@@ -1,39 +1,58 @@
 [versions]
-agp = "9.2.1"
-coreKtx = "1.18.0"
+agp = "8.7.3"
+coreKtx = "1.16.0"
 junit = "4.13.2"
-junitVersion = "1.3.0"
-espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.13.0"
-kotlin = "2.3.21"
-composeBom = "2026.04.01"
-ksp = "2.0.0-1.0.21"
-navigationCompose = "2.9.8"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.9.0"
+activityCompose = "1.10.1"
+kotlin = "2.1.0"
+composeBom = "2025.05.01"
+ksp = "2.1.0-1.0.29"
+navigationCompose = "2.9.0"
 
 # Architecture & DI
-hilt = "2.59.2"
-hiltNavigationCompose = "1.3.0"
-room = "2.8.4"
+hilt = "2.55"
+hiltNavigationCompose = "1.2.0"
+room = "2.7.1"
 
+# DataStore & WorkManager
+datastore = "1.1.4"
+workmanager = "2.10.1"
+hiltWork = "1.2.0"
 
-# Network (Untuk nembak API AI di Backend)
-retrofit = "3.0.0"
-okhttp = "5.3.2"
+# Network
+retrofit = "2.11.0"
+okhttp = "4.12.0"
+kotlinxSerializationJson = "1.8.1"
 
 # Firebase
-firebaseBom = "34.12.0"
+firebaseBom = "33.13.0"
 
-# ML Kit & Camera (Untuk OCR Cover)
-cameraX = "1.6.0"
-mlkitText = "19.0.1"
+# CameraX
+cameraX = "1.4.2"
+
+# ML Kit
+mlkitBarcode = "17.3.0"
+mlkitText = "16.0.1"
+
+# Image
+coil = "2.7.0"
+
+# QR
+zxing = "3.5.3"
 
 # Excel Export
-apachePoi = "5.5.1"
-uiTextGoogleFonts = "1.11.2"
+apachePoi = "5.3.0"
 
+# Desugar
+desugar = "2.1.5"
 
+# SplashScreen
+splashscreen = "1.0.1"
 
+# Google Fonts
+uiTextGoogleFonts = "1.7.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,47 +69,76 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
+# Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 # Hilt DI
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
 
-# Room DB (Untuk Draft Offline)
+# Room DB
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# DataStore
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+# WorkManager
+work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workmanager" }
+
+# Lifecycle ViewModel Compose
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 
 # Retrofit
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
-# Firebase (Penyimpanan Gambar)
+# Firebase (Stubbed - google-services.json not present)
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 
-# CameraX & ML Kit
+# CameraX
 camerax-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
 camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
 camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
 camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+
+# ML Kit
+mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcode" }
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitText" }
 
-# Apache POI (Export Excel)
+# Coil Image Loading
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+# ZXing QR Generator
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
+
+# Apache POI Excel Export
 apache-poi = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "apachePoi" }
+
+# Desugar (java.time.*)
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
+
+# SplashScreen
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
+# Google Fonts
 androidx-compose-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
-
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
-
+google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -1,0 +1,96 @@
+﻿Starting a Gradle Daemon, 2 incompatible and 7 stopped Daemons could not be reused, use --status for details
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:checkDebugAarMetadata
+> Task :app:generateDebugResValues
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:processDebugResources
+> Task :app:l8DexDesugarLibDebug
+> Task :app:kspDebugKotlin
+> Task :app:checkDebugDuplicateClasses
+> Task :app:desugarDebugFileDependencies
+
+> Task :app:mergeExtDexDebug
+.\gradlew : ERROR: C:\Users\USER\.gradle\caches\9.4.1\transforms\8ca21e2afb0e24131e9f75f4231602fa\transformed\jetified-
+log4j-api-2.23.1.jar: D8: MethodHandle.invoke and MethodHandle.invokeExact are only supported starting with Android O 
+(--min-api 26): Lorg/apache/logging/log4j/util/ServiceLoaderUtil;callServiceLoader(Ljava/lang/invoke/MethodHandles$Look
+up;Ljava/lang/Class;Ljava/lang/ClassLoader;Z)Ljava/lang/Iterable;
+At line:1 char:121
++ ...  "$env:JAVA_HOME\bin;$env:PATH"; .\gradlew assembleDebug 2>&1 | Out-F ...
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: C:\Users.../lang/Iterable;:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ERROR: 
+C:\Users\USER\.gradle\caches\9.4.1\transforms\e58304aaba7a02699aa3c48c69c177ac\transformed\jetified-poi-5.3.0.jar: D8: 
+MethodHandle.invoke and MethodHandle.invokeExact are only supported starting with Android O (--min-api 26): Lorg/apache
+/poi/poifs/nio/CleanerUtil;lambda$null$0(Ljava/lang/invoke/MethodHandle;Ljava/nio/ByteBuffer;)Ljava/lang/Throwable;
+
+> Task :app:kspDebugKotlin
+w: [ksp] C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/core/database/dao/AuditLogDao.kt:16: The query returns some columns [nama_user] which are not used by com.bpkpad.peminjaman.core.database.entity.AuditLogEntity. You can use @ColumnInfo annotation on the properties to specify the mapping. You can annotate the function with @RewriteQueriesToDropUnusedColumns to direct Room to rewrite your query to avoid fetching unused columns.  You can suppress this warning by annotating the function with @SuppressWarnings(RoomWarnings.QUERY_MISMATCH). Columns returned by the query: id, transaksi_id, user_id, aksi, detail, catatan, timestamp, nama_user.
+w: [ksp] C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/core/database/AppDatabase.kt:23: Schema export directory was not provided to the annotation processor so Room cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument by applying the Room Gradle plugin (id 'androidx.room') OR set exportSchema to false.
+
+> Task :app:mergeExtDexDebug FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:mergeExtDexDebug'.
+> Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+   > Failed to transform poi-5.3.0.jar (org.apache.poi:poi:5.3.0) to match attributes {artifactType=android-dex, 
+dexing-component-attributes=ComponentSpecificParameters(minSdkVersion=24, debuggable=true, 
+enableCoreLibraryDesugaring=true, enableGlobalSynthetics=false, enableApiModeling=false, 
+dependenciesClassesAreInstrumented=false, asmTransformComponent=null, useJacocoTransformInstrumentation=false, 
+enableDesugaring=true, needsClasspath=false, useFullClasspath=false, componentIfUsingFullClasspath=null), 
+org.gradle.category=library, org.gradle.libraryelements=jar, org.gradle.status=release, org.gradle.usage=java-runtime}.
+      > Execution failed for DexingNoClasspathTransform: 
+C:\Users\USER\.gradle\caches\9.4.1\transforms\e58304aaba7a02699aa3c48c69c177ac\transformed\jetified-poi-5.3.0.jar.
+         > Error while dexing.
+           Increase the minSdkVersion to 26 or above.
+
+   > Failed to transform log4j-api-2.23.1.jar (org.apache.logging.log4j:log4j-api:2.23.1) to match attributes 
+{artifactType=android-dex, dexing-component-attributes=ComponentSpecificParameters(minSdkVersion=24, debuggable=true, 
+enableCoreLibraryDesugaring=true, enableGlobalSynthetics=false, enableApiModeling=false, 
+dependenciesClassesAreInstrumented=false, asmTransformComponent=null, useJacocoTransformInstrumentation=false, 
+enableDesugaring=true, needsClasspath=false, useFullClasspath=false, componentIfUsingFullClasspath=null), 
+org.gradle.category=library, org.gradle.libraryelements=jar, org.gradle.status=release, org.gradle.usage=java-runtime}.
+      > Execution failed for DexingNoClasspathTransform: C:\Users\USER\.gradle\caches\9.4.1\transforms\8ca21e2afb0e2413
+1e9f75f4231602fa\transformed\jetified-log4j-api-2.23.1.jar.
+         > Error while dexing.
+           Increase the minSdkVersion to 26 or above.
+
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 4m 25s
+23 actionable tasks: 22 executed, 1 up-to-date

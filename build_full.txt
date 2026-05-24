@@ -1,0 +1,42 @@
+﻿Starting a Gradle Daemon, 1 incompatible and 6 stopped Daemons could not be reused, use --status for details
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:checkDebugAarMetadata FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/build/reports/problems/problems-report.html
+.\gradlew : 
+At line:1 char:121
++ ...  "$env:JAVA_HOME\bin;$env:PATH"; .\gradlew assembleDebug 2>&1 | Out-F ...
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:checkDebugAarMetadata'.
+> Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+   > Could not find com.google.mlkit:barcode-scanning:18.3.1.
+     Searched in the following locations:
+       - https://dl.google.com/dl/android/maven2/com/google/mlkit/barcode-scanning/18.3.1/barcode-scanning-18.3.1.pom
+       - https://repo.maven.apache.org/maven2/com/google/mlkit/barcode-scanning/18.3.1/barcode-scanning-18.3.1.pom
+     Required by:
+         project ':app'
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 14s
+2 actionable tasks: 1 executed, 1 up-to-date

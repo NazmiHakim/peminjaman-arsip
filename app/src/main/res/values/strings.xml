@@ -1,17 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Non-Keu</string>
+    <string name="app_name">BPKPAD Peminjaman</string>
+    
+    <!-- Auth -->
+    <string name="login_title">Masuk ke BPKPAD</string>
+    <string name="login_subtitle">Sistem Manajemen Peminjaman Dokumen</string>
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="btn_login">Masuk</string>
+    <string name="btn_logout">Keluar</string>
+    <string name="error_username_empty">Username tidak boleh kosong</string>
+    <string name="error_password_empty">Password tidak boleh kosong</string>
+    <string name="error_invalid_credentials">Username atau password salah</string>
 
-    <string-array name="com_google_android_gms_fonts_certs">
-        <item>@array/com_google_android_gms_fonts_certs_dev</item>
-        <item>@array/com_google_android_gms_fonts_certs_prod</item>
-    </string-array>
+    <!-- Dashboard -->
+    <string name="dashboard_arsiparis">Dashboard Arsiparis</string>
+    <string name="dashboard_kasubag">Dashboard Kasubag</string>
+    <string name="label_total_peminjaman">Total Peminjaman</string>
+    <string name="label_menunggu">Menunggu</string>
+    <string name="label_dipinjam">Dipinjam</string>
+    <string name="label_overdue">Terlambat</string>
+    <string name="label_dikembalikan">Dikembalikan</string>
 
-    <string-array name="com_google_android_gms_fonts_certs_dev">
-        <item>MIIEqDCCA5CgAwIBAgIYAN5Y64OWMA0GCSqGSIb3DQEBBQUAMFAxCzAJBgNVBAYTAk1YMR0wGwYDVQQKExRDb25lY3RpdmlkYWQgR29tZXogU0ExIjAgBgNVBAMTGVNpc3RlbWFzIGRlIENvbmVjdGl2aWRhZDAeFw0wNTA4MzEyMzU4MjdaFw0zMDA4MzEyMzU4MjdaMFAxCzAJBgNVBAYTAk1YMR0wGwYDVQQKExRDb25lY3RpdmlkYWQgR29tZXogU0ExIjAgBgNVBAMTGVNpc3RlbWFzIGRlIENvbmVjdGl2aWRhZDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALo0a/n90b6clVbTnbN36J183KvJ... (dan seterusnya)</item>
-    </string-array>
+    <!-- Transaksi -->
+    <string name="buat_transaksi">Buat Peminjaman</string>
+    <string name="label_instansi">Instansi Peminjam</string>
+    <string name="label_pic_nama">Nama PIC</string>
+    <string name="label_pic_no_hp">No. HP PIC</string>
+    <string name="label_nomor_surat">Nomor Surat Pengantar</string>
+    <string name="label_tanggal_kembali">Tanggal Kembali Rencana</string>
+    <string name="label_dokumen">Dokumen yang Dipinjam</string>
+    <string name="btn_tambah_dokumen">+ Tambah Dokumen</string>
+    <string name="btn_submit">Kirim Pengajuan</string>
+    <string name="btn_approve">Setujui</string>
+    <string name="btn_reject">Tolak</string>
+    <string name="btn_bypass">Bypass Persetujuan</string>
+    <string name="btn_acknowledge">Ketahui</string>
+    <string name="btn_return">Selesaikan Peminjaman</string>
+    <string name="btn_extend">Perpanjang</string>
+    <string name="btn_whatsapp">Hubungi via WhatsApp</string>
+    <string name="btn_export_pdf">Export PDF</string>
+    <string name="btn_export_excel">Export Excel</string>
 
-    <string-array name="com_google_android_gms_fonts_certs_prod">
-        <item>MIIEqDCCA5CgAwIBAgIYAN5Y64OWMA0GCSqGSIb3DQEBBQUAMFAxCzAJBgNVBAYTAk1YMR0wGwYDVQQKExRDb25lY3RpdmlkYWQgR29tZXogU0ExIjAgBgNVBAMTGVNpc3RlbWFzIGRlIENvbmVjdGl2aWRhZD0=</item>
-    </string-array>
+    <!-- Status -->
+    <string name="status_menunggu">Menunggu Persetujuan</string>
+    <string name="status_disetujui">Disetujui</string>
+    <string name="status_ditolak">Ditolak</string>
+    <string name="status_dipinjam">Sedang Dipinjam</string>
+    <string name="status_dikembalikan">Dikembalikan</string>
+    <string name="status_dibatalkan">Dibatalkan</string>
+
+    <!-- Notifications -->
+    <string name="notif_overdue_title">Dokumen Terlambat Dikembalikan!</string>
+    <string name="notif_overdue_body">Ada %1$d dokumen yang melewati batas waktu pengembalian</string>
+    <string name="notif_approval_title">Pengajuan Baru Menunggu Persetujuan</string>
+
+    <!-- General -->
+    <string name="loading">Memuat\u2026</string>
+    <string name="empty_state">Tidak ada data</string>
+    <string name="error_generic">Terjadi kesalahan. Coba lagi.</string>
+    <string name="btn_retry">Coba Lagi</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_save">Simpan</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_close">Tutup</string>
+    <string name="btn_scan_qr">Scan QR</string>
+    <string name="label_catatan">Catatan</string>
+    <string name="label_alasan">Alasan</string>
+    <string name="label_foto">Foto</string>
+    <string name="label_ambil_foto">Ambil Foto</string>
 </resources>

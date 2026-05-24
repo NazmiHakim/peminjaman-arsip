@@ -1,0 +1,111 @@
+﻿Starting a Gradle Daemon, 2 incompatible and 8 stopped Daemons could not be reused, use --status for details
+
+> Configure project :app
+w: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/build.gradle.kts:49:5: 'fun BaseAppModuleExtension.kotlinOptions(configure: Action<KotlinJvmOptions>): Unit' is deprecated. The kotlinOptions types are deprecated, please migrate to the compilerOptions types. More details are here: https://kotl.in/u1r8ln.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:processDebugResources
+> Task :app:checkDebugDuplicateClasses
+> Task :app:l8DexDesugarLibDebug
+> Task :app:desugarDebugFileDependencies
+> Task :app:kspDebugKotlin
+> Task :app:mergeExtDexDebug
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeDebugNativeLibs
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libbarhopper_v3.so, libdatastore_shared_counter.so, libimage_processing_util_jni.so, libsurface_util_jni.so.
+
+> Task :app:compileDebugKotlin
+.\gradlew : e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/arsipnonkeu/ui
+/theme/component/Topbar.kt:21:31 Unresolved reference 'R'.
+At line:1 char:121
++ ...  "$env:JAVA_HOME\bin;$env:PATH"; .\gradlew assembleDebug 2>&1 | Out-F ...
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (e: file:///C:/U... reference 'R'.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/arsipnonkeu/ui/theme/compo
+nent/Topbar.kt:53:52 None of the following candidates is applicable:
+class R : Any
+class R : Any
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/arsipnonkeu/ui/theme/compo
+nent/Topbar.kt:53:54 Unresolved reference 'drawable'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/core/theme/Bpkp
+adTypography.kt:15:22 Unresolved reference 'array'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/data
+/repository/TransaksiRepositoryImpl.kt:62:21 No value passed for parameter 'kondisiPengembalian'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/data
+/repository/TransaksiRepositoryImpl.kt:62:21 No value passed for parameter 'catatanKondisi'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/detail/DetailTransaksiScreen.kt:167:59 No value passed for parameter 'onClick'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/detail/DetailTransaksiScreen.kt:167:83 Argument type mismatch: actual type is 
+'kotlin.Function0<kotlin.Unit>', but 'androidx.compose.ui.Modifier' was expected.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/form/FormTransaksiViewModel.kt:136:61 Argument type mismatch: actual type is 'kotlin.Int', but 
+'kotlin.collections.List<kotlin.Int>' was expected.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/form/FormTransaksiViewModel.kt:136:69 Too many arguments for 'suspend fun invoke(transaksi: Transaksi, 
+dokumenIds: List<Int>): ResultState<Transaksi>'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/pengembalian/ScanQrScreen.kt:131:45 Unresolved reference 'Builder'.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/pengembalian/ScanQrScreen.kt:131:63 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/pengembalian/ScanQrScreen.kt:131:68 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/app/src/main/java/com/bpkpad/peminjaman/peminjaman/pres
+entation/pengembalian/ScanQrScreen.kt:131:73 Unresolved reference 'surfaceProvider'.
+
+> Task :app:compileDebugKotlin FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/USER/AndroidStudioProjects/peminjaman-arsip/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing 
+org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+
+BUILD FAILED in 2m 21s
+For more on this, please refer to https://docs.gradle.org/9.4.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+31 actionable tasks: 31 executed
