@@ -66,6 +66,16 @@
     <string name="btn_delete">Hapus</string>
     <string name="btn_close">Tutup</string>
     <string name="btn_scan_qr">Scan QR</string>
+    <string name="btn_send_qr_whatsapp">Kirim QR ke WhatsApp PIC</string>
+    <string name="qr_permission_title">Izin Kamera Diperlukan</string>
+    <string name="qr_permission_message">Aplikasi perlu akses kamera untuk memindai QR Code pengembalian dokumen.</string>
+    <string name="qr_permission_allow">Izinkan Kamera</string>
+    <string name="qr_permission_later">Nanti</string>
+    <string name="qr_permission_unavailable_title">Kamera belum aktif</string>
+    <string name="qr_permission_unavailable_body">Izinkan kamera untuk scan QR, atau gunakan token manual di bawah.</string>
+    <string name="qr_card_title">QR Code Pengembalian</string>
+    <string name="qr_card_subtitle">Kirimkan ke PIC agar pengembalian dokumen bisa diproses lebih cepat.</string>
+    <string name="qr_share_failed">Gagal membuka WhatsApp untuk mengirim QR.</string>
     <string name="label_catatan">Catatan</string>
     <string name="label_alasan">Alasan</string>
     <string name="label_foto">Foto</string>

@@ -1,5 +1,9 @@
 package com.bpkpad.peminjaman.peminjaman.presentation.pengembalian
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -13,15 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bpkpad.peminjaman.R
 import com.bpkpad.peminjaman.core.theme.BpkpadTheme
 import com.bpkpad.peminjaman.core.ui.BpkpadTopBar
+import com.bpkpad.peminjaman.peminjaman.presentation.pengembalian.components.CameraPermissionPlaceholder
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
@@ -62,6 +70,27 @@ fun ScanQrContent(
     onClearError: () -> Unit
 ) {
     var manualToken by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val isPreview = LocalInspectionMode.current
+    var hasCameraPermission by remember {
+        mutableStateOf(
+            isPreview || ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+    var showCameraPermissionDialog by remember { mutableStateOf(!hasCameraPermission && !isPreview) }
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasCameraPermission = isGranted
+        showCameraPermissionDialog = false
+    }
+
+    LaunchedEffect(hasCameraPermission, isPreview) {
+        if (!hasCameraPermission && !isPreview) showCameraPermissionDialog = true
+    }
 
     Scaffold(topBar = { BpkpadTopBar("Scan QR Code Pengembalian", onBack = onBack) }) { padding ->
         Column(
@@ -69,17 +98,28 @@ fun ScanQrContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Camera preview box
-            Card(Modifier.fillMaxWidth().aspectRatio(1f), shape = RoundedCornerShape(16.dp)) {
+            Card(
+                Modifier.fillMaxWidth().aspectRatio(1f),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
                 Box {
-                    CameraPreviewWithQrScan(onQrDetected, Modifier.fillMaxSize())
-                    // Viewfinder overlay
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Surface(
-                            Modifier.size(180.dp),
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp),
-                            border = androidx.compose.foundation.BorderStroke(2.dp, Color.White.copy(alpha = 0.7f))
-                        ) {}
+                    if (hasCameraPermission) {
+                        CameraPreviewWithQrScan(onQrDetected, Modifier.fillMaxSize())
+                        // Viewfinder overlay
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Surface(
+                                Modifier.size(180.dp),
+                                color = Color.Transparent,
+                                shape = RoundedCornerShape(8.dp),
+                                border = androidx.compose.foundation.BorderStroke(2.dp, Color.White.copy(alpha = 0.7f))
+                            ) {}
+                        }
+                    } else {
+                        CameraPermissionPlaceholder(
+                            onRequestPermission = { showCameraPermissionDialog = true },
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
                 }
             }
@@ -125,6 +165,25 @@ fun ScanQrContent(
             }
         }
     }
+
+    if (showCameraPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = { showCameraPermissionDialog = false },
+            icon = { Icon(Icons.Default.PhotoCamera, contentDescription = null) },
+            title = { Text(stringResource(id = R.string.qr_permission_title)) },
+            text = { Text(stringResource(id = R.string.qr_permission_message)) },
+            confirmButton = {
+                Button(onClick = { cameraPermissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text(stringResource(id = R.string.qr_permission_allow))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCameraPermissionDialog = false }) {
+                    Text(stringResource(id = R.string.qr_permission_later))
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -133,6 +192,13 @@ private fun CameraPreviewWithQrScan(onQrDetected: (String) -> Unit, modifier: Mo
     val detectedRef = remember { AtomicBoolean(false) }
     val executor = remember { Executors.newSingleThreadExecutor() }
     val scanner = remember { BarcodeScanning.getClient() }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            executor.shutdown()
+            scanner.close()
+        }
+    }
 
     AndroidView(
         factory = { ctx ->

@@ -196,6 +196,7 @@ Saat AI merekomendasikan reuse component, **WAJIB** verifikasi:
 
 // presentation/pengembalian/components/
 @Composable fun QrScannerOverlay()
+@Composable fun CameraPermissionPlaceholder(onRequestPermission: () -> Unit, modifier: Modifier = Modifier)
 ```
 
 ### 5.5 Comment Convention untuk UI Components
