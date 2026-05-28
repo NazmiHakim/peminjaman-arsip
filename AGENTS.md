@@ -187,16 +187,21 @@ Saat AI merekomendasikan reuse component, **WAJIB** verifikasi:
 @Composable fun RoleBasedContent(arsiparisContent: @Composable () -> Unit, kasubagContent: @Composable () -> Unit)
 @Composable fun InstansiAutocompleteField(value: String, onValueChange: (String) -> Unit, suggestions: List<Instansi>)
 @Composable fun KondisiSelectionDialog(onConfirm: (Map<Int, Kondisi>) -> Unit, onDismiss: () -> Unit)
+@Composable fun BpkpadDatePickerField(value: String, onDateSelected: (String) -> Unit, label: String, modifier: Modifier = Modifier, error: String? = null, isError: Boolean = error != null, placeholder: String = "Pilih tanggal")
 ```
 
 #### 🏠 LOCAL Components (Spesifik Feature)
 ```kotlin
 // presentation/form/components/
 @Composable fun DokumenSearchResultItem(dokumen: MasterDokumen, onClick: () -> Unit)
+@Composable fun FotoSuratInputOptions(hasFoto: Boolean, isError: Boolean, onScanFoto: () -> Unit, onPickGallery: () -> Unit, modifier: Modifier = Modifier)
 
 // presentation/pengembalian/components/
 @Composable fun QrScannerOverlay()
 @Composable fun CameraPermissionPlaceholder(onRequestPermission: () -> Unit, modifier: Modifier = Modifier)
+
+// laporan/presentation/
+@Composable fun ExportedReportCard(report: ExportedReport, onShare: () -> Unit)
 ```
 
 ### 5.5 Comment Convention untuk UI Components

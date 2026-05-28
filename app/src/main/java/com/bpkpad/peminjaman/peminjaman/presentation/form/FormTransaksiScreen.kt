@@ -1,6 +1,8 @@
 package com.bpkpad.peminjaman.peminjaman.presentation.form
 
+import android.app.Activity
 import android.net.Uri
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -13,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,11 @@ import com.bpkpad.peminjaman.core.theme.BpkpadTheme
 import com.bpkpad.peminjaman.core.ui.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
 import com.bpkpad.peminjaman.peminjaman.domain.model.MasterDokumen
+import com.bpkpad.peminjaman.peminjaman.presentation.form.components.FotoSuratInputOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
+import kotlinx.coroutines.launch
 
 /**
  * [LOCAL] FormTransaksiScreen
@@ -35,6 +43,8 @@ fun FormTransaksiScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(uiState.submitSuccess) {
         if (uiState.submitSuccess) { snackbarHostState.showSnackbar("Transaksi berhasil dibuat!"); viewModel.clearSuccess(); onBack() }
@@ -43,6 +53,27 @@ fun FormTransaksiScreen(
 
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { viewModel.onFotoSelected(it) }
+    }
+    val documentScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val scanResult = result.data?.let { GmsDocumentScanningResult.fromActivityResultIntent(it) }
+            val imageUri = scanResult?.pages?.firstOrNull()?.imageUri
+            if (imageUri != null) {
+                viewModel.onFotoSelected(imageUri)
+            } else {
+                scope.launch { snackbarHostState.showSnackbar("Scanner tidak mengembalikan gambar dokumen") }
+            }
+        }
+    }
+    val documentScanner = remember {
+        GmsDocumentScanning.getClient(
+            GmsDocumentScannerOptions.Builder()
+                .setGalleryImportAllowed(false)
+                .setPageLimit(1)
+                .setResultFormats(GmsDocumentScannerOptions.RESULT_FORMAT_JPEG)
+                .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_BASE_WITH_FILTER)
+                .build()
+        )
     }
 
     FormTransaksiContent(
@@ -55,7 +86,23 @@ fun FormTransaksiScreen(
         onTanggalKembaliChange = viewModel::onTanggalKembaliChange,
         onInstansiSelect = viewModel::onInstansiSelect,
         onInstansiSearch = viewModel::onInstansiSearch,
-        onPickFoto = { imagePickerLauncher.launch("image/*") },
+        onScanFoto = {
+            val activity = context.findActivity()
+            if (activity == null) {
+                scope.launch { snackbarHostState.showSnackbar("Tidak dapat membuka scanner dokumen") }
+            } else {
+                documentScanner.getStartScanIntent(activity)
+                    .addOnSuccessListener { intentSender ->
+                        documentScannerLauncher.launch(IntentSenderRequest.Builder(intentSender).build())
+                    }
+                    .addOnFailureListener { error ->
+                        scope.launch {
+                            snackbarHostState.showSnackbar(error.message ?: "Gagal membuka scanner dokumen")
+                        }
+                    }
+            }
+        },
+        onPickGallery = { imagePickerLauncher.launch("image/*") },
         onDokumenSearch = viewModel::searchDokumen,
         onDokumenAdd = viewModel::addDokumen,
         onDokumenRemove = viewModel::removeDokumen,
@@ -74,7 +121,8 @@ fun FormTransaksiContent(
     onTanggalKembaliChange: (String) -> Unit,
     onInstansiSelect: (Instansi) -> Unit,
     onInstansiSearch: (String) -> Unit,
-    onPickFoto: () -> Unit,
+    onScanFoto: () -> Unit,
+    onPickGallery: () -> Unit,
     onDokumenSearch: (String) -> Unit,
     onDokumenAdd: (MasterDokumen) -> Unit,
     onDokumenRemove: (Int) -> Unit,
@@ -82,7 +130,6 @@ fun FormTransaksiContent(
 ) {
     var dokumenQuery by remember { mutableStateOf("") }
     var instansiQuery by remember { mutableStateOf("") }
-    var showDatePicker by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = { BpkpadTopBar("Buat Peminjaman Baru", onBack = onBack) },
@@ -148,38 +195,24 @@ fun FormTransaksiContent(
                     error = if (uiState.submitted && uiState.nomorSurat.isBlank()) "Wajib diisi" else null)
             }
             item {
-                BpkpadTextField(
+                BpkpadDatePickerField(
                     value = uiState.tanggalKembali,
-                    onValueChange = onTanggalKembaliChange,
-                    label = "Tanggal Kembali Rencana (YYYY-MM-DD) *",
-                    error = if (uiState.submitted && uiState.tanggalKembali.isBlank()) "Wajib diisi" else null,
-                    trailingIcon = { Icon(Icons.Default.CalendarToday, null) }
+                    onDateSelected = onTanggalKembaliChange,
+                    label = "Tanggal Kembali Rencana *",
+                    error = if (uiState.submitted && uiState.tanggalKembali.isBlank()) "Wajib diisi" else null
                 )
             }
 
             // Foto
             item {
                 Text("Foto Surat Pengantar", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                OutlinedCard(onClick = onPickFoto, modifier = Modifier.fillMaxWidth().height(80.dp), shape = RoundedCornerShape(12.dp)) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        if (uiState.fotoUri != null) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
-                                Spacer(Modifier.width(8.dp))
-                                Text("Foto dipilih", style = MaterialTheme.typography.bodySmall)
-                            }
-                        } else {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.AddPhotoAlternate, null, tint = MaterialTheme.colorScheme.outline)
-                                Spacer(Modifier.width(8.dp))
-                                Text("Ketuk untuk pilih foto *", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
-                            }
-                        }
-                    }
-                }
-                if (uiState.submitted && uiState.fotoUri == null) {
-                    Text("Foto surat wajib dilampirkan", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-                }
+                Spacer(Modifier.height(8.dp))
+                FotoSuratInputOptions(
+                    hasFoto = uiState.fotoUri != null,
+                    isError = uiState.submitted && uiState.fotoUri == null,
+                    onScanFoto = onScanFoto,
+                    onPickGallery = onPickGallery
+                )
             }
 
             // Dokumen
@@ -247,8 +280,16 @@ private fun FormTransaksi_Preview() {
         FormTransaksiContent(
             uiState = FormTransaksiUiState(), onBack = {},
             onPicNamaChange = {}, onPicHpChange = {}, onNomorSuratChange = {}, onTanggalKembaliChange = {},
-            onInstansiSelect = {}, onInstansiSearch = {}, onPickFoto = {},
+            onInstansiSelect = {}, onInstansiSearch = {}, onScanFoto = {}, onPickGallery = {},
             onDokumenSearch = {}, onDokumenAdd = {}, onDokumenRemove = {}, onSubmit = {}
         )
+    }
+}
+
+private tailrec fun android.content.Context.findActivity(): Activity? {
+    return when (this) {
+        is Activity -> this
+        is android.content.ContextWrapper -> baseContext.findActivity()
+        else -> null
     }
 }

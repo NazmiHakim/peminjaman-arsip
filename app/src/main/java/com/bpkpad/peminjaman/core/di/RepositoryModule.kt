@@ -2,6 +2,8 @@ package com.bpkpad.peminjaman.core.di
 
 import com.bpkpad.peminjaman.core.storage.FileRepository
 import com.bpkpad.peminjaman.core.storage.LocalFileRepository
+import com.bpkpad.peminjaman.laporan.data.repository.LaporanExportRepositoryImpl
+import com.bpkpad.peminjaman.laporan.domain.repository.LaporanExportRepository
 import com.bpkpad.peminjaman.peminjaman.data.repository.*
 import com.bpkpad.peminjaman.peminjaman.domain.repository.*
 import com.bpkpad.peminjaman.auth.data.repository.UserRepositoryImpl
@@ -36,4 +38,7 @@ abstract class RepositoryModule {
 
     @Binds @Singleton
     abstract fun bindAuditLogRepository(impl: AuditLogRepositoryImpl): AuditLogRepository
+
+    @Binds @Singleton
+    abstract fun bindLaporanExportRepository(impl: LaporanExportRepositoryImpl): LaporanExportRepository
 }

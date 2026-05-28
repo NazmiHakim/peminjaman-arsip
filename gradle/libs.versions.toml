@@ -35,6 +35,7 @@ cameraX = "1.4.2"
 # ML Kit
 mlkitBarcode = "17.3.0"
 mlkitText = "16.0.1"
+mlkitDocumentScanner = "16.0.0"
 
 # Image
 coil = "2.7.0"
@@ -115,6 +116,7 @@ camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = 
 # ML Kit
 mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcode" }
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitText" }
+mlkit-document-scanner = { group = "com.google.android.gms", name = "play-services-mlkit-document-scanner", version.ref = "mlkitDocumentScanner" }
 
 # Coil Image Loading
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }

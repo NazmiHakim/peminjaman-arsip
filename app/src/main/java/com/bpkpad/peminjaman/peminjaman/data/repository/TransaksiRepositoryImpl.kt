@@ -7,7 +7,6 @@ import com.bpkpad.peminjaman.peminjaman.domain.model.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.*
 import com.bpkpad.peminjaman.peminjaman.domain.repository.TransaksiRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -24,14 +23,14 @@ class TransaksiRepositoryImpl @Inject constructor(
 ) : TransaksiRepository {
 
     override fun getAll(): Flow<List<Transaksi>> =
-        transaksiDao.getAll().map { list -> list.map { buildDomain(it) } }
+        transaksiDao.getAll().map { list -> list.map { buildDomainWithDetails(it) } }
 
     override fun getByStatus(status: TransaksiStatus): Flow<List<Transaksi>> =
-        transaksiDao.getByStatus(status.name.lowercase()).map { list -> list.map { buildDomain(it) } }
+        transaksiDao.getByStatus(status.name.lowercase()).map { list -> list.map { buildDomainWithDetails(it) } }
 
     override fun getOverdue(): Flow<List<Transaksi>> {
         val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-        return transaksiDao.getOverdue(today).map { list -> list.map { buildDomain(it) } }
+        return transaksiDao.getOverdue(today).map { list -> list.map { buildDomainWithDetails(it) } }
     }
 
     override suspend fun getById(id: Int): Transaksi? {
@@ -194,11 +193,14 @@ class TransaksiRepositoryImpl @Inject constructor(
         return buildDomain(entity, details.map { it.toDomain() })
     }
 
-    private fun buildDomain(entity: TransaksiEntity, details: List<DetailPeminjaman> = emptyList()): Transaksi {
+    private suspend fun buildDomain(entity: TransaksiEntity, details: List<DetailPeminjaman> = emptyList()): Transaksi {
+        val instansi = instansiDao.getById(entity.instansiPeminjamId)
+        val createdBy = userDao.getById(entity.createdBy)
+        val approvedBy = entity.approvedBy?.let { userDao.getById(it) }
         return Transaksi(
             id = entity.id,
             instansiId = entity.instansiPeminjamId,
-            namaInstansi = "", // Will be resolved in ViewModel
+            namaInstansi = instansi?.namaInstansi ?: "Instansi #${entity.instansiPeminjamId}",
             picNama = entity.picNama,
             picNoHp = entity.picNoHp,
             nomorSuratPengantar = entity.nomorSuratPengantar,
@@ -214,9 +216,9 @@ class TransaksiRepositoryImpl @Inject constructor(
             isBypassAcknowledged = entity.isBypassAcknowledged,
             alasanPenolakan = entity.alasanPenolakan,
             createdBy = entity.createdBy,
-            namaCreatedBy = "",
+            namaCreatedBy = createdBy?.namaLengkap.orEmpty(),
             approvedBy = entity.approvedBy,
-            namaApprovedBy = null,
+            namaApprovedBy = approvedBy?.namaLengkap,
             createdAt = entity.createdAt,
             details = details
         )

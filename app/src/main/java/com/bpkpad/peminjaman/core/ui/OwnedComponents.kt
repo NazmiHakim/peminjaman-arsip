@@ -3,14 +3,15 @@ package com.bpkpad.peminjaman.core.ui
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,10 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -295,6 +300,99 @@ fun DokumenListItem(
     }
 }
 
+/**
+ * [OWNED] BpkpadDatePickerField
+ *
+ * Ownership: Modul Peminjaman
+ * Scope: Global (Form transaksi, Laporan)
+ * Theme: BpkpadTheme compliant
+ * RBAC: Neutral
+ *
+ * Changelog:
+ * - v1.0 (2026-05-28): Initial read-only date field with Material date picker.
+ *
+ * Dependencies:
+ * - androidx.compose.material3.DatePickerDialog
+ * - androidx.compose.material3.OutlinedTextField
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BpkpadDatePickerField(
+    value: String,
+    onDateSelected: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    error: String? = null,
+    isError: Boolean = error != null,
+    placeholder: String = "Pilih tanggal"
+) {
+    var showPicker by remember { mutableStateOf(false) }
+    val selectedDate = remember(value) { value.toLocalDateOrNull() }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = selectedDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+    )
+    val interactionSource = remember { MutableInteractionSource() }
+
+    OutlinedTextField(
+        value = selectedDate?.toDisplayString() ?: value,
+        onValueChange = {},
+        label = { Text(label) },
+        placeholder = { Text(placeholder) },
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = { showPicker = true }
+            ),
+        readOnly = true,
+        singleLine = true,
+        isError = isError,
+        supportingText = error?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
+        trailingIcon = {
+            IconButton(onClick = { showPicker = true }) {
+                Icon(Icons.Default.CalendarToday, contentDescription = "Pilih tanggal")
+            }
+        },
+        shape = RoundedCornerShape(12.dp)
+    )
+
+    if (showPicker) {
+        DatePickerDialog(
+            onDismissRequest = { showPicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis
+                            ?.toLocalDate()
+                            ?.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                            ?.let(onDateSelected)
+                        showPicker = false
+                    }
+                ) { Text("Pilih") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPicker = false }) { Text("Batal") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}
+
+private fun String.toLocalDateOrNull(): LocalDate? {
+    if (isBlank()) return null
+    return try {
+        LocalDate.parse(trim())
+    } catch (e: Exception) {
+        null
+    }
+}
+
+private fun Long.toLocalDate(): LocalDate {
+    return Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()
+}
+
 @Preview(showBackground = true, name = "StatusBadge All States")
 @Composable
 private fun StatusBadge_Preview() {
@@ -302,6 +400,19 @@ private fun StatusBadge_Preview() {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             TransaksiStatus.entries.forEach { StatusBadge(it) }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "DatePickerField")
+@Composable
+private fun BpkpadDatePickerField_Preview() {
+    BpkpadTheme {
+        BpkpadDatePickerField(
+            value = "2026-05-28",
+            onDateSelected = {},
+            label = "Tanggal Kembali Rencana *",
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 

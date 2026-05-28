@@ -123,6 +123,7 @@ dependencies {
 
     // ML Kit Barcode Scanning
     implementation(libs.mlkit.barcode)
+    implementation(libs.mlkit.document.scanner)
 
     // Coil Image Loading
     implementation(libs.coil.compose)
