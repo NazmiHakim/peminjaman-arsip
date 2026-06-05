@@ -3,10 +3,13 @@ package com.bpkpad.peminjaman.peminjaman.presentation.detail
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -14,12 +17,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bpkpad.peminjaman.R
 import com.bpkpad.peminjaman.core.common.Constants
@@ -75,7 +80,7 @@ fun DetailTransaksiContent(
     val role = uiState.session?.role
 
     Scaffold(
-        topBar = { BpkpadTopBar("Detail Transaksi #${uiState.transaksi?.id ?: ""}", onBack = onBack) },
+        containerColor = Color(0xFFF7F8FA),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         when {
@@ -87,12 +92,55 @@ fun DetailTransaksiContent(
                 val t = uiState.transaksi
                 LazyColumn(
                     Modifier.fillMaxSize().padding(padding),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    contentPadding = PaddingValues(bottom = 24.dp)
                 ) {
-                    // Header card
+                    // ── Figma Header: Back arrow + "Detail Pengajuan" ──
                     item {
-                        Card(shape = RoundedCornerShape(12.dp)) {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = Color.White,
+                            shadowElevation = 2.dp
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0xFFF3F4F6))
+                                        .clickable(onClick = onBack),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.ArrowBack,
+                                        contentDescription = "Kembali",
+                                        tint = Color(0xFF374151),
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                                Spacer(Modifier.width(12.dp))
+                                Text(
+                                    text = "Detail Pengajuan",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF1A1A1A)
+                                )
+                            }
+                        }
+                    }
+
+                    // ── Header card: Instansi + Status ──
+                    item {
+                        Card(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(1.dp)
+                        ) {
                             Column(Modifier.padding(16.dp)) {
                                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
                                     Text(t.namaInstansi, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
@@ -101,50 +149,89 @@ fun DetailTransaksiContent(
                                 if (t.needsBypassAcknowledge) { Spacer(Modifier.height(4.dp)); BypassIndicator(false) }
                                 else if (t.metodePersetujuan == MetodePersetujuan.BYPASS) { Spacer(Modifier.height(4.dp)); BypassIndicator(true) }
 
-                                HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                                DetailRow("PIC", "${t.picNama} (${t.picNoHp})")
-                                DetailRow("Surat", t.nomorSuratPengantar)
-                                DetailRow("Tgl Pinjam", t.tanggalPinjam.toDisplayString())
-                                DetailRow("Tenggat", t.tanggalKembaliRencana.toDisplayString(), isHighlight = t.isOverdue)
-                                t.tanggalKembaliAktual?.let { DetailRow("Kembali Aktual", it.toDisplayString()) }
+                                HorizontalDivider(Modifier.padding(vertical = 8.dp), color = Color(0xFFE5E7EB))
+                            }
+                        }
+                    }
 
-                                if (t.isOverdue) {
-                                    Spacer(Modifier.height(6.dp))
-                                    Surface(color = BpkpadRed.copy(0.1f), shape = RoundedCornerShape(6.dp)) {
-                                        Text("Terlambat ${t.daysOverdue} hari", color = BpkpadRed, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(8.dp))
-                                    }
-                                }
-                                t.alasanPenolakan?.let { alasan ->
-                                    Spacer(Modifier.height(6.dp))
-                                    Surface(color = BpkpadRed.copy(0.08f), shape = RoundedCornerShape(8.dp)) {
-                                        Column(Modifier.fillMaxWidth().padding(10.dp)) {
-                                            Text("Alasan Penolakan:", style = MaterialTheme.typography.labelSmall, color = BpkpadRed, fontWeight = FontWeight.SemiBold)
-                                            Text(alasan, style = MaterialTheme.typography.bodySmall)
-                                        }
-                                    }
-                                }
-                                t.catatanBypass?.let { catatan ->
-                                    Spacer(Modifier.height(6.dp))
-                                    Surface(color = BpkpadOrange.copy(0.08f), shape = RoundedCornerShape(8.dp)) {
-                                        Column(Modifier.fillMaxWidth().padding(10.dp)) {
-                                            Text("Catatan Bypass:", style = MaterialTheme.typography.labelSmall, color = BpkpadOrange, fontWeight = FontWeight.SemiBold)
-                                            Text(catatan, style = MaterialTheme.typography.bodySmall)
-                                        }
-                                    }
+                    // ── Section: Informasi Pengajuan ──
+                    item {
+                        DetailSectionCard(title = "Informasi Pengajuan") {
+                            FigmaDetailRow(Icons.Default.Person, "Nama Pemohon", "${t.picNama} (${t.picNoHp})")
+                            FigmaDetailRow(Icons.Default.Business, "Unit Kerja", t.namaInstansi)
+                            FigmaDetailRow(Icons.Default.Phone, "No. Telepon", t.picNoHp)
+                        }
+                    }
+
+                    // ── Section: Data Arsip ──
+                    item {
+                        DetailSectionCard(title = "Data Arsip") {
+                            FigmaDetailRow(Icons.Default.Description, "Nomor Surat", t.nomorSuratPengantar)
+                            FigmaDetailRow(Icons.Default.CalendarMonth, "Tgl Pinjam", t.tanggalPinjam.toDisplayString())
+                            FigmaDetailRow(Icons.Default.Event, "Tenggat", t.tanggalKembaliRencana.toDisplayString(), isHighlight = t.isOverdue)
+                            t.tanggalKembaliAktual?.let {
+                                FigmaDetailRow(Icons.Default.EventAvailable, "Kembali Aktual", it.toDisplayString())
+                            }
+                        }
+                    }
+
+                    // ── Overdue Warning ──
+                    if (t.isOverdue) {
+                        item {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                                color = Color(0xFFF8D7DA),
+                                shape = RoundedCornerShape(10.dp)
+                            ) {
+                                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Default.Warning, null, Modifier.size(18.dp), tint = Color(0xFFC62828))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text("Terlambat ${t.daysOverdue} hari", color = Color(0xFFC62828), fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
                                 }
                             }
                         }
                     }
 
-                    // QR Code
+                    // ── Alasan Penolakan ──
+                    t.alasanPenolakan?.let { alasan ->
+                        item {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                                color = BpkpadRed.copy(0.08f),
+                                shape = RoundedCornerShape(10.dp)
+                            ) {
+                                Column(Modifier.fillMaxWidth().padding(12.dp)) {
+                                    Text("Alasan Penolakan:", style = MaterialTheme.typography.labelSmall, color = BpkpadRed, fontWeight = FontWeight.SemiBold)
+                                    Text(alasan, style = MaterialTheme.typography.bodySmall)
+                                }
+                            }
+                        }
+                    }
+
+                    // ── Catatan Bypass ──
+                    t.catatanBypass?.let { catatan ->
+                        item {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                                color = BpkpadOrange.copy(0.08f),
+                                shape = RoundedCornerShape(10.dp)
+                            ) {
+                                Column(Modifier.fillMaxWidth().padding(12.dp)) {
+                                    Text("Catatan Bypass:", style = MaterialTheme.typography.labelSmall, color = BpkpadOrange, fontWeight = FontWeight.SemiBold)
+                                    Text(catatan, style = MaterialTheme.typography.bodySmall)
+                                }
+                            }
+                        }
+                    }
+
+                    // ── QR Code ──
                     t.qrCodeToken?.let { token ->
                         item {
                             Card(
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                                 shape = RoundedCornerShape(12.dp),
-                                elevation = CardDefaults.cardElevation(3.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
-                                )
+                                elevation = CardDefaults.cardElevation(2.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFDFF5E1).copy(alpha = 0.6f))
                             ) {
                                 Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                     Row(
@@ -152,35 +239,29 @@ fun DetailTransaksiContent(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.Center
                                     ) {
-                                        Icon(
-                                            Icons.Default.QrCodeScanner,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
-                                        )
+                                        Icon(Icons.Default.QrCodeScanner, contentDescription = null, tint = Color(0xFF207125))
                                         Spacer(Modifier.width(8.dp))
                                         Text(
                                             text = stringResource(id = R.string.qr_card_title),
                                             style = MaterialTheme.typography.titleSmall,
-                                            fontWeight = FontWeight.SemiBold
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color(0xFF207125)
                                         )
                                     }
                                     Spacer(Modifier.height(4.dp))
                                     Text(
                                         text = stringResource(id = R.string.qr_card_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                        color = Color(0xFF374151)
                                     )
                                     Spacer(Modifier.height(8.dp))
                                     QrCodeDisplay(token, 200.dp)
                                     Spacer(Modifier.height(8.dp))
-                                    Surface(
-                                        color = MaterialTheme.colorScheme.surface,
-                                        shape = RoundedCornerShape(8.dp)
-                                    ) {
+                                    Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
                                         Text(
                                             token,
                                             style = MaterialTheme.typography.labelMedium,
-                                            color = MaterialTheme.colorScheme.primary,
+                                            color = Color(0xFF207125),
                                             fontWeight = FontWeight.SemiBold,
                                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                         )
@@ -211,32 +292,61 @@ fun DetailTransaksiContent(
                         }
                     }
 
-                    // Documents
+                    // ── Documents ──
                     if (t.details.isNotEmpty()) {
-                        item { Text("Dokumen Dipinjam (${t.details.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold) }
+                        item {
+                            Text(
+                                "Dokumen Dipinjam (${t.details.size})",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                            )
+                        }
                         items(t.details) { detail -> DokumenListItem(detail) }
                     }
 
-                    // Action buttons (RBAC)
+                    // ── Action buttons (RBAC) ──
                     item {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             // Arsiparis actions
                             if (role == UserRole.ARSIPARIS) {
                                 if (t.status == TransaksiStatus.DISETUJUI) {
-                                    BpkpadPrimaryButton("Konfirmasi Serah Dokumen", onClick = onConfirmHandover)
+                                    Button(
+                                        onClick = onConfirmHandover,
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
+                                    ) {
+                                        Text("Konfirmasi Serah Dokumen", color = Color.White, fontWeight = FontWeight.SemiBold)
+                                    }
                                 }
                                 if (t.status == TransaksiStatus.DIPINJAM) {
-                                    BpkpadPrimaryButton("Selesaikan Peminjaman (Pengembalian)", onClick = { showReturnDialog = true })
+                                    Button(
+                                        onClick = { showReturnDialog = true },
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
+                                    ) {
+                                        Text("Selesaikan Peminjaman", color = Color.White, fontWeight = FontWeight.SemiBold)
+                                    }
                                 }
                                 if (t.picNoHp.isNotBlank()) {
-                                    BpkpadSecondaryButton(
-                                        text = "Hubungi via WhatsApp",
+                                    OutlinedButton(
                                         onClick = {
                                             val phone = t.picNoHp.filter { it.isDigit() }.let { if (it.startsWith("0")) "62${it.substring(1)}" else it }
                                             val msg = "Halo ${t.picNama}, reminder dokumen peminjaman ${t.nomorSuratPengantar} dari BPKPAD Balangan. Tenggat: ${t.tanggalKembaliRencana.toDisplayString()}. Terima kasih."
                                             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("${Constants.WHATSAPP_API_URL}?phone=$phone&text=${Uri.encode(msg)}")))
-                                        }
-                                    )
+                                        },
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Icon(Icons.Default.Phone, null, tint = Color(0xFF207125))
+                                        Spacer(Modifier.width(8.dp))
+                                        Text("Hubungi via WhatsApp", color = Color(0xFF207125), fontWeight = FontWeight.SemiBold)
+                                    }
                                 }
                                 if (t.canBeCancelled) {
                                     TextButton(onClick = { showCancelDialog = true }, modifier = Modifier.fillMaxWidth()) {
@@ -247,7 +357,14 @@ fun DetailTransaksiContent(
                             // Kasubag actions
                             if (role == UserRole.KASUBAG) {
                                 if (t.needsBypassAcknowledge) {
-                                    BpkpadPrimaryButton("Ketahui (Verifikasi Bypass)", onClick = onAcknowledgeBypass)
+                                    Button(
+                                        onClick = onAcknowledgeBypass,
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
+                                    ) {
+                                        Text("Ketahui (Verifikasi Bypass)", color = Color.White, fontWeight = FontWeight.SemiBold)
+                                    }
                                 }
                                 if (t.canBeCancelled) {
                                     TextButton(onClick = { showCancelDialog = true }, modifier = Modifier.fillMaxWidth()) {
@@ -258,9 +375,16 @@ fun DetailTransaksiContent(
                         }
                     }
 
-                    // Audit Trail
+                    // ── Audit Trail ──
                     if (uiState.auditLogs.isNotEmpty()) {
-                        item { Text("Audit Trail (${uiState.auditLogs.size})", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold) }
+                        item {
+                            Text(
+                                "Audit Trail (${uiState.auditLogs.size})",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                            )
+                        }
                         itemsIndexed(uiState.auditLogs) { idx, log ->
                             AuditTimelineItem(log, isLast = idx == uiState.auditLogs.size - 1)
                         }
@@ -304,11 +428,52 @@ private fun buildQrWhatsAppMessage(transaksi: Transaksi, qrToken: String): Strin
     }
 }
 
+// ── Figma-style Section Card ──
 @Composable
-private fun DetailRow(label: String, value: String, isHighlight: Boolean = false) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
-        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline, modifier = Modifier.width(110.dp))
-        Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium, color = if (isHighlight) BpkpadRed else MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+private fun DetailSectionCard(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+        Text(
+            text = title,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF1A1A1A),
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+        Card(
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(1.dp)
+        ) {
+            Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                content()
+            }
+        }
+    }
+}
+
+// ── Figma-style Detail Row with icon ──
+@Composable
+private fun FigmaDetailRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    value: String,
+    isHighlight: Boolean = false
+) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, null, Modifier.size(18.dp), tint = Color(0xFF9CA3AF))
+        Spacer(Modifier.width(10.dp))
+        Column {
+            Text(label, fontSize = 11.sp, color = Color(0xFF9CA3AF), fontWeight = FontWeight.Medium)
+            Text(
+                value,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = if (isHighlight) Color(0xFFC62828) else Color(0xFF1A1A1A)
+            )
+        }
     }
 }
 

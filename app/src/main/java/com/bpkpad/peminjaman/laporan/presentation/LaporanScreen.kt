@@ -2,58 +2,26 @@ package com.bpkpad.peminjaman.laporan.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Assessment
-import androidx.compose.material.icons.filled.Assignment
-import androidx.compose.material.icons.filled.BookmarkAdded
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.HourglassEmpty
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.TableChart
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bpkpad.peminjaman.core.theme.BpkpadBlue
@@ -62,7 +30,6 @@ import com.bpkpad.peminjaman.core.theme.BpkpadGold
 import com.bpkpad.peminjaman.core.theme.BpkpadRed
 import com.bpkpad.peminjaman.core.theme.BpkpadTheme
 import com.bpkpad.peminjaman.core.ui.BpkpadDatePickerField
-import com.bpkpad.peminjaman.core.ui.BpkpadTopBar
 import com.bpkpad.peminjaman.laporan.domain.model.ExportedReport
 import java.io.File
 
@@ -116,22 +83,53 @@ fun LaporanContent(
     onShareReport: (ExportedReport) -> Unit
 ) {
     Scaffold(
-        topBar = { BpkpadTopBar("Laporan & Ekspor", onBack = onBack) },
+        containerColor = Color(0xFFF7F8FA),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentPadding = PaddingValues(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            // ── Figma-style Header ──
+            item {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    shadowElevation = 2.dp
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFFF3F4F6))
+                                .clickable(onClick = onBack),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.ArrowBack, "Kembali", tint = Color(0xFF374151), modifier = Modifier.size(20.dp))
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Text("Laporan & Ekspor", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1A1A))
+                    }
+                }
+            }
+
             item {
                 Card(
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
+                    colors = CardDefaults.cardColors(Color(0xFFDFF5E1).copy(alpha = 0.7f)),
+                    elevation = CardDefaults.cardElevation(1.dp)
                 ) {
                     Column(Modifier.fillMaxWidth().padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Assessment, null, tint = MaterialTheme.colorScheme.primary)
+                            Icon(Icons.Default.Assessment, null, tint = Color(0xFF207125))
                             Spacer(Modifier.width(10.dp))
                             Column {
                                 Text("Laporan Peminjaman", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -153,9 +151,10 @@ fun LaporanContent(
             }
 
             item {
+                Column(Modifier.padding(horizontal = 16.dp)) {
                 Text("Filter Periode", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
-                Card(shape = RoundedCornerShape(12.dp), elevation = CardDefaults.cardElevation(1.dp)) {
+                Card(shape = RoundedCornerShape(12.dp), elevation = CardDefaults.cardElevation(1.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
                     Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             BpkpadDatePickerField(
@@ -191,9 +190,11 @@ fun LaporanContent(
                         }
                     }
                 }
+                }
             }
 
             item {
+                Column(Modifier.padding(horizontal = 16.dp)) {
                 Text("Ringkasan", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -206,6 +207,7 @@ fun LaporanContent(
                         StatCard("Overdue", uiState.totalOverdue, Icons.Default.Warning, BpkpadRed, Modifier.weight(1f))
                     }
                 }
+                }
             }
 
             uiState.exportedReport?.let { report ->
@@ -215,6 +217,7 @@ fun LaporanContent(
             }
 
             item {
+                Column(Modifier.padding(horizontal = 16.dp)) {
                 Text("Ekspor Data", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -236,6 +239,7 @@ fun LaporanContent(
                         enabled = uiState.filterError == null && uiState.totalFiltered > 0 && !uiState.isExportingPdf,
                         onClick = onExportExcel
                     )
+                }
                 }
             }
 

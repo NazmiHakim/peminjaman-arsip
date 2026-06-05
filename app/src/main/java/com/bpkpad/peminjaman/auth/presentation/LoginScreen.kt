@@ -65,7 +65,7 @@ fun LoginContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(colors = listOf(BpkpadBlue, BpkpadBlueDark)))
+            .background(Brush.verticalGradient(colors = listOf(Color(0xFF207125), Color(0xFF0D631B))))
     ) {
         Column(
             modifier = Modifier
@@ -100,7 +100,7 @@ fun LoginContent(
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(Modifier.padding(24.dp)) {
-                    Text("Masuk", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = BpkpadBlueDark)
+                    Text("Masuk", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = Color(0xFF207125))
                     Text("Masukkan kredensial Anda", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
 
                     Spacer(Modifier.height(20.dp))
@@ -163,7 +163,7 @@ fun LoginContent(
                         enabled = !uiState.isLoading,
                         modifier = Modifier.fillMaxWidth().height(52.dp),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = BpkpadBlue)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
                     ) {
                         if (uiState.isLoading) {
                             CircularProgressIndicator(Modifier.size(20.dp), Color.White, strokeWidth = 2.dp)

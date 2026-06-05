@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -23,12 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bpkpad.peminjaman.R
 import com.bpkpad.peminjaman.core.theme.BpkpadTheme
-import com.bpkpad.peminjaman.core.ui.BpkpadTopBar
 import com.bpkpad.peminjaman.peminjaman.presentation.pengembalian.components.CameraPermissionPlaceholder
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -92,11 +95,49 @@ fun ScanQrContent(
         if (!hasCameraPermission && !isPreview) showCameraPermissionDialog = true
     }
 
-    Scaffold(topBar = { BpkpadTopBar("Scan QR Code Pengembalian", onBack = onBack) }) { padding ->
+    Scaffold(
+        containerColor = Color(0xFFF7F8FA)
+    ) { padding ->
         Column(
-            Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            Modifier.fillMaxSize().padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // ── Figma-style Header ──
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
+                shadowElevation = 2.dp
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(androidx.compose.foundation.shape.CircleShape)
+                            .background(Color(0xFFF3F4F6))
+                            .clickable(onClick = onBack),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.ArrowBack, "Kembali", tint = Color(0xFF374151), modifier = Modifier.size(20.dp))
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        "Scan QR Pengembalian",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF1A1A1A)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
             // Camera preview box
             Card(
                 Modifier.fillMaxWidth().aspectRatio(1f),
@@ -146,10 +187,11 @@ fun ScanQrContent(
             Button(
                 onClick = { if (manualToken.isNotBlank()) onManualSearch(manualToken) },
                 enabled = manualToken.isNotBlank() && !uiState.isLoading,
-                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)
+                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
             ) {
                 if (uiState.isLoading) CircularProgressIndicator(Modifier.size(20.dp), Color.White, strokeWidth = 2.dp)
-                else { Icon(Icons.Default.Search, null); Spacer(Modifier.width(8.dp)); Text("Cari Transaksi") }
+                else { Icon(Icons.Default.Search, null, tint = Color.White); Spacer(Modifier.width(8.dp)); Text("Cari Transaksi", color = Color.White) }
             }
 
             uiState.error?.let { err ->
@@ -162,6 +204,7 @@ fun ScanQrContent(
                         IconButton(onClearError, Modifier.size(20.dp)) { Icon(Icons.Default.Close, "Tutup", Modifier.size(16.dp)) }
                     }
                 }
+            }
             }
         }
     }
