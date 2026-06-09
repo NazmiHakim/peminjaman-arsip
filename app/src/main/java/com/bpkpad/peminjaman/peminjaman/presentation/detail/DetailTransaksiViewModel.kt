@@ -45,8 +45,7 @@ class DetailTransaksiViewModel @Inject constructor(
             try {
                 val t = transaksiRepo.getById(id)
                 if (t == null) { _uiState.update { it.copy(isLoading = false, error = "Transaksi tidak ditemukan") }; return@launch }
-                val nama = instansiRepo.getById(t.instansiId)?.namaInstansi ?: "Instansi #${t.instansiId}"
-                _uiState.update { it.copy(transaksi = t.copy(namaInstansi = nama), isLoading = false) }
+                _uiState.update { it.copy(transaksi = t, isLoading = false) }
             } catch (e: Exception) { _uiState.update { it.copy(isLoading = false, error = e.message) } }
         }
         viewModelScope.launch { auditLogRepo.getByTransaksiId(id).collect { logs -> _uiState.update { it.copy(auditLogs = logs) } } }
@@ -87,8 +86,7 @@ class DetailTransaksiViewModel @Inject constructor(
 
     private suspend fun reload() {
         val t = transaksiRepo.getById(transaksiId) ?: return
-        val nama = instansiRepo.getById(t.instansiId)?.namaInstansi ?: ""
-        _uiState.update { it.copy(transaksi = t.copy(namaInstansi = nama), isLoading = false) }
+        _uiState.update { it.copy(transaksi = t, isLoading = false) }
     }
 
     fun clearMessages() { _uiState.update { it.copy(error = null, successMessage = null) } }

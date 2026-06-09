@@ -104,8 +104,19 @@ fun BpkpadNavGraph(
             DetailTransaksiScreen(transaksiId = id, onBack = { navController.popBackStack() })
         }
 
-        composable(Screen.ListRiwayat.route) {
+        composable(
+            route = "list_riwayat?status={status}", // Menggunakan query parameter opsional
+            arguments = listOf(
+                navArgument("status") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            val statusParam = backStackEntry.arguments?.getString("status")
             ListRiwayatScreen(
+                statusFilter = statusParam, // Oper parameter ke Screen
                 onBack = { navController.popBackStack() },
                 onNavigateToDetail = { id -> navController.navigate(Screen.DetailTransaksi.createRoute(id)) }
             )

@@ -130,7 +130,7 @@ class LaporanExportRepositoryImpl @Inject constructor(
                     sheet.createRow(index + 5).apply {
                         val values = listOf(
                             item.id.toString(),
-                            item.namaInstansi.ifBlank { "Instansi #${item.instansiId}" },
+                            item.namaInstansi.ifBlank { "Instansi #${item.namaInstansi}" },
                             item.picNama,
                             item.picNoHp,
                             item.nomorSuratPengantar,
@@ -263,7 +263,7 @@ class LaporanExportRepositoryImpl @Inject constructor(
         rows.forEach { item ->
             val values = listOf(
                 "#${item.id}",
-                item.namaInstansi.ifBlank { "Instansi #${item.instansiId}" },
+                item.namaInstansi.ifBlank { "Instansi #${item.namaInstansi}" },
                 item.picNama,
                 item.nomorSuratPengantar,
                 item.tanggalPinjam.toDisplayString(),

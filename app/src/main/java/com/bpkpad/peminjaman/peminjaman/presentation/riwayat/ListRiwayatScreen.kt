@@ -29,16 +29,29 @@ import com.bpkpad.peminjaman.peminjaman.domain.model.enums.TransaksiStatus
  * [LOCAL] ListRiwayatScreen
  * Ownership: Riwayat feature
  * RBAC: Both roles
- * v1.0 2026-05-24
+ * v1.1 - Added status filter param support from Dashboard
  */
 @Composable
 fun ListRiwayatScreen(
+    statusFilter: String? = null, // <-- Parameter dari NavGraph
     onBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     viewModel: ListRiwayatViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    ListRiwayatContent(uiState = uiState, onBack = onBack, onNavigateToDetail = onNavigateToDetail, onSearch = viewModel::onSearch, onStatusFilter = viewModel::onStatusFilter)
+
+    // --- TRIGGER FILTER AWAL DARI DASHBOARD ---
+    LaunchedEffect(statusFilter) {
+        viewModel.setInitialFilter(statusFilter)
+    }
+
+    ListRiwayatContent(
+        uiState = uiState,
+        onBack = onBack,
+        onNavigateToDetail = onNavigateToDetail,
+        onSearch = viewModel::onSearch,
+        onStatusFilter = viewModel::onStatusFilter
+    )
 }
 
 @Composable
@@ -137,7 +150,7 @@ fun ListRiwayatContent(
             ) {
                 item {
                     FilterChip(
-                        selected = uiState.selectedStatus == null,
+                        selected = uiState.selectedStatus == null && !uiState.searchQuery.contains("TERLAMBAT"), // Opsional penyesuaian visual
                         onClick = { onStatusFilter(null) },
                         label = { Text("Semua") },
                         colors = FilterChipDefaults.filterChipColors(
@@ -146,11 +159,27 @@ fun ListRiwayatContent(
                         )
                     )
                 }
+
+                // Tambahan manual Chip untuk "Terlambat" (Khusus yang datang dari Dashboard)
+                item {
+                    val isTerlambat = uiState.selectedStatus == TransaksiStatus.DIPINJAM // Dalam konteks aplikasi Anda, Terlambat adalah dipinjam yang overdue
+
+                    FilterChip(
+                        selected = isTerlambat,
+                        onClick = { onStatusFilter(TransaksiStatus.DIPINJAM) },
+                        label = { Text("Terlambat") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Color(0xFFE53935), // Warna merah untuk terlambat
+                            selectedLabelColor = Color.White
+                        )
+                    )
+                }
+
                 items(TransaksiStatus.entries) { status ->
                     FilterChip(
                         selected = uiState.selectedStatus == status,
                         onClick = { onStatusFilter(if (uiState.selectedStatus == status) null else status) },
-                        label = { Text(status.name.replace('_', ' ')) },
+                        label = { Text(status.name.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }) }, // Dibuat lebih rapi format teksnya
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = Color(0xFF207125),
                             selectedLabelColor = Color.White

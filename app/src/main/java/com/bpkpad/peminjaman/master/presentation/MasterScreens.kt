@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.room.Delete
 import com.bpkpad.peminjaman.core.theme.*
 import com.bpkpad.peminjaman.core.ui.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
@@ -143,33 +144,31 @@ fun ListInstansiScreen(
     onBack: () -> Unit,
     viewModel: ListInstansiViewModel = hiltViewModel()
 ) {
+    // UI sekarang HANYA membaca dari 1 sumber ini
     val uiState by viewModel.uiState.collectAsState()
-    val filtered = viewModel.filtered
+
+    var showDialog by remember { mutableStateOf(false) }
+    var inputNama by remember { mutableStateOf("") }
+    var inputKode by remember { mutableStateOf("") }
+    var inputAlamat by remember { mutableStateOf("") }
 
     Scaffold(
-        containerColor = Color(0xFFF7F8FA)
+        containerColor = Color(0xFFF7F8FA),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                containerColor = Color(0xFF207125),
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Tambah Instansi")
+            }
+        }
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
-            // ── Figma-style Header ──
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.White,
-                shadowElevation = 2.dp
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFF3F4F6))
-                            .clickable(onClick = onBack),
-                        contentAlignment = Alignment.Center
-                    ) {
+            // ── Header ──
+            Surface(modifier = Modifier.fillMaxWidth(), color = Color.White, shadowElevation = 2.dp) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Box(modifier = Modifier.size(36.dp).clip(CircleShape).background(Color(0xFFF3F4F6)).clickable(onClick = onBack), contentAlignment = Alignment.Center) {
                         Icon(Icons.Default.ArrowBack, "Kembali", tint = Color(0xFF374151), modifier = Modifier.size(20.dp))
                     }
                     Spacer(Modifier.width(12.dp))
@@ -177,32 +176,73 @@ fun ListInstansiScreen(
                 }
             }
 
+            // ── Kolom Pencarian ──
             OutlinedTextField(
-                value = uiState.searchQuery, onValueChange = viewModel::onSearch,
+                value = uiState.searchQuery,
+                onValueChange = viewModel::onSearch,
                 placeholder = { Text("Cari nama / kode instansi...", color = Color(0xFF9CA3AF)) },
                 leadingIcon = { Icon(Icons.Default.Search, null, tint = Color(0xFF9CA3AF)) },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                 shape = RoundedCornerShape(12.dp), singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                    unfocusedBorderColor = Color(0xFFE5E7EB),
-                    focusedBorderColor = Color(0xFF207125)
+                    unfocusedContainerColor = Color.White, focusedContainerColor = Color.White,
+                    unfocusedBorderColor = Color(0xFFE5E7EB), focusedBorderColor = Color(0xFF207125)
                 )
             )
-            Text("${filtered.size} instansi", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280), modifier = Modifier.padding(horizontal = 16.dp))
-            if (uiState.isLoading) BpkpadLoadingIndicator()
-            else if (filtered.isEmpty()) BpkpadEmptyState("Tidak ada instansi ditemukan", Icons.Default.Business)
-            else LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(filtered) { inst -> InstansiCard(inst) }
-                item { Spacer(Modifier.height(24.dp)) }
+            Text("${uiState.instansiList.size} instansi", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280), modifier = Modifier.padding(horizontal = 16.dp))
+
+            // ── Tampilkan Data ──
+            if (uiState.isLoading) {
+                BpkpadLoadingIndicator()
+            } else if (uiState.instansiList.isEmpty()) {
+                BpkpadEmptyState("Data tidak ditemukan", Icons.Default.Business)
+            } else {
+                LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // Masukkan instansiList langsung ke dalam items
+                    items(uiState.instansiList) { inst ->
+                        InstansiCard(
+                            inst = inst,
+                            onDelete = { viewModel.deleteInstansi(inst.id) } // Jalankan perintah hapus
+                        )
+                    }
+                    item { Spacer(Modifier.height(80.dp)) }
+                }
             }
+        }
+
+        // ── Dialog Tambah Data ──
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Tambah Instansi Baru", fontWeight = FontWeight.Bold) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(value = inputNama, onValueChange = { inputNama = it }, label = { Text("Nama Instansi *") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                        OutlinedTextField(value = inputKode, onValueChange = { inputKode = it }, label = { Text("Kode (Opsional)") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                        OutlinedTextField(value = inputAlamat, onValueChange = { inputAlamat = it }, label = { Text("Alamat (Opsional)") }, modifier = Modifier.fillMaxWidth())
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            if (inputNama.isNotBlank()) {
+                                viewModel.addInstansi(inputNama, inputKode, inputAlamat)
+                                showDialog = false
+                                inputNama = ""; inputKode = ""; inputAlamat = ""
+                            }
+                        }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
+                    ) { Text("Simpan") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) { Text("Batal", color = Color(0xFF6B7280)) }
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun InstansiCard(inst: Instansi) {
+private fun InstansiCard(inst: Instansi, onDelete: () -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(1.dp),
@@ -220,9 +260,14 @@ private fun InstansiCard(inst: Instansi) {
                 inst.kodeInstansi?.let { Text("Kode: $it", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280)) }
                 inst.alamat?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280)) }
             }
+            // Tombol Hapus / Delete
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Default.Delete, contentDescription = "Hapus", tint = MaterialTheme.colorScheme.error)
+            }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

@@ -45,6 +45,15 @@ class TransaksiRepositoryImpl @Inject constructor(
 
     override suspend fun create(transaksi: Transaksi, dokumenIds: List<Int>): ResultState<Transaksi> {
         return try {
+            for (dokumenId in dokumenIds) {
+                val dok = masterDokumenDao.getById(dokumenId)
+                if (dok == null) return ResultState.Error("Dokumen tidak ditemukan di database.")
+
+                // Pastikan dokumen statusnya 'tersedia'
+                if (dok.status.lowercase() != "tersedia") {
+                    return ResultState.Error("PENGAJUAN DITOLAK: Dokumen ${dok.nomorDokumen} saat ini sedang dipinjam atau diproses oleh instansi lain. Silakan ajukan kembali setelah dokumen dikembalikan.")
+                }
+            }
             // Insert transaksi
             val entity = transaksi.toEntity()
             val transaksiId = transaksiDao.insert(entity).toInt()
@@ -52,6 +61,7 @@ class TransaksiRepositoryImpl @Inject constructor(
             // Insert detail peminjaman for each dokumen
             val details = dokumenIds.mapNotNull { dokumenId ->
                 val dok = masterDokumenDao.getById(dokumenId) ?: return@mapNotNull null
+                masterDokumenDao.updateStatus(dokumenId, "dipinjam")
                 DetailPeminjamanEntity(
                     transaksiId = transaksiId,
                     dokumenId = dokumenId,
@@ -92,6 +102,13 @@ class TransaksiRepositoryImpl @Inject constructor(
 
     override suspend fun reject(transaksiId: Int, approverId: Int, alasan: String): ResultState<Unit> {
         return try {
+            // --- TAMBAHAN TASK 10: Membuka kembali gembok dokumen jika ditolak Kasubag ---
+            val details = detailDao.getByTransaksiIdSync(transaksiId)
+            details.forEach { detail ->
+                masterDokumenDao.updateStatus(detail.dokumenId, "tersedia")
+            }
+            // -----------------------------------------------------------------------------
+
             transaksiDao.reject(transaksiId, approverId, alasan)
             ResultState.Success(Unit)
         } catch (e: Exception) {
@@ -194,13 +211,11 @@ class TransaksiRepositoryImpl @Inject constructor(
     }
 
     private suspend fun buildDomain(entity: TransaksiEntity, details: List<DetailPeminjaman> = emptyList()): Transaksi {
-        val instansi = instansiDao.getById(entity.instansiPeminjamId)
         val createdBy = userDao.getById(entity.createdBy)
         val approvedBy = entity.approvedBy?.let { userDao.getById(it) }
         return Transaksi(
             id = entity.id,
-            instansiId = entity.instansiPeminjamId,
-            namaInstansi = instansi?.namaInstansi ?: "Instansi #${entity.instansiPeminjamId}",
+            namaInstansi = entity.namaInstansi,
             picNama = entity.picNama,
             picNoHp = entity.picNoHp,
             nomorSuratPengantar = entity.nomorSuratPengantar,
@@ -226,7 +241,7 @@ class TransaksiRepositoryImpl @Inject constructor(
 
     private fun Transaksi.toEntity() = TransaksiEntity(
         id = id,
-        instansiPeminjamId = instansiId,
+        namaInstansi = namaInstansi,
         picNama = picNama,
         picNoHp = picNoHp,
         nomorSuratPengantar = nomorSuratPengantar,

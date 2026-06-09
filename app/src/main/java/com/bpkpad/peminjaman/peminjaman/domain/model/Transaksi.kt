@@ -6,7 +6,6 @@ import java.time.LocalDate
 
 data class Transaksi(
     val id: Int,
-    val instansiId: Int,
     val namaInstansi: String,
     val picNama: String,
     val picNoHp: String,

@@ -23,8 +23,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 data class FormTransaksiUiState(
-    val instansiId: Int? = null,
-    val selectedInstansi: Instansi? = null,
+    val instansiName: String = "",
     val instansiSuggestions: List<Instansi> = emptyList(),
     val picNama: String = "",
     val picNoHp: String = "",
@@ -86,8 +85,14 @@ class FormTransaksiViewModel @Inject constructor(
     fun onNomorSuratChange(v: String) = _uiState.update { it.copy(nomorSurat = v) }
     fun onTanggalKembaliChange(v: String) = _uiState.update { it.copy(tanggalKembali = v) }
     fun onFotoSelected(uri: Uri) = _uiState.update { it.copy(fotoUri = uri) }
-    fun onInstansiSearch(q: String) { _instansiQuery.value = q }
-    fun onInstansiSelect(inst: Instansi) = _uiState.update { it.copy(instansiId = inst.id, selectedInstansi = inst, instansiSuggestions = emptyList()) }
+    fun onInstansiSearch(q: String) {
+        _uiState.update { it.copy(instansiName = q) }
+        _instansiQuery.value = q
+    }
+    fun onInstansiSelect(inst: Instansi) {
+        // Saat diklik dari autocomplete, masukkan namanya ke kolom teks
+        _uiState.update { it.copy(instansiName = inst.namaInstansi, instansiSuggestions = emptyList()) }
+    }
     fun searchDokumen(q: String) { _dokumenQuery.value = q }
     fun addDokumen(dok: MasterDokumen) = _uiState.update { it.copy(selectedDokumen = it.selectedDokumen + dok, dokumenSearchResults = emptyList()) }
     fun removeDokumen(id: Int) = _uiState.update { it.copy(selectedDokumen = it.selectedDokumen.filter { d -> d.id != id }) }
@@ -97,7 +102,7 @@ class FormTransaksiViewModel @Inject constructor(
     fun submit() {
         val s = _uiState.value
         _uiState.update { it.copy(submitted = true) }
-        if (s.instansiId == null || s.picNama.isBlank() || s.picNoHp.isBlank() ||
+        if (s.instansiName.isBlank() || s.picNama.isBlank() || s.picNoHp.isBlank() ||
             s.nomorSurat.isBlank() || s.tanggalKembali.isBlank() || s.fotoUri == null || s.selectedDokumen.isEmpty()
         ) return
 
@@ -122,7 +127,7 @@ class FormTransaksiViewModel @Inject constructor(
             }
 
             val transaksi = Transaksi(
-                id = 0, instansiId = s.instansiId, namaInstansi = s.selectedInstansi?.namaInstansi ?: "",
+                id = 0, namaInstansi = s.instansiName,
                 picNama = s.picNama, picNoHp = s.picNoHp, nomorSuratPengantar = s.nomorSurat,
                 fotoSuratPengantarPath = fotoPath, qrCodeToken = null,
                 tanggalPinjam = LocalDate.now(), tanggalKembaliRencana = tanggalKembali,

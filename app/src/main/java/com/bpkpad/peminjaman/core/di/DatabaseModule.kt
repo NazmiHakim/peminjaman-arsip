@@ -24,7 +24,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            Constants.DB_NAME
+            "peminjaman_arsip.db"
         )
             .fallbackToDestructiveMigration()
             .build()

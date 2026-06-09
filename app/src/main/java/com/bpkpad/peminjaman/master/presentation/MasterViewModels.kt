@@ -2,6 +2,7 @@ package com.bpkpad.peminjaman.master.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bpkpad.peminjaman.master.domain.usecase.CreateInstansiUseCase
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
 import com.bpkpad.peminjaman.peminjaman.domain.model.MasterDokumen
 import com.bpkpad.peminjaman.peminjaman.domain.repository.InstansiRepository
@@ -41,6 +42,7 @@ class ListDokumenViewModel @Inject constructor(
 }
 
 // =============== List Instansi ViewModel ===============
+// =============== List Instansi ViewModel ===============
 data class ListInstansiUiState(
     val instansiList: List<Instansi> = emptyList(),
     val searchQuery: String = "",
@@ -49,21 +51,74 @@ data class ListInstansiUiState(
 
 @HiltViewModel
 class ListInstansiViewModel @Inject constructor(
-    private val instansiRepo: InstansiRepository
+    private val instansiRepo: InstansiRepository,
+    private val createInstansiUseCase: com.bpkpad.peminjaman.master.domain.usecase.CreateInstansiUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ListInstansiUiState())
-    val uiState: StateFlow<ListInstansiUiState> = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            instansiRepo.getAll().collect { list ->
-                _uiState.update { it.copy(instansiList = list, isLoading = false) }
+    // 1. Simpan apa yang diketik user di kolom pencarian
+    private val _searchQuery = MutableStateFlow("")
+    private val _errorMessage = kotlinx.coroutines.flow.MutableSharedFlow<String>()
+    val errorMessage = _errorMessage.asSharedFlow()
+    // -------------------------------------------------------
+
+    val uiState: StateFlow<ListInstansiUiState> = combine(
+        instansiRepo.getAll(),
+        _searchQuery
+    ) { listDariDb, ketikan ->
+        val hasilFilter = if (ketikan.isBlank()) {
+            listDariDb
+        } else {
+            listDariDb.filter {
+                it.namaInstansi.contains(ketikan, ignoreCase = true) ||
+                        (it.kodeInstansi?.contains(ketikan, ignoreCase = true) == true)
             }
         }
+
+        ListInstansiUiState(
+            instansiList = hasilFilter,
+            searchQuery = ketikan,
+            isLoading = false
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = ListInstansiUiState(isLoading = true)
+    )
+
+    fun onSearch(q: String) {
+        _searchQuery.value = q
     }
-    fun onSearch(q: String) { _uiState.update { it.copy(searchQuery = q) } }
-    val filtered get() = uiState.value.let { s ->
-        if (s.searchQuery.isBlank()) s.instansiList
-        else s.instansiList.filter { i -> i.namaInstansi.contains(s.searchQuery, true) || (i.kodeInstansi?.contains(s.searchQuery, true) == true) }
+
+    fun addInstansi(nama: String, kode: String, alamat: String) {
+        viewModelScope.launch {
+            val newInstansi = Instansi(
+                id = 0,
+                namaInstansi = nama,
+                alamat = alamat.ifBlank { null },
+                kodeInstansi = kode.ifBlank { null }
+            )
+            createInstansiUseCase(newInstansi, 1)
+        }
+    }
+    fun updateInstansi(id: Int, nama: String, kode: String, alamat: String) {
+        viewModelScope.launch {
+            val updatedInstansi = Instansi(
+                id = id, // Menggunakan ID yang sudah ada supaya data lamanya tertimpa
+                namaInstansi = nama,
+                alamat = alamat.ifBlank { null },
+                kodeInstansi = kode.ifBlank { null }
+            )
+            instansiRepo.update(updatedInstansi)
+        }
+    }
+    // Fungsi Delete Instansi
+    fun deleteInstansi(id: Int) {
+        viewModelScope.launch {
+            val result = instansiRepo.delete(id)
+            // Cek apakah hasilnya Error (misal karena dipakai di Peminjaman)
+            if (result is com.bpkpad.peminjaman.core.common.ResultState.Error) {
+                _errorMessage.emit("Gagal: Instansi ini tidak bisa dihapus karena sudah dipakai dalam riwayat peminjaman.")
+            }
+        }
     }
 }

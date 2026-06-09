@@ -7,12 +7,6 @@ import java.time.LocalDate
     tableName = "transaksi_peminjaman",
     foreignKeys = [
         ForeignKey(
-            entity = InstansiEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["instansi_peminjam_id"],
-            onDelete = ForeignKey.RESTRICT
-        ),
-        ForeignKey(
             entity = UserEntity::class,
             parentColumns = ["id"],
             childColumns = ["created_by"],
@@ -20,7 +14,6 @@ import java.time.LocalDate
         )
     ],
     indices = [
-        Index(value = ["instansi_peminjam_id"]),
         Index(value = ["status"]),
         Index(value = ["tanggal_kembali_rencana"]),
         Index(value = ["created_by"]),
@@ -30,7 +23,7 @@ import java.time.LocalDate
 )
 data class TransaksiEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "instansi_peminjam_id") val instansiPeminjamId: Int,
+    @ColumnInfo(name = "nama_instansi") val namaInstansi: String,
     @ColumnInfo(name = "pic_nama") val picNama: String,
     @ColumnInfo(name = "pic_no_hp") val picNoHp: String,
     @ColumnInfo(name = "nomor_surat_pengantar") val nomorSuratPengantar: String,

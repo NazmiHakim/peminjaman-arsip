@@ -7,7 +7,6 @@ import com.bpkpad.peminjaman.core.session.SessionManager
 import com.bpkpad.peminjaman.core.session.SessionObject
 import com.bpkpad.peminjaman.peminjaman.domain.model.Transaksi
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.TransaksiStatus
-import com.bpkpad.peminjaman.peminjaman.domain.repository.InstansiRepository
 import com.bpkpad.peminjaman.peminjaman.domain.repository.TransaksiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -28,7 +27,6 @@ data class DashboardArsiparisUiState(
 @HiltViewModel
 class DashboardArsiparisViewModel @Inject constructor(
     private val transaksiRepo: TransaksiRepository,
-    private val instansiRepo: InstansiRepository,
     private val sessionManager: SessionManager,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
@@ -45,20 +43,14 @@ class DashboardArsiparisViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            val instansiMap = mutableMapOf<Int, String>()
-            instansiRepo.getAll().firstOrNull()?.forEach { i -> instansiMap[i.id] = i.namaInstansi }
-
             combine(
                 transaksiRepo.getOverdue(),
                 transaksiRepo.getAll()
             ) { overdue, all ->
-                val withNames: (Transaksi) -> Transaksi = { t ->
-                    t.copy(namaInstansi = instansiMap[t.instansiId] ?: "Instansi #${t.instansiId}")
-                }
                 _uiState.update {
                     it.copy(
-                        overdueList = overdue.map(withNames),
-                        recentList  = all.take(10).map(withNames),
+                        overdueList = overdue,
+                        recentList  = all.take(10),
                         totalDipinjam = all.count { t -> t.status == TransaksiStatus.DIPINJAM },
                         totalMenunggu = all.count { t -> t.status == TransaksiStatus.MENUNGGU_PERSETUJUAN },
                         totalOverdue  = overdue.size,

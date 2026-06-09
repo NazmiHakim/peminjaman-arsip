@@ -74,7 +74,7 @@ fun StatusBadge(status: TransaksiStatus, modifier: Modifier = Modifier) {
  * Ownership: Modul Peminjaman
  * Scope: Global (Dashboard, Riwayat, Detail)
  * RBAC: Neutral
- * v1.0 2026-05-24
+ * v1.2 - Fix Translucent Shadow Bleeding on Overdue Cards
  */
 @Composable
 fun TransaksiCard(
@@ -84,17 +84,21 @@ fun TransaksiCard(
     modifier: Modifier = Modifier
 ) {
     val isOverdue = transaksi.isOverdue
+
     Card(
         onClick = onCardClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(if (isOverdue) 4.dp else 2.dp),
+        // Elevation disamakan agar bayangan konsisten dan elegan
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         colors = CardDefaults.cardColors(
+            // MENGGUNAKAN SOLID COLOR (Warna mutlak)
+            // Jika overdue, gunakan warna pastel merah solid (0xFFFFF5F5), jika tidak gunakan Putih.
             containerColor = if (isOverdue && showOverdueBadge)
-                BpkpadRed.copy(alpha = 0.04f) else MaterialTheme.colorScheme.surface
+                Color(0xFFFFF5F5) else Color.White
         ),
         border = if (isOverdue && showOverdueBadge)
-            androidx.compose.foundation.BorderStroke(1.dp, BpkpadRed.copy(alpha = 0.3f)) else null
+            androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE53935).copy(alpha = 0.3f)) else null
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -103,42 +107,44 @@ fun TransaksiCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "#${transaksi.id} · ${transaksi.namaInstansi.ifBlank { "Instansi #${transaksi.instansiId}" }}",
+                    text = "#${transaksi.id} · ${transaksi.namaInstansi.ifBlank { "Instansi Peminjam" }}",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier.weight(1f).padding(end = 8.dp),
+                    color = Color(0xFF1A1A1A)
                 )
                 StatusBadge(transaksi.status)
             }
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Person, null, Modifier.size(13.dp), tint = MaterialTheme.colorScheme.outline)
-                Spacer(Modifier.width(4.dp))
-                Text(transaksi.picNama, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Icon(Icons.Default.Person, null, Modifier.size(14.dp), tint = Color(0xFF6B7280))
+                Spacer(Modifier.width(6.dp))
+                Text(transaksi.picNama, style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
             }
+            Spacer(Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.CalendarToday, null, Modifier.size(13.dp), tint = MaterialTheme.colorScheme.outline)
-                Spacer(Modifier.width(4.dp))
+                Icon(Icons.Default.CalendarToday, null, Modifier.size(14.dp), tint = Color(0xFF6B7280))
+                Spacer(Modifier.width(6.dp))
                 Text(
                     "Kembali: ${transaksi.tanggalKembaliRencana.toDisplayString()}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (isOverdue && showOverdueBadge) BpkpadRed else MaterialTheme.colorScheme.onSurfaceVariant
+                    color = if (isOverdue && showOverdueBadge) Color(0xFFE53935) else Color(0xFF6B7280)
                 )
             }
             if (isOverdue && showOverdueBadge) {
-                Spacer(Modifier.height(6.dp))
-                Surface(color = BpkpadRed.copy(alpha = 0.12f), shape = RoundedCornerShape(6.dp)) {
-                    Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Warning, null, Modifier.size(13.dp), tint = BpkpadRed)
-                        Spacer(Modifier.width(4.dp))
-                        Text("Terlambat ${transaksi.daysOverdue} hari", style = MaterialTheme.typography.labelSmall, color = BpkpadRed, fontWeight = FontWeight.SemiBold)
+                Spacer(Modifier.height(8.dp))
+                Surface(color = Color(0xFFE53935).copy(alpha = 0.12f), shape = RoundedCornerShape(6.dp)) {
+                    Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Warning, null, Modifier.size(14.dp), tint = Color(0xFFE53935))
+                        Spacer(Modifier.width(6.dp))
+                        Text("Terlambat ${transaksi.daysOverdue} hari", style = MaterialTheme.typography.labelSmall, color = Color(0xFFE53935), fontWeight = FontWeight.Bold)
                     }
                 }
             }
             if (transaksi.needsBypassAcknowledge) {
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(8.dp))
                 BypassIndicator(isAcknowledged = false)
             }
         }
@@ -324,12 +330,25 @@ fun BpkpadDatePickerField(
     modifier: Modifier = Modifier,
     error: String? = null,
     isError: Boolean = error != null,
-    placeholder: String = "Pilih tanggal"
+    placeholder: String = "Pilih tanggal",
+    disablePastDates: Boolean = true
 ) {
     var showPicker by remember { mutableStateOf(false) }
     val selectedDate = remember(value) { value.toLocalDateOrNull() }
+    val todayMillis = remember {
+        LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    }
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = selectedDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+        initialSelectedDateMillis = selectedDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return if (disablePastDates) {
+                    utcTimeMillis >= todayMillis // Blokir hari sebelum hari ini
+                } else {
+                    true // Bebas pilih hari apa saja
+                }
+            }
+        }
     )
     val interactionSource = remember { MutableInteractionSource() }
 

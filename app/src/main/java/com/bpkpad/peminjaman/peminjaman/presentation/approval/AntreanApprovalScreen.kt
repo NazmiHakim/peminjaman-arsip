@@ -217,7 +217,7 @@ private fun PendingApprovalCard(transaksi: Transaksi, onViewDetail: () -> Unit, 
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("#${transaksi.id} ${transaksi.namaInstansi.ifBlank { "Instansi #${transaksi.instansiId}" }}", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                Text("#${transaksi.id} ${transaksi.namaInstansi}", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
                 StatusBadge(transaksi.status)
             }
             Spacer(Modifier.height(6.dp))

@@ -7,7 +7,6 @@ import com.bpkpad.peminjaman.core.session.SessionManager
 import com.bpkpad.peminjaman.peminjaman.domain.model.Perpanjangan
 import com.bpkpad.peminjaman.peminjaman.domain.model.Transaksi
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.TransaksiStatus
-import com.bpkpad.peminjaman.peminjaman.domain.repository.InstansiRepository
 import com.bpkpad.peminjaman.peminjaman.domain.repository.PerpanjanganRepository
 import com.bpkpad.peminjaman.peminjaman.domain.repository.TransaksiRepository
 import com.bpkpad.peminjaman.peminjaman.domain.usecase.perpanjangan.ApprovePerpanjanganUseCase
@@ -32,7 +31,6 @@ data class AntreanApprovalUiState(
 class AntreanApprovalViewModel @Inject constructor(
     private val transaksiRepo: TransaksiRepository,
     private val perpanjanganRepo: PerpanjanganRepository,
-    private val instansiRepo: InstansiRepository,
     private val sessionManager: SessionManager,
     private val approveTransaksiUseCase: ApproveTransaksiUseCase,
     private val rejectTransaksiUseCase: RejectTransaksiUseCase,
@@ -51,16 +49,13 @@ class AntreanApprovalViewModel @Inject constructor(
             sessionManager.session.firstOrNull()?.let { userId = it.userId }
         }
         viewModelScope.launch {
-            val map = mutableMapOf<Int, String>()
-            instansiRepo.getAll().firstOrNull()?.forEach { map[it.id] = it.namaInstansi }
-
             combine(
                 transaksiRepo.getByStatus(TransaksiStatus.MENUNGGU_PERSETUJUAN),
                 perpanjanganRepo.getPendingAll()
             ) { pending, perps ->
                 _uiState.update {
                     it.copy(
-                        pendingTransaksi    = pending.map { t -> t.copy(namaInstansi = map[t.instansiId] ?: "Instansi #${t.instansiId}") },
+                        pendingTransaksi    = pending,
                         pendingPerpanjangan = perps,
                         isLoading = false
                     )

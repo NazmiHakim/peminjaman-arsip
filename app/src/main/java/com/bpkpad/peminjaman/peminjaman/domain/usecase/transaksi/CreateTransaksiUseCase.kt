@@ -13,7 +13,7 @@ class CreateTransaksiUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(transaksi: Transaksi, dokumenIds: List<Int>): ResultState<Transaksi> {
         // --- Input Validation ---
-        if (transaksi.instansiId <= 0)
+        if (transaksi.namaInstansi.isBlank())
             return ResultState.Error("Instansi tidak valid")
         if (transaksi.picNama.isBlank())
             return ResultState.Error("Nama PIC tidak boleh kosong")

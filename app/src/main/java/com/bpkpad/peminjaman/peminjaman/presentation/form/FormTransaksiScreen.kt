@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
  * [LOCAL] FormTransaksiScreen
  * Ownership: Form feature (Arsiparis only)
  * RBAC: ARSIPARIS
- * v1.0 2026-05-24
+ * v1.2 - Fixed Keyboard Overlap using imePadding & navigationBarsPadding
  */
 @Composable
 fun FormTransaksiScreen(
@@ -135,64 +135,38 @@ fun FormTransaksiContent(
     onSubmit: () -> Unit
 ) {
     var dokumenQuery by remember { mutableStateOf("") }
-    var instansiQuery by remember { mutableStateOf("") }
 
+    // --- MODIFIKASI: Menambahkan WindowInsets untuk menangani status bar dan navigasi bawaan ---
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         LazyColumn(
-            Modifier.fillMaxSize().padding(padding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                // --- MODIFIKASI: Sihir anti-keyboard-overlap ---
+                .imePadding(),
+            // ---------------------------------------------
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
-            // ── Figma Header: Back arrow + "Ajukan Permohonan" ──
+            // ── Header ──
             item {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFFF3F4F6))
-                                .clickable(onClick = onBack),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.ArrowBack,
-                                contentDescription = "Kembali",
-                                tint = Color(0xFF374151),
-                                modifier = Modifier.size(20.dp)
-                            )
+                Surface(modifier = Modifier.fillMaxWidth(), color = Color.White, shadowElevation = 2.dp) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(modifier = Modifier.size(36.dp).clip(CircleShape).background(Color(0xFFF3F4F6)).clickable(onClick = onBack), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color(0xFF374151), modifier = Modifier.size(20.dp))
                         }
                         Spacer(Modifier.width(12.dp))
-                        Text(
-                            text = "Ajukan Permohonan",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1A1A1A)
-                        )
+                        Text(text = "Ajukan Permohonan", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1A1A))
                     }
                 }
             }
 
-            // ── Foto Surat (Green button at top per Figma) ──
+            // ── Foto Surat ──
             item {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-                    Text(
-                        "Foto Surat Pengantar",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF374151)
-                    )
+                    Text("Foto Surat Pengantar", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF374151))
                     Spacer(Modifier.height(8.dp))
                     FotoSuratInputOptions(
                         hasFoto = uiState.fotoUri != null,
@@ -203,37 +177,29 @@ fun FormTransaksiContent(
                 }
             }
 
-            // ── Section: Data Pemohon ──
+            // ── Data Pemohon ──
             item {
                 FormSectionCard(title = "Data Pemohon") {
-                    // Nama Pemohon
-                    FigmaFormField(
-                        icon = Icons.Default.Person,
-                        label = "Nama Pemohon"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.Person, label = "Nama Pemohon") {
                         BpkpadTextField(uiState.picNama, onPicNamaChange, "Nama PIC *",
                             error = if (uiState.submitted && uiState.picNama.isBlank()) "Wajib diisi" else null)
                     }
 
                     Spacer(Modifier.height(10.dp))
 
-                    // Unit Kerja / Instansi
-                    FigmaFormField(
-                        icon = Icons.Default.Business,
-                        label = "Unit Kerja"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.Business, label = "Unit Kerja") {
                         BpkpadTextField(
-                            value = instansiQuery,
-                            onValueChange = { instansiQuery = it; onInstansiSearch(it) },
+                            value = uiState.instansiName,
+                            onValueChange = { onInstansiSearch(it) },
                             label = "Instansi Peminjam *",
-                            error = if (uiState.submitted && uiState.instansiId == null) "Pilih instansi" else null
+                            error = if (uiState.submitted && uiState.instansiName.isBlank()) "Wajib diisi" else null
                         )
-                        if (uiState.instansiSuggestions.isNotEmpty() && instansiQuery.isNotBlank()) {
+                        if (uiState.instansiSuggestions.isNotEmpty() && uiState.instansiName.isNotBlank()) {
                             Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp), elevation = CardDefaults.cardElevation(2.dp)) {
                                 Column {
                                     uiState.instansiSuggestions.take(5).forEach { inst ->
                                         TextButton(
-                                            onClick = { onInstansiSelect(inst); instansiQuery = inst.namaInstansi },
+                                            onClick = { onInstansiSelect(inst) },
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
                                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
@@ -248,50 +214,28 @@ fun FormTransaksiContent(
                                 }
                             }
                         }
-                        uiState.selectedInstansi?.let { inst ->
-                            Spacer(Modifier.height(4.dp))
-                            Surface(color = Color(0xFFDFF5E1), shape = RoundedCornerShape(8.dp)) {
-                                Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF207125), modifier = Modifier.size(16.dp))
-                                    Spacer(Modifier.width(8.dp))
-                                    Text(inst.namaInstansi, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, color = Color(0xFF207125))
-                                }
-                            }
-                        }
                     }
 
                     Spacer(Modifier.height(10.dp))
 
-                    // No. Telepon
-                    FigmaFormField(
-                        icon = Icons.Default.Phone,
-                        label = "No. Telepon"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.Phone, label = "No. Telepon") {
                         BpkpadTextField(uiState.picNoHp, onPicHpChange, "No. HP PIC *",
                             error = if (uiState.submitted && uiState.picNoHp.isBlank()) "Wajib diisi (min 10 digit)" else null)
                     }
                 }
             }
 
-            // ── Section: Data Arsip ──
+            // ── Data Arsip ──
             item {
                 FormSectionCard(title = "Data Arsip") {
-                    // Nomor Surat
-                    FigmaFormField(
-                        icon = Icons.Default.Description,
-                        label = "Nomor Surat"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.Description, label = "Nomor Surat") {
                         BpkpadTextField(uiState.nomorSurat, onNomorSuratChange, "Nomor Surat Pengantar *",
                             error = if (uiState.submitted && uiState.nomorSurat.isBlank()) "Wajib diisi" else null)
                     }
 
                     Spacer(Modifier.height(10.dp))
 
-                    // Cari Dokumen
-                    FigmaFormField(
-                        icon = Icons.Default.Search,
-                        label = "Cari Dokumen"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.Search, label = "Cari Dokumen") {
                         BpkpadTextField(
                             value = dokumenQuery,
                             onValueChange = { dokumenQuery = it; onDokumenSearch(it) },
@@ -306,6 +250,13 @@ fun FormTransaksiContent(
                                                 Column {
                                                     Text(dok.nomorDokumen, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                                                     Text(dok.perihal, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                                                    Spacer(Modifier.height(2.dp))
+                                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                                        Icon(Icons.Default.LocationOn, contentDescription = "Lokasi", tint = Color(0xFF207125), modifier = Modifier.size(12.dp))
+                                                        Spacer(Modifier.width(4.dp))
+                                                        Text(dok.lokasiRak ?: "Lokasi belum diatur", style = MaterialTheme.typography.labelSmall, color = Color(0xFF207125), fontWeight = FontWeight.Medium)
+                                                    }
+
                                                 }
                                             }
                                         }
@@ -323,15 +274,17 @@ fun FormTransaksiContent(
 
             // ── Selected Dokumen List ──
             items(uiState.selectedDokumen) { dok ->
-                Card(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = CardDefaults.cardColors(Color(0xFFDFF5E1))
-                ) {
+                Card(modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp), shape = RoundedCornerShape(10.dp), colors = CardDefaults.cardColors(Color(0xFFDFF5E1))) {
                     Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text(dok.nomorDokumen, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = Color(0xFF207125))
                             Text(dok.perihal, style = MaterialTheme.typography.bodySmall, color = Color(0xFF374151))
+                            Spacer(Modifier.height(4.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Inventory, contentDescription = "Rak", tint = Color(0xFF6B7280), modifier = Modifier.size(14.dp))
+                                Spacer(Modifier.width(4.dp))
+                                Text("Rak/Lokasi: ${dok.lokasiRak ?: "-"}", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                            }
                         }
                         IconButton(onClick = { onDokumenRemove(dok.id) }) {
                             Icon(Icons.Default.Close, "Hapus", tint = MaterialTheme.colorScheme.error)
@@ -340,13 +293,10 @@ fun FormTransaksiContent(
                 }
             }
 
-            // ── Section: Jadwal Peminjaman ──
+            // ── Jadwal Peminjaman ──
             item {
                 FormSectionCard(title = "Jadwal Peminjaman") {
-                    FigmaFormField(
-                        icon = Icons.Default.CalendarMonth,
-                        label = "Tanggal Kembali"
-                    ) {
+                    FigmaFormField(icon = Icons.Default.CalendarMonth, label = "Tanggal Kembali") {
                         BpkpadDatePickerField(
                             value = uiState.tanggalKembali,
                             onDateSelected = onTanggalKembaliChange,
@@ -362,30 +312,19 @@ fun FormTransaksiContent(
                 Button(
                     onClick = onSubmit,
                     enabled = !uiState.isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .height(50.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF207125),
-                        contentColor = Color.White
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125), contentColor = Color.White)
                 ) {
                     if (uiState.isLoading) {
                         CircularProgressIndicator(Modifier.size(20.dp), Color.White, strokeWidth = 2.dp)
                     } else {
                         Icon(Icons.Default.Send, null, tint = Color.White)
                         Spacer(Modifier.width(8.dp))
-                        Text(
-                            if (uiState.isLoading) "Menyimpan..." else "Ajukan Peminjaman",
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 15.sp
-                        )
+                        Text(if (uiState.isLoading) "Menyimpan..." else "Ajukan Peminjaman", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                     }
                 }
             }
-
             item { Spacer(Modifier.height(24.dp)) }
         }
     }
@@ -393,55 +332,23 @@ fun FormTransaksiContent(
 
 // ── Figma Section Card ──
 @Composable
-private fun FormSectionCard(
-    title: String,
-    content: @Composable ColumnScope.() -> Unit
-) {
+private fun FormSectionCard(title: String, content: @Composable ColumnScope.() -> Unit) {
     Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-        Text(
-            text = title,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF1A1A1A),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(1.dp)
-        ) {
-            Column(Modifier.fillMaxWidth().padding(14.dp)) {
-                content()
-            }
+        Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A1A1A), modifier = Modifier.padding(bottom = 8.dp))
+        Card(shape = RoundedCornerShape(12.dp), colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(1.dp)) {
+            Column(Modifier.fillMaxWidth().padding(14.dp)) { content() }
         }
     }
 }
 
-// ── Figma Form Field with icon + label ──
+// ── Figma Form Field ──
 @Composable
-private fun FigmaFormField(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    content: @Composable ColumnScope.() -> Unit
-) {
+private fun FigmaFormField(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, content: @Composable ColumnScope.() -> Unit) {
     Row(verticalAlignment = Alignment.Top) {
-        Icon(
-            icon,
-            contentDescription = null,
-            tint = Color(0xFF6B7280),
-            modifier = Modifier
-                .padding(top = 14.dp)
-                .size(20.dp)
-        )
+        Icon(icon, contentDescription = null, tint = Color(0xFF6B7280), modifier = Modifier.padding(top = 14.dp).size(20.dp))
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
-            Text(
-                text = label,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF6B7280),
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            Text(text = label, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = Color(0xFF6B7280), modifier = Modifier.padding(bottom = 4.dp))
             content()
         }
     }

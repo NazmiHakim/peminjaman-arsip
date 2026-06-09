@@ -97,8 +97,9 @@ class DatabaseSeeder @Inject constructor(
         db.transaksiDao().insertAll(listOf(
             // SKENARIO 1: OVERDUE (4 hari) - trigger WorkManager
             TransaksiEntity(
-                id = 1, instansiPeminjamId = 1,
+                id = 1, namaInstansi = "Dinas Pendidikan Balangan", // <--- UBAH DI SINI
                 picNama = "Pak Joko Widodo", picNoHp = "628111222333",
+                // ... (sisanya biarkan sama)
                 nomorSuratPengantar = "005/DINDIK/V/2026",
                 fotoSuratPengantarPath = "surat_1.jpg",
                 qrCodeToken = "QR-OVERDUE-001",
@@ -112,8 +113,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 2: PENDING - antrean Kasubag
             TransaksiEntity(
-                id = 2, instansiPeminjamId = 2,
+                id = 2, namaInstansi = "Dinas Kesehatan Balangan", // <--- UBAH DI SINI
                 picNama = "Dr. Andi Rahman", picNoHp = "628222333444",
+                // ...
                 nomorSuratPengantar = "010/DINKES/V/2026",
                 fotoSuratPengantarPath = "surat_2.jpg",
                 qrCodeToken = null,
@@ -127,8 +129,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 3: BYPASS - perlu acknowledge Kasubag
             TransaksiEntity(
-                id = 3, instansiPeminjamId = 3,
+                id = 3, namaInstansi = "Badan Perencanaan Daerah", // <--- UBAH DI SINI
                 picNama = "Ibu Rina Susanti", picNoHp = "628333444555",
+                // ...
                 nomorSuratPengantar = "015/BAPPEDA/V/2026",
                 fotoSuratPengantarPath = "surat_3.jpg",
                 qrCodeToken = "QR-BYPASS-003",
@@ -143,8 +146,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 4: NORMAL BORROWED - test pengembalian / perpanjangan
             TransaksiEntity(
-                id = 4, instansiPeminjamId = 2,
+                id = 4, namaInstansi = "Dinas Kesehatan Balangan", // <--- UBAH DI SINI
                 picNama = "Ibu Sari Dewi", picNoHp = "628444555666",
+                // ...
                 nomorSuratPengantar = "020/DINKES/V/2026",
                 fotoSuratPengantarPath = "surat_4.jpg",
                 qrCodeToken = "QR-NORMAL-004",
@@ -158,8 +162,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 5: DITOLAK - dead-end
             TransaksiEntity(
-                id = 5, instansiPeminjamId = 4,
+                id = 5, namaInstansi = "Inspektorat Daerah", // <--- UBAH DI SINI
                 picNama = "Pak Harto", picNoHp = "628555666777",
+                // ...
                 nomorSuratPengantar = "025/INSPEKTORAT/V/2026",
                 fotoSuratPengantarPath = "surat_5.jpg",
                 qrCodeToken = null,
@@ -174,8 +179,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 6: DIKEMBALIKAN (BAIK) - riwayat sukses
             TransaksiEntity(
-                id = 6, instansiPeminjamId = 5,
+                id = 6, namaInstansi = "Dinas Pekerjaan Umum", // <--- UBAH DI SINI
                 picNama = "Pak Bambang", picNoHp = "628666777888",
+                // ...
                 nomorSuratPengantar = "030/DPU/IV/2026",
                 fotoSuratPengantarPath = "surat_6.jpg",
                 qrCodeToken = "QR-RETURNED-006",
@@ -189,8 +195,9 @@ class DatabaseSeeder @Inject constructor(
             ),
             // SKENARIO 7: DIPINJAM + Perpanjangan Pending
             TransaksiEntity(
-                id = 7, instansiPeminjamId = 1,
+                id = 7, namaInstansi = "Dinas Pendidikan Balangan", // <--- UBAH DI SINI
                 picNama = "Ibu Wulan", picNoHp = "628777888999",
+                // ...
                 nomorSuratPengantar = "035/DINDIK/V/2026",
                 fotoSuratPengantarPath = "surat_7.jpg",
                 qrCodeToken = "QR-PERPANJANG-007",

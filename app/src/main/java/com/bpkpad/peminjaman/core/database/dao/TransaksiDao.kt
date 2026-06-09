@@ -42,10 +42,10 @@ interface TransaksiDao {
 
     @Query("""
         SELECT * FROM transaksi_peminjaman 
-        WHERE instansi_peminjam_id = :instansiId 
+        WHERE nama_instansi = :namaInstansi 
         ORDER BY created_at DESC
     """)
-    fun getByInstansi(instansiId: Int): Flow<List<TransaksiEntity>>
+    fun getByInstansi(namaInstansi: String): Flow<List<TransaksiEntity>>
 
     @Query("""
         SELECT COUNT(*) FROM transaksi_peminjaman WHERE status = :status
@@ -82,7 +82,8 @@ interface TransaksiDao {
     @Query("UPDATE transaksi_peminjaman SET status = 'dipinjam', updated_at = :now WHERE id = :id")
     suspend fun confirmHandover(id: Int, now: Long = System.currentTimeMillis())
 
-    @Query("UPDATE transaksi_peminjaman SET status = 'dikembalikan', tanggal_kembali_aktual = :actualDate, updated_at = :now WHERE id = :id")
+    // --- TAMBAHAN TASK 9: qr_code_token = NULL ---
+    @Query("UPDATE transaksi_peminjaman SET status = 'dikembalikan', tanggal_kembali_aktual = :actualDate, qr_code_token = NULL, updated_at = :now WHERE id = :id")
     suspend fun returnTransaksi(id: Int, actualDate: LocalDate, now: Long = System.currentTimeMillis())
 
     @Query("UPDATE transaksi_peminjaman SET status = 'dibatalkan', updated_at = :now WHERE id = :id")

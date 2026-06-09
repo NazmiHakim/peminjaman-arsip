@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BPKPAD Peminjaman</string>
-    
+
     <!-- Auth -->
     <string name="login_title">Masuk ke BPKPAD</string>
     <string name="login_subtitle">Sistem Manajemen Peminjaman Dokumen</string>
