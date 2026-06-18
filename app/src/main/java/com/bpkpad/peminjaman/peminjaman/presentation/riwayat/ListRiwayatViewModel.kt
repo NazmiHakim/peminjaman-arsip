@@ -15,6 +15,7 @@ data class ListRiwayatUiState(
     val filteredList: List<Transaksi> = emptyList(),
     val searchQuery: String = "",
     val selectedStatus: TransaksiStatus? = null,
+    val isOverdueOnly: Boolean = false,
     val isLoading: Boolean = true
 )
 
@@ -22,12 +23,8 @@ data class ListRiwayatUiState(
 class ListRiwayatViewModel @Inject constructor(
     private val transaksiRepo: TransaksiRepository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(ListRiwayatUiState())
     val uiState: StateFlow<ListRiwayatUiState> = _uiState.asStateFlow()
-
-    private var isOverdueOnly = false // Flag khusus untuk filter "Terlambat"
-
     init {
         viewModelScope.launch {
             transaksiRepo.getAll().collect { list ->
@@ -40,18 +37,15 @@ class ListRiwayatViewModel @Inject constructor(
     // Fungsi untuk menangkap filter awal dari Dashboard
     fun setInitialFilter(statusString: String?) {
         if (statusString.isNullOrBlank() || statusString == "ALL") {
-            _uiState.update { it.copy(selectedStatus = null) }
-            isOverdueOnly = false
+            _uiState.update { it.copy(selectedStatus = null, isOverdueOnly = false) }
         } else if (statusString == "TERLAMBAT") {
-            _uiState.update { it.copy(selectedStatus = TransaksiStatus.DIPINJAM) }
-            isOverdueOnly = true
+            _uiState.update { it.copy(selectedStatus = TransaksiStatus.DIPINJAM, isOverdueOnly = true) }
         } else {
             try {
                 val status = TransaksiStatus.valueOf(statusString)
-                _uiState.update { it.copy(selectedStatus = status) }
-                isOverdueOnly = false
+                _uiState.update { it.copy(selectedStatus = status, isOverdueOnly = false) }
             } catch (e: Exception) {
-                isOverdueOnly = false
+                _uiState.update { it.copy(isOverdueOnly = false) }
             }
         }
         applyFilter()
@@ -60,8 +54,12 @@ class ListRiwayatViewModel @Inject constructor(
     fun onSearch(q: String) { _uiState.update { it.copy(searchQuery = q) }; applyFilter() }
 
     fun onStatusFilter(status: TransaksiStatus?) {
-        isOverdueOnly = false
-        _uiState.update { it.copy(selectedStatus = status) }
+        _uiState.update { it.copy(selectedStatus = status, isOverdueOnly = false) }
+        applyFilter()
+    }
+
+    fun onOverdueToggle(active: Boolean) {
+        _uiState.update { it.copy(isOverdueOnly = active) }
         applyFilter()
     }
 
@@ -71,7 +69,7 @@ class ListRiwayatViewModel @Inject constructor(
             val matchQuery = s.searchQuery.isBlank() || t.namaInstansi.contains(s.searchQuery, true) ||
                     t.picNama.contains(s.searchQuery, true) || t.nomorSuratPengantar.contains(s.searchQuery, true)
 
-            val matchStatus = if (isOverdueOnly) {
+            val matchStatus = if (s.isOverdueOnly) {
                 t.status == TransaksiStatus.DIPINJAM && t.isOverdue // Filter khusus terlambat
             } else {
                 s.selectedStatus == null || t.status == s.selectedStatus

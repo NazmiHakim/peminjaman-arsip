@@ -35,7 +35,10 @@ data class FormTransaksiUiState(
     val isLoading: Boolean = false,
     val submitted: Boolean = false,
     val error: String? = null,
-    val submitSuccess: Boolean = false
+    val submitSuccess: Boolean = false,
+    val isBypass: Boolean = false,
+    val fotoBypassUri: Uri? = null,
+    val catatanBypass: String = ""
 )
 
 @OptIn(FlowPreview::class)
@@ -85,6 +88,9 @@ class FormTransaksiViewModel @Inject constructor(
     fun onNomorSuratChange(v: String) = _uiState.update { it.copy(nomorSurat = v) }
     fun onTanggalKembaliChange(v: String) = _uiState.update { it.copy(tanggalKembali = v) }
     fun onFotoSelected(uri: Uri) = _uiState.update { it.copy(fotoUri = uri) }
+    fun onBypassToggle(v: Boolean) = _uiState.update { it.copy(isBypass = v) }
+    fun onFotoBypassSelected(uri: Uri) = _uiState.update { it.copy(fotoBypassUri = uri) }
+    fun onCatatanBypassChange(v: String) = _uiState.update { it.copy(catatanBypass = v) }
     fun onInstansiSearch(q: String) {
         _uiState.update { it.copy(instansiName = q) }
         _instansiQuery.value = q
@@ -106,6 +112,7 @@ class FormTransaksiViewModel @Inject constructor(
             s.nomorSurat.isBlank() || s.tanggalKembali.isBlank() || s.fotoUri == null || s.selectedDokumen.isEmpty()
         ) return
 
+        if (s.isBypass && (s.fotoBypassUri == null || s.catatanBypass.isBlank())) return
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val userId = sessionManager.session.firstOrNull()?.userId ?: run {
@@ -113,7 +120,7 @@ class FormTransaksiViewModel @Inject constructor(
                 return@launch
             }
 
-            // Upload foto
+            // Upload foto surat pengantar
             val fotoResult = fileRepo.uploadImage(s.fotoUri, "surat/${UUID.randomUUID()}.jpg")
             if (fotoResult is ResultState.Error) {
                 _uiState.update { it.copy(isLoading = false, error = fotoResult.message) }
@@ -121,20 +128,35 @@ class FormTransaksiViewModel @Inject constructor(
             }
             val fotoPath = (fotoResult as ResultState.Success).data
 
+            // Upload foto bukti bypass jika bypass aktif
+            var buktiBypassPath: String? = null
+            if (s.isBypass && s.fotoBypassUri != null) {
+                val buktiResult = fileRepo.uploadImage(s.fotoBypassUri, "bypass/${UUID.randomUUID()}.jpg")
+                if (buktiResult is ResultState.Error) {
+                    _uiState.update { it.copy(isLoading = false, error = buktiResult.message) }
+                    return@launch
+                }
+                buktiBypassPath = (buktiResult as ResultState.Success).data
+            }
+
             val tanggalKembali = try { LocalDate.parse(s.tanggalKembali) } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = "Format tanggal tidak valid (YYYY-MM-DD)") }
                 return@launch
             }
+
+            val status = if (s.isBypass) TransaksiStatus.DISETUJUI else TransaksiStatus.MENUNGGU_PERSETUJUAN
+            val metodePersetujuan = if (s.isBypass) MetodePersetujuan.BYPASS else null
+            val catatanBypassStr = if (s.isBypass) s.catatanBypass else null
 
             val transaksi = Transaksi(
                 id = 0, namaInstansi = s.instansiName,
                 picNama = s.picNama, picNoHp = s.picNoHp, nomorSuratPengantar = s.nomorSurat,
                 fotoSuratPengantarPath = fotoPath, qrCodeToken = null,
                 tanggalPinjam = LocalDate.now(), tanggalKembaliRencana = tanggalKembali,
-                tanggalKembaliAktual = null, status = TransaksiStatus.MENUNGGU_PERSETUJUAN,
-                metodePersetujuan = null, buktiBypassPath = null, catatanBypass = null,
+                tanggalKembaliAktual = null, status = status,
+                metodePersetujuan = metodePersetujuan, buktiBypassPath = buktiBypassPath, catatanBypass = catatanBypassStr,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = userId, namaCreatedBy = "", approvedBy = null, namaApprovedBy = null,
+                createdBy = userId, namaCreatedBy = "", approvedBy = if (s.isBypass) userId else null, namaApprovedBy = null,
                 createdAt = System.currentTimeMillis(), details = emptyList()
             )
 

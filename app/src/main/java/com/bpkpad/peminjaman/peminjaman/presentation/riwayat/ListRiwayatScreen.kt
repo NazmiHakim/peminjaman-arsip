@@ -1,5 +1,7 @@
 package com.bpkpad.peminjaman.peminjaman.presentation.riwayat
 
+import androidx.compose.animation.AnimatedVisibility
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +53,8 @@ fun ListRiwayatScreen(
         onBack = onBack,
         onNavigateToDetail = onNavigateToDetail,
         onSearch = viewModel::onSearch,
-        onStatusFilter = viewModel::onStatusFilter
+        onStatusFilter = viewModel::onStatusFilter,
+        onOverdueToggle = viewModel::onOverdueToggle
     )
 }
 
@@ -60,7 +64,8 @@ fun ListRiwayatContent(
     onBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onSearch: (String) -> Unit,
-    onStatusFilter: (TransaksiStatus?) -> Unit
+    onStatusFilter: (TransaksiStatus?) -> Unit,
+    onOverdueToggle: (Boolean) -> Unit
 ) {
     Scaffold(
         containerColor = Color(0xFFF7F8FA)
@@ -150,7 +155,7 @@ fun ListRiwayatContent(
             ) {
                 item {
                     FilterChip(
-                        selected = uiState.selectedStatus == null && !uiState.searchQuery.contains("TERLAMBAT"), // Opsional penyesuaian visual
+                        selected = uiState.selectedStatus == null && !uiState.isOverdueOnly,
                         onClick = { onStatusFilter(null) },
                         label = { Text("Semua") },
                         colors = FilterChipDefaults.filterChipColors(
@@ -160,24 +165,9 @@ fun ListRiwayatContent(
                     )
                 }
 
-                // Tambahan manual Chip untuk "Terlambat" (Khusus yang datang dari Dashboard)
-                item {
-                    val isTerlambat = uiState.selectedStatus == TransaksiStatus.DIPINJAM // Dalam konteks aplikasi Anda, Terlambat adalah dipinjam yang overdue
-
-                    FilterChip(
-                        selected = isTerlambat,
-                        onClick = { onStatusFilter(TransaksiStatus.DIPINJAM) },
-                        label = { Text("Terlambat") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFFE53935), // Warna merah untuk terlambat
-                            selectedLabelColor = Color.White
-                        )
-                    )
-                }
-
                 items(TransaksiStatus.entries) { status ->
                     FilterChip(
-                        selected = uiState.selectedStatus == status,
+                        selected = uiState.selectedStatus == status && !uiState.isOverdueOnly,
                         onClick = { onStatusFilter(if (uiState.selectedStatus == status) null else status) },
                         label = { Text(status.name.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }) }, // Dibuat lebih rapi format teksnya
                         colors = FilterChipDefaults.filterChipColors(
@@ -188,8 +178,37 @@ fun ListRiwayatContent(
                 }
             }
 
-            Spacer(Modifier.height(4.dp))
+            // ── Overdue Toggle Switch (Hanya muncul jika status "Dipinjam" terpilih) ──
+            AnimatedVisibility(visible = uiState.selectedStatus == TransaksiStatus.DIPINJAM) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = "Tampilkan Hanya Terlambat (Overdue)",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = if (uiState.isOverdueOnly) Color(0xFFC62828) else Color(0xFF374151)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Switch(
+                        checked = uiState.isOverdueOnly,
+                        onCheckedChange = onOverdueToggle,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = Color(0xFFC62828),
+                            uncheckedThumbColor = Color(0xFF9CA3AF),
+                            uncheckedTrackColor = Color(0xFFE5E7EB)
+                        ),
+                        modifier = Modifier.scale(0.8f)
+                    )
+                }
+            }
 
+            Spacer(Modifier.height(4.dp))
             // ── Transaction List ──
             if (uiState.isLoading) {
                 BpkpadLoadingIndicator()
@@ -216,7 +235,7 @@ private fun ListRiwayat_Preview() {
     BpkpadTheme {
         ListRiwayatContent(
             uiState = ListRiwayatUiState(isLoading = false),
-            onBack = {}, onNavigateToDetail = {}, onSearch = {}, onStatusFilter = {}
+            onBack = {}, onNavigateToDetail = {}, onSearch = {}, onStatusFilter = {}, onOverdueToggle = {}
         )
     }
 }

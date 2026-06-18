@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,8 +53,12 @@ fun FormTransaksiScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    var showSuccessDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(uiState.submitSuccess) {
-        if (uiState.submitSuccess) { snackbarHostState.showSnackbar("Transaksi berhasil dibuat!"); viewModel.clearSuccess(); onBack() }
+        if (uiState.submitSuccess) {
+            showSuccessDialog = true
+        }
     }
     LaunchedEffect(uiState.error) { uiState.error?.let { snackbarHostState.showSnackbar("Error: $it"); viewModel.clearError() } }
 
@@ -71,6 +76,22 @@ fun FormTransaksiScreen(
             }
         }
     }
+    
+    val bypassImagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { viewModel.onFotoBypassSelected(it) }
+    }
+    val bypassDocumentScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val scanResult = result.data?.let { GmsDocumentScanningResult.fromActivityResultIntent(it) }
+            val imageUri = scanResult?.pages?.firstOrNull()?.imageUri
+            if (imageUri != null) {
+                viewModel.onFotoBypassSelected(imageUri)
+            } else {
+                scope.launch { snackbarHostState.showSnackbar("Scanner tidak mengembalikan gambar dokumen") }
+            }
+        }
+    }
+
     val documentScanner = remember {
         GmsDocumentScanning.getClient(
             GmsDocumentScannerOptions.Builder()
@@ -79,6 +100,30 @@ fun FormTransaksiScreen(
                 .setResultFormats(GmsDocumentScannerOptions.RESULT_FORMAT_JPEG)
                 .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_BASE_WITH_FILTER)
                 .build()
+        )
+    }
+
+    if (showSuccessDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showSuccessDialog = false
+                viewModel.clearSuccess()
+                onBack()
+            },
+            title = { Text("Pengajuan Berhasil", fontWeight = FontWeight.Bold) },
+            text = { Text("Permohonan peminjaman dokumen telah berhasil diajukan.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showSuccessDialog = false
+                        viewModel.clearSuccess()
+                        onBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
+                ) {
+                    Text("OK")
+                }
+            }
         )
     }
 
@@ -109,6 +154,26 @@ fun FormTransaksiScreen(
             }
         },
         onPickGallery = { imagePickerLauncher.launch("image/*") },
+        onBypassToggle = viewModel::onBypassToggle,
+        onFotoBypassSelected = viewModel::onFotoBypassSelected,
+        onCatatanBypassChange = viewModel::onCatatanBypassChange,
+        onScanFotoBypass = {
+            val activity = context.findActivity()
+            if (activity == null) {
+                scope.launch { snackbarHostState.showSnackbar("Tidak dapat membuka scanner dokumen") }
+            } else {
+                documentScanner.getStartScanIntent(activity)
+                    .addOnSuccessListener { intentSender ->
+                        bypassDocumentScannerLauncher.launch(IntentSenderRequest.Builder(intentSender).build())
+                    }
+                    .addOnFailureListener { error ->
+                        scope.launch {
+                            snackbarHostState.showSnackbar(error.message ?: "Gagal membuka scanner dokumen")
+                        }
+                    }
+            }
+        },
+        onPickGalleryBypass = { bypassImagePickerLauncher.launch("image/*") },
         onDokumenSearch = viewModel::searchDokumen,
         onDokumenAdd = viewModel::addDokumen,
         onDokumenRemove = viewModel::removeDokumen,
@@ -129,6 +194,11 @@ fun FormTransaksiContent(
     onInstansiSearch: (String) -> Unit,
     onScanFoto: () -> Unit,
     onPickGallery: () -> Unit,
+    onBypassToggle: (Boolean) -> Unit,
+    onFotoBypassSelected: (Uri) -> Unit,
+    onCatatanBypassChange: (String) -> Unit,
+    onScanFotoBypass: () -> Unit,
+    onPickGalleryBypass: () -> Unit,
     onDokumenSearch: (String) -> Unit,
     onDokumenAdd: (MasterDokumen) -> Unit,
     onDokumenRemove: (Int) -> Unit,
@@ -307,6 +377,51 @@ fun FormTransaksiContent(
                 }
             }
 
+            // ── Bypass Persetujuan ──
+            item {
+                FormSectionCard(title = "Bypass Persetujuan (Persetujuan Fisik)") {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Bypass Persetujuan", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1A1A1A))
+                            Text("Gunakan jika sudah ada persetujuan fisik (telepon/memo) dari Kasubag.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF6B7280))
+                        }
+                        Switch(
+                            checked = uiState.isBypass,
+                            onCheckedChange = onBypassToggle,
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = Color(0xFF207125)
+                            )
+                        )
+                    }
+
+                    if (uiState.isBypass) {
+                        Spacer(Modifier.height(12.dp))
+                        Text("Foto Bukti ACC / Memo Fisik *", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF374151))
+                        Spacer(Modifier.height(8.dp))
+                        FotoBypassInputOptions(
+                            hasFoto = uiState.fotoBypassUri != null,
+                            isError = uiState.submitted && uiState.fotoBypassUri == null,
+                            onScanFoto = onScanFotoBypass,
+                            onPickGallery = onPickGalleryBypass
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        FigmaFormField(icon = Icons.Default.Comment, label = "Catatan Bypass *") {
+                            BpkpadTextField(
+                                value = uiState.catatanBypass,
+                                onValueChange = onCatatanBypassChange,
+                                label = "Catatan / alasan bypass (wajib)",
+                                error = if (uiState.submitted && uiState.catatanBypass.isBlank()) "Wajib diisi" else null
+                            )
+                        }
+                    }
+                }
+            }
+
             // ── Submit Button ──
             item {
                 Button(
@@ -362,6 +477,8 @@ private fun FormTransaksi_Preview() {
             uiState = FormTransaksiUiState(), onBack = {},
             onPicNamaChange = {}, onPicHpChange = {}, onNomorSuratChange = {}, onTanggalKembaliChange = {},
             onInstansiSelect = {}, onInstansiSearch = {}, onScanFoto = {}, onPickGallery = {},
+            onBypassToggle = {}, onFotoBypassSelected = {}, onCatatanBypassChange = {},
+            onScanFotoBypass = {}, onPickGalleryBypass = {},
             onDokumenSearch = {}, onDokumenAdd = {}, onDokumenRemove = {}, onSubmit = {}
         )
     }
@@ -372,5 +489,76 @@ private tailrec fun android.content.Context.findActivity(): Activity? {
         is Activity -> this
         is android.content.ContextWrapper -> baseContext.findActivity()
         else -> null
+    }
+}
+
+@Composable
+private fun FotoBypassInputOptions(
+    hasFoto: Boolean,
+    isError: Boolean,
+    onScanFoto: () -> Unit,
+    onPickGallery: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (hasFoto) {
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
+            } else {
+                MaterialTheme.colorScheme.surface
+            }
+        )
+    ) {
+        Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if (hasFoto) Icons.Default.CheckCircle else Icons.Default.AddPhotoAlternate,
+                    contentDescription = null,
+                    tint = if (hasFoto) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                )
+                Spacer(Modifier.width(10.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = if (hasFoto) "Foto bukti bypass sudah dilampirkan" else "Lampirkan foto bukti bypass (Memo/ACC)",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Ambil foto memo fisik Kasubag atau bukti persetujuan lainnya.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedButton(
+                    onClick = onScanFoto,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Icon(Icons.Default.CameraAlt, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Ambil Foto")
+                }
+                OutlinedButton(
+                    onClick = onPickGallery,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Icon(Icons.Default.PhotoLibrary, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Gallery")
+                }
+            }
+            if (isError) {
+                Text(
+                    text = "Foto bukti bypass wajib dilampirkan",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
     }
 }
