@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bpkpad.peminjaman.core.common.InputRules
 import com.bpkpad.peminjaman.core.theme.BpkpadTheme
 import com.bpkpad.peminjaman.core.ui.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
@@ -252,7 +253,7 @@ fun FormTransaksiContent(
                 FormSectionCard(title = "Data Pemohon") {
                     FigmaFormField(icon = Icons.Default.Person, label = "Nama Pemohon") {
                         BpkpadTextField(uiState.picNama, onPicNamaChange, "Nama PIC *",
-                            error = if (uiState.submitted && uiState.picNama.isBlank()) "Wajib diisi" else null)
+                            error = if (uiState.submitted) InputRules.validateApplicantName(uiState.picNama) else null)
                     }
 
                     Spacer(Modifier.height(10.dp))
@@ -262,7 +263,7 @@ fun FormTransaksiContent(
                             value = uiState.instansiName,
                             onValueChange = { onInstansiSearch(it) },
                             label = "Instansi Peminjam *",
-                            error = if (uiState.submitted && uiState.instansiName.isBlank()) "Wajib diisi" else null
+                            error = if (uiState.submitted) InputRules.validateWorkUnit(uiState.instansiName) else null
                         )
                         if (uiState.instansiSuggestions.isNotEmpty() && uiState.instansiName.isNotBlank()) {
                             Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp), elevation = CardDefaults.cardElevation(2.dp)) {
@@ -290,7 +291,7 @@ fun FormTransaksiContent(
 
                     FigmaFormField(icon = Icons.Default.Phone, label = "No. Telepon") {
                         BpkpadTextField(uiState.picNoHp, onPicHpChange, "No. HP PIC *",
-                            error = if (uiState.submitted && uiState.picNoHp.isBlank()) "Wajib diisi (min 10 digit)" else null)
+                            error = if (uiState.submitted) InputRules.validatePhone(uiState.picNoHp) else null)
                     }
                 }
             }
@@ -300,7 +301,7 @@ fun FormTransaksiContent(
                 FormSectionCard(title = "Data Arsip") {
                     FigmaFormField(icon = Icons.Default.Description, label = "Nomor Surat") {
                         BpkpadTextField(uiState.nomorSurat, onNomorSuratChange, "Nomor Surat Pengantar *",
-                            error = if (uiState.submitted && uiState.nomorSurat.isBlank()) "Wajib diisi" else null)
+                            error = if (uiState.submitted) InputRules.validateLetterNumber(uiState.nomorSurat) else null)
                     }
 
                     Spacer(Modifier.height(10.dp))
@@ -308,7 +309,11 @@ fun FormTransaksiContent(
                     FigmaFormField(icon = Icons.Default.Search, label = "Cari Dokumen") {
                         BpkpadTextField(
                             value = dokumenQuery,
-                            onValueChange = { dokumenQuery = it; onDokumenSearch(it) },
+                            onValueChange = {
+                                val filtered = InputRules.filterDocumentSearch(it)
+                                dokumenQuery = filtered
+                                onDokumenSearch(filtered)
+                            },
                             label = "Cari nomor / perihal dokumen"
                         )
                         if (uiState.dokumenSearchResults.isNotEmpty()) {
@@ -415,7 +420,15 @@ fun FormTransaksiContent(
                                 value = uiState.catatanBypass,
                                 onValueChange = onCatatanBypassChange,
                                 label = "Catatan / alasan bypass (wajib)",
-                                error = if (uiState.submitted && uiState.catatanBypass.isBlank()) "Wajib diisi" else null
+                                error = if (uiState.submitted) InputRules.validateBypassNote(uiState.catatanBypass) else null,
+                                singleLine = false,
+                                maxLines = 5
+                            )
+                            Text(
+                                "${uiState.catatanBypass.length}/${InputRules.BYPASS_NOTE_MAX}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.outline,
+                                modifier = Modifier.align(Alignment.End)
                             )
                         }
                     }

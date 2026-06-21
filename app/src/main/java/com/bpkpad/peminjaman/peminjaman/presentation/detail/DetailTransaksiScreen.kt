@@ -3,6 +3,8 @@ package com.bpkpad.peminjaman.peminjaman.presentation.detail
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage // <-- INI LIBRARY UNTUK BACA GAMBAR
 import com.bpkpad.peminjaman.R
 import com.bpkpad.peminjaman.core.common.Constants
+import com.bpkpad.peminjaman.core.common.InputRules
 import com.bpkpad.peminjaman.core.common.toDisplayString
 import com.bpkpad.peminjaman.core.theme.*
 import com.bpkpad.peminjaman.core.ui.*
@@ -57,6 +60,16 @@ fun DetailTransaksiScreen(
     LaunchedEffect(transaksiId) { viewModel.load(transaksiId) }
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val bypassProofPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let(viewModel::onBypassProofSelected)
+    }
+    val extensionLetterPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let(viewModel::onExtensionLetterSelected)
+    }
 
     LaunchedEffect(uiState.successMessage) { uiState.successMessage?.let { snackbarHostState.showSnackbar(it); viewModel.clearMessages() } }
     LaunchedEffect(uiState.error) { uiState.error?.let { snackbarHostState.showSnackbar("Error: $it"); viewModel.clearMessages() } }
@@ -65,6 +78,13 @@ fun DetailTransaksiScreen(
         uiState = uiState, snackbarHostState = snackbarHostState, onBack = onBack,
         onConfirmHandover = viewModel::confirmHandover,
         onReturn = viewModel::returnTransaksi,
+        onBypassNoteChange = viewModel::onBypassNoteChange,
+        onPickBypassProof = { bypassProofPicker.launch("image/*") },
+        onSubmitBypass = viewModel::bypassPendingTransaksi,
+        onExtensionDateChange = viewModel::onExtensionDateChange,
+        onExtensionReasonChange = viewModel::onExtensionReasonChange,
+        onPickExtensionLetter = { extensionLetterPicker.launch("image/*") },
+        onSubmitExtension = viewModel::createExtension,
         onAcknowledgeBypass = viewModel::acknowledgeBypass,
         onCancel = viewModel::cancelTransaksi
     )
@@ -77,6 +97,13 @@ fun DetailTransaksiContent(
     onBack: () -> Unit,
     onConfirmHandover: () -> Unit,
     onReturn: (Map<Int, Pair<String, String?>>) -> Unit,
+    onBypassNoteChange: (String) -> Unit,
+    onPickBypassProof: () -> Unit,
+    onSubmitBypass: () -> Unit,
+    onExtensionDateChange: (String) -> Unit,
+    onExtensionReasonChange: (String) -> Unit,
+    onPickExtensionLetter: () -> Unit,
+    onSubmitExtension: () -> Unit,
     onAcknowledgeBypass: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -84,6 +111,8 @@ fun DetailTransaksiContent(
     val qrShareFailedMessage = stringResource(id = R.string.qr_share_failed)
     var showReturnDialog by remember { mutableStateOf(false) }
     var showCancelDialog by remember { mutableStateOf(false) }
+    var showBypassDialog by remember { mutableStateOf(false) }
+    var showExtensionDialog by remember { mutableStateOf(false) }
     var showImageDialog by remember { mutableStateOf(false) }
     val role = uiState.session?.role
 
@@ -298,14 +327,79 @@ fun DetailTransaksiContent(
                         }
                     }
 
+                    if (uiState.perpanjanganList.isNotEmpty()) {
+                        item {
+                            FigmaNewSectionCard(title = "Riwayat Perpanjangan") {
+                                uiState.perpanjanganList.forEachIndexed { index, extension ->
+                                    Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+                                        Text(
+                                            "${extension.tanggalKembaliLama.toDisplayString()} → ${extension.tanggalKembaliBaru.toDisplayString()}",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                        Text(
+                                            "Status: ${extension.status.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.outline
+                                        )
+                                        Text(extension.alasan, style = MaterialTheme.typography.bodySmall)
+                                        extension.alasanPenolakan?.let {
+                                            Text(
+                                                "Alasan penolakan: $it",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = BpkpadRed
+                                            )
+                                        }
+                                    }
+                                    if (index < uiState.perpanjanganList.lastIndex) {
+                                        HorizontalDivider()
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     // ── Action buttons (RBAC) ──
                     item {
                         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             if (role == UserRole.ARSIPARIS) {
+                                if (t.canBeBypassed) {
+                                    Button(
+                                        onClick = { showBypassDialog = true },
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = BpkpadBlue)
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.btn_bypass),
+                                            color = Color.White,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    }
+                                }
                                 if (t.status == TransaksiStatus.DISETUJUI) {
                                     Button(onClick = onConfirmHandover, modifier = Modifier.fillMaxWidth().height(48.dp), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))) { Text("Konfirmasi Serah Dokumen", color = Color.White, fontWeight = FontWeight.SemiBold) }
                                 }
                                 if (t.status == TransaksiStatus.DIPINJAM) {
+                                    val hasPendingExtension = uiState.perpanjanganList.any {
+                                        it.status == PerpanjanganStatus.PENDING
+                                    }
+                                    OutlinedButton(
+                                        onClick = { showExtensionDialog = true },
+                                        enabled = !hasPendingExtension,
+                                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Icon(Icons.Default.EventRepeat, contentDescription = null)
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(
+                                            if (hasPendingExtension) {
+                                                "Perpanjangan Menunggu Persetujuan"
+                                            } else {
+                                                "Ajukan Perpanjangan"
+                                            }
+                                        )
+                                    }
                                     Button(onClick = { showReturnDialog = true }, modifier = Modifier.fillMaxWidth().height(48.dp), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))) { Text("Selesaikan Peminjaman", color = Color.White, fontWeight = FontWeight.SemiBold) }
                                 }
                                 if (t.picNoHp.isNotBlank()) {
@@ -343,7 +437,25 @@ fun DetailTransaksiContent(
                         }
                         itemsIndexed(uiState.auditLogs) { idx, log ->
                             Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                                AuditTimelineItem(log, isLast = idx == uiState.auditLogs.size - 1)
+                                val fallbackReturnNotes = if (
+                                    log.catatan.isNullOrBlank() &&
+                                    log.aksi in setOf(
+                                        AuditAction.DIKEMBALIKAN_RUSAK,
+                                        AuditAction.DIKEMBALIKAN_HILANG
+                                    )
+                                ) {
+                                    t.details.mapNotNull { detail ->
+                                        detail.catatanKondisi
+                                            ?.takeIf(String::isNotBlank)
+                                            ?.let { note ->
+                                                "${detail.nomorDokumen}: $note"
+                                            }
+                                    }.joinToString("\n").ifBlank { null }
+                                } else null
+                                AuditTimelineItem(
+                                    log = log.copy(catatan = log.catatan ?: fallbackReturnNotes),
+                                    isLast = idx == uiState.auditLogs.size - 1
+                                )
                             }
                         }
                     }
@@ -355,6 +467,174 @@ fun DetailTransaksiContent(
     }
 
     // ── DIALOG GAMBAR FULLSCREEN ──
+    if (showBypassDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                if (!uiState.isLoading) showBypassDialog = false
+            },
+            icon = {
+                Icon(
+                    Icons.Default.WarningAmber,
+                    contentDescription = null,
+                    tint = BpkpadOrange
+                )
+            },
+            title = { Text(stringResource(R.string.bypass_pending_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.bypass_pending_description))
+                    BpkpadSecondaryButton(
+                        text = if (uiState.bypassProofUri == null) {
+                            stringResource(R.string.bypass_attach_proof)
+                        } else {
+                            stringResource(R.string.bypass_replace_proof)
+                        },
+                        onClick = onPickBypassProof
+                    )
+                    if (uiState.bypassProofUri != null) {
+                        Text(
+                            stringResource(R.string.bypass_proof_selected),
+                            color = Color(0xFF207125),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    BpkpadTextField(
+                        value = uiState.bypassNote,
+                        onValueChange = onBypassNoteChange,
+                        label = stringResource(R.string.bypass_note_label),
+                        singleLine = false,
+                        maxLines = 5,
+                        error = InputRules.validateBypassNote(uiState.bypassNote)
+                            .takeIf { uiState.bypassNote.isNotEmpty() }
+                    )
+                    Text(
+                        "${uiState.bypassNote.length}/${InputRules.BYPASS_NOTE_MAX}",
+                        modifier = Modifier.align(Alignment.End),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = !uiState.isLoading &&
+                        uiState.bypassProofUri != null &&
+                        InputRules.validateBypassNote(uiState.bypassNote) == null,
+                    onClick = {
+                        onSubmitBypass()
+                        showBypassDialog = false
+                    }
+                ) {
+                    Text(stringResource(R.string.bypass_process))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    enabled = !uiState.isLoading,
+                    onClick = { showBypassDialog = false }
+                ) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
+    }
+
+    if (showExtensionDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                if (!uiState.isLoading) showExtensionDialog = false
+            },
+            icon = {
+                Icon(
+                    Icons.Default.EventRepeat,
+                    contentDescription = null,
+                    tint = BpkpadBlue
+                )
+            },
+            title = { Text("Ajukan Perpanjangan") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Tenggat saat ini: ${uiState.transaksi?.tanggalKembaliRencana?.toDisplayString()}"
+                    )
+                    BpkpadDatePickerField(
+                        value = uiState.extensionDate,
+                        onDateSelected = onExtensionDateChange,
+                        label = "Tanggal kembali baru *",
+                        error = uiState.extensionDate
+                            .takeIf { it.isNotBlank() }
+                            ?.let { selected ->
+                                val oldDate = uiState.transaksi?.tanggalKembaliRencana
+                                val newDate = runCatching {
+                                    java.time.LocalDate.parse(selected)
+                                }.getOrNull()
+                                if (newDate == null || oldDate == null || !newDate.isAfter(oldDate)) {
+                                    "Tanggal harus setelah tenggat saat ini"
+                                } else null
+                            }
+                    )
+                    BpkpadSecondaryButton(
+                        text = if (uiState.extensionLetterUri == null) {
+                            "Lampirkan Surat Perpanjangan"
+                        } else {
+                            "Ganti Surat Perpanjangan"
+                        },
+                        onClick = onPickExtensionLetter
+                    )
+                    if (uiState.extensionLetterUri != null) {
+                        Text(
+                            "Surat perpanjangan sudah dipilih",
+                            color = Color(0xFF207125),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    BpkpadTextField(
+                        value = uiState.extensionReason,
+                        onValueChange = onExtensionReasonChange,
+                        label = "Alasan perpanjangan *",
+                        singleLine = false,
+                        maxLines = 5,
+                        error = InputRules.validateExtensionReason(uiState.extensionReason)
+                            .takeIf { uiState.extensionReason.isNotEmpty() }
+                    )
+                    Text(
+                        "${uiState.extensionReason.length}/${InputRules.EXTENSION_REASON_MAX}",
+                        modifier = Modifier.align(Alignment.End),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            },
+            confirmButton = {
+                val oldDate = uiState.transaksi?.tanggalKembaliRencana
+                val newDate = runCatching {
+                    java.time.LocalDate.parse(uiState.extensionDate)
+                }.getOrNull()
+                TextButton(
+                    enabled = !uiState.isLoading &&
+                        uiState.extensionLetterUri != null &&
+                        InputRules.validateExtensionReason(uiState.extensionReason) == null &&
+                        oldDate != null &&
+                        newDate?.isAfter(oldDate) == true,
+                    onClick = {
+                        onSubmitExtension()
+                        showExtensionDialog = false
+                    }
+                ) {
+                    Text("Ajukan")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    enabled = !uiState.isLoading,
+                    onClick = { showExtensionDialog = false }
+                ) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
+    }
+
     if (showImageDialog) {
         Dialog(
             onDismissRequest = { showImageDialog = false },
@@ -543,7 +823,18 @@ private fun DetailTransaksi_Preview() {
     BpkpadTheme {
         DetailTransaksiContent(
             uiState = DetailTransaksiUiState(isLoading = false, error = "Transaksi tidak ditemukan"),
-            onBack = {}, onConfirmHandover = {}, onReturn = {}, onAcknowledgeBypass = {}, onCancel = {}
+            onBack = {},
+            onConfirmHandover = {},
+            onReturn = {},
+            onBypassNoteChange = {},
+            onPickBypassProof = {},
+            onSubmitBypass = {},
+            onExtensionDateChange = {},
+            onExtensionReasonChange = {},
+            onPickExtensionLetter = {},
+            onSubmitExtension = {},
+            onAcknowledgeBypass = {},
+            onCancel = {}
         )
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.bpkpad.peminjaman.core.common.Constants
 import com.bpkpad.peminjaman.core.database.AppDatabase
+import com.bpkpad.peminjaman.core.database.DatabaseMigrations
 import com.bpkpad.peminjaman.core.database.DatabaseSeeder
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,10 @@ object DatabaseModule {
             AppDatabase::class.java,
             "peminjaman_arsip.db"
         )
-            .fallbackToDestructiveMigration()
+            .addMigrations(
+                DatabaseMigrations.MIGRATION_2_3,
+                DatabaseMigrations.MIGRATION_3_4
+            )
             .build()
     }
 

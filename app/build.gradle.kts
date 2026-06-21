@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,6 +8,21 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use(::load)
+    }
+}
+
+fun secureConfig(name: String): String =
+    providers.environmentVariable(name).orNull
+        ?: localProperties.getProperty(name)
+        ?: ""
+
+fun quotedBuildConfig(value: String): String =
+    "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 android {
     namespace = "com.bpkpad.peminjaman"
@@ -21,6 +38,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", "\"https://api.bpkpad-balangan.go.id/\"")
+        buildConfigField(
+            "String",
+            "SUPABASE_URL",
+            quotedBuildConfig(secureConfig("SUPABASE_URL"))
+        )
+        buildConfigField(
+            "String",
+            "SUPABASE_PUBLISHABLE_KEY",
+            quotedBuildConfig(secureConfig("SUPABASE_PUBLISHABLE_KEY"))
+        )
     }
 
     buildTypes {
@@ -114,6 +141,19 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.serialization.json)
+
+    // Supabase (publishable key only; authorization is enforced by Auth + RLS)
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
+    implementation(libs.supabase.storage)
+    implementation(libs.ktor.client.android)
+    implementation(libs.androidx.browser) {
+        version {
+            strictly(libs.versions.androidxBrowser.get())
+        }
+    }
 
     // CameraX
     implementation(libs.camerax.core)

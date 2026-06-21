@@ -132,8 +132,9 @@ fun DashboardArsiparisContent(
                 item {
                     FigmaStatusCardsRow(
                         onNavigate = onNavigate,
-                        totalAll = uiState.totalDipinjam + uiState.totalMenunggu + uiState.totalOverdue,
+                        totalAll = uiState.totalSemua,
                         totalMenunggu = uiState.totalMenunggu,
+                        totalDisetujui = uiState.totalDisetujui,
                         totalDipinjam = uiState.totalDipinjam,
                         totalOverdue = uiState.totalOverdue
                     )
@@ -252,10 +253,18 @@ private fun FigmaHeader(userName: String, onLogoutClick: () -> Unit) {
 }
 
 @Composable
-private fun FigmaStatusCardsRow(onNavigate: (String) -> Unit, totalAll: Int, totalMenunggu: Int, totalDipinjam: Int, totalOverdue: Int) {
+private fun FigmaStatusCardsRow(
+    onNavigate: (String) -> Unit,
+    totalAll: Int,
+    totalMenunggu: Int,
+    totalDisetujui: Int,
+    totalDipinjam: Int,
+    totalOverdue: Int
+) {
     Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         FigmaStatCard("Total Pengajuan", "Semua Waktu", totalAll, Icons.Default.Description, Color(0xFFDFF5E1), Color(0xFF207125)) { onNavigate("list_riwayat?status=ALL") }
         FigmaStatCard("Menunggu", "Persetujuan", totalMenunggu, Icons.Default.HourglassEmpty, Color(0xFFFFF3CD), Color(0xFFD4A017)) { onNavigate("list_riwayat?status=MENUNGGU_PERSETUJUAN") }
+        FigmaStatCard("Disetujui", "Siap diserahkan", totalDisetujui, Icons.Default.Verified, Color(0xFFE3F2FD), Color(0xFF1565C0)) { onNavigate("list_riwayat?status=DISETUJUI") }
         FigmaStatCard("Sedang dipinjam", "Aktif", totalDipinjam, Icons.Default.CheckCircleOutline, Color(0xFFD1ECF1), Color(0xFF0C5460)) { onNavigate("list_riwayat?status=DIPINJAM") }
         FigmaStatCard("Terlambat", "Overdue", totalOverdue, Icons.Default.Warning, Color(0xFFF8D7DA), Color(0xFFC62828)) { onNavigate("list_riwayat?status=TERLAMBAT") }
     }

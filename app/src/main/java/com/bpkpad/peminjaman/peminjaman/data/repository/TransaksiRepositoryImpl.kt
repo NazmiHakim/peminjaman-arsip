@@ -1,15 +1,19 @@
 package com.bpkpad.peminjaman.peminjaman.data.repository
 
+import android.util.Log
 import com.bpkpad.peminjaman.core.common.ResultState
 import com.bpkpad.peminjaman.core.database.dao.*
 import com.bpkpad.peminjaman.core.database.entity.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.*
 import com.bpkpad.peminjaman.peminjaman.domain.repository.TransaksiRepository
+import com.bpkpad.peminjaman.peminjaman.data.remote.LoanRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withTimeout
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +23,8 @@ class TransaksiRepositoryImpl @Inject constructor(
     private val detailDao: DetailPeminjamanDao,
     private val instansiDao: InstansiDao,
     private val userDao: UserDao,
-    private val masterDokumenDao: MasterDokumenDao
+    private val masterDokumenDao: MasterDokumenDao,
+    private val loanRemoteDataSource: LoanRemoteDataSource
 ) : TransaksiRepository {
 
     override fun getAll(): Flow<List<Transaksi>> =
@@ -55,7 +60,7 @@ class TransaksiRepositoryImpl @Inject constructor(
                 }
             }
             // Insert transaksi
-            val entity = transaksi.toEntity()
+            val entity = transaksi.toEntity().copy(syncKey = UUID.randomUUID().toString())
             val transaksiId = transaksiDao.insert(entity).toInt()
 
             // Insert detail peminjaman for each dokumen
@@ -74,6 +79,7 @@ class TransaksiRepositoryImpl @Inject constructor(
                 )
             }
             detailDao.insertAll(details)
+            syncTransaction(transaksiId)
 
             val created = transaksiDao.getById(transaksiId) ?: return ResultState.Error("Gagal membaca data yang baru dibuat")
             ResultState.Success(buildDomainWithDetails(created))
@@ -84,7 +90,18 @@ class TransaksiRepositoryImpl @Inject constructor(
 
     override suspend fun update(transaksi: Transaksi): ResultState<Transaksi> {
         return try {
-            transaksiDao.update(transaksi.toEntity())
+            val existing = transaksiDao.getById(transaksi.id)
+                ?: return ResultState.Error("Transaksi tidak ditemukan")
+            transaksiDao.update(
+                transaksi.toEntity().copy(
+                    remoteId = existing.remoteId,
+                    syncKey = existing.syncKey,
+                    syncState = "pending",
+                    lastSyncError = null,
+                    createdAt = existing.createdAt
+                )
+            )
+            syncTransaction(transaksi.id)
             ResultState.Success(transaksi)
         } catch (e: Exception) {
             ResultState.Error("Gagal mengupdate transaksi: ${e.message}", e)
@@ -94,6 +111,7 @@ class TransaksiRepositoryImpl @Inject constructor(
     override suspend fun approve(transaksiId: Int, approverId: Int, qrToken: String): ResultState<Unit> {
         return try {
             transaksiDao.approve(transaksiId, approverId, qrToken)
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal menyetujui transaksi: ${e.message}", e)
@@ -110,16 +128,36 @@ class TransaksiRepositoryImpl @Inject constructor(
             // -----------------------------------------------------------------------------
 
             transaksiDao.reject(transaksiId, approverId, alasan)
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal menolak transaksi: ${e.message}", e)
         }
     }
 
-    override suspend fun bypass(transaksiId: Int, arsiparisId: Int, buktiPath: String, catatan: String): ResultState<Unit> {
+    override suspend fun bypass(
+        transaksiId: Int,
+        arsiparisId: Int,
+        buktiPath: String,
+        catatan: String,
+        qrToken: String
+    ): ResultState<Unit> {
         return try {
-            transaksiDao.bypass(transaksiId, arsiparisId, buktiPath, catatan)
-            ResultState.Success(Unit)
+            val updatedRows = transaksiDao.bypass(
+                transaksiId,
+                arsiparisId,
+                buktiPath,
+                catatan,
+                qrToken
+            )
+            if (updatedRows == 1) {
+                syncTransaction(transaksiId)
+                ResultState.Success(Unit)
+            } else {
+                ResultState.Error(
+                    "Bypass gagal karena transaksi sudah berubah atau tidak lagi menunggu persetujuan"
+                )
+            }
         } catch (e: Exception) {
             ResultState.Error("Gagal bypass persetujuan: ${e.message}", e)
         }
@@ -128,6 +166,7 @@ class TransaksiRepositoryImpl @Inject constructor(
     override suspend fun acknowledgeBypass(transaksiId: Int, kasubagId: Int): ResultState<Unit> {
         return try {
             transaksiDao.acknowledgeBypass(transaksiId)
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal acknowledge bypass: ${e.message}", e)
@@ -137,6 +176,7 @@ class TransaksiRepositoryImpl @Inject constructor(
     override suspend fun confirmHandover(transaksiId: Int, arsiparisId: Int): ResultState<Unit> {
         return try {
             transaksiDao.confirmHandover(transaksiId)
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal konfirmasi serah: ${e.message}", e)
@@ -168,6 +208,7 @@ class TransaksiRepositoryImpl @Inject constructor(
 
             // Update transaksi status
             transaksiDao.returnTransaksi(transaksiId, LocalDate.now())
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal menyelesaikan pengembalian: ${e.message}", e)
@@ -182,9 +223,16 @@ class TransaksiRepositoryImpl @Inject constructor(
                 masterDokumenDao.updateStatus(detail.dokumenId, "tersedia")
             }
             transaksiDao.cancel(transaksiId)
+            syncTransaction(transaksiId)
             ResultState.Success(Unit)
         } catch (e: Exception) {
             ResultState.Error("Gagal membatalkan transaksi: ${e.message}", e)
+        }
+    }
+
+    override suspend fun syncPending() {
+        transaksiDao.getPendingSync().forEach { transaction ->
+            syncTransaction(transaction.id)
         }
     }
 
@@ -208,6 +256,42 @@ class TransaksiRepositoryImpl @Inject constructor(
     private suspend fun buildDomainWithDetails(entity: TransaksiEntity): Transaksi {
         val details = detailDao.getByTransaksiIdSync(entity.id)
         return buildDomain(entity, details.map { it.toDomain() })
+    }
+
+    private suspend fun syncTransaction(transaksiId: Int) {
+        val transaction = transaksiDao.getById(transaksiId) ?: return
+        runCatching {
+            withTimeout(SYNC_TIMEOUT_MILLIS) {
+                val details = detailDao.getByTransaksiIdSync(transaksiId)
+                val documents = details.mapNotNull { detail ->
+                    val localDocument = masterDokumenDao.getById(detail.dokumenId)
+                        ?: return@mapNotNull null
+                    val resolvedDocument = if (localDocument.remoteId == null) {
+                        loanRemoteDataSource.findArchiveDocumentId(localDocument.nomorDokumen)
+                            ?.also { remoteId ->
+                                masterDokumenDao.updateRemoteId(localDocument.id, remoteId)
+                            }
+                            ?.let { remoteId -> localDocument.copy(remoteId = remoteId) }
+                            ?: localDocument
+                    } else {
+                        localDocument
+                    }
+                    detail.dokumenId to resolvedDocument
+                }.toMap()
+                val remoteId = loanRemoteDataSource.ensureTransaction(
+                    transaction = transaction,
+                    details = details,
+                    documents = documents
+                )
+                transaksiDao.markSynced(transaksiId, remoteId)
+            }
+        }.onFailure { error ->
+            transaksiDao.markSyncPending(
+                transaksiId,
+                error.message?.take(MAX_SYNC_ERROR_LENGTH)
+            )
+            Log.w(TAG, "Transaksi #$transaksiId tersimpan lokal dan menunggu sinkronisasi", error)
+        }
     }
 
     private suspend fun buildDomain(entity: TransaksiEntity, details: List<DetailPeminjaman> = emptyList()): Transaksi {
@@ -271,4 +355,10 @@ class TransaksiRepositoryImpl @Inject constructor(
         kondisiPengembalian = KondisiPengembalian.fromString(kondisiPengembalian),
         catatanKondisi = catatanKondisi
     )
+
+    private companion object {
+        const val TAG = "TransaksiSync"
+        const val SYNC_TIMEOUT_MILLIS = 8_000L
+        const val MAX_SYNC_ERROR_LENGTH = 500
+    }
 }

@@ -16,7 +16,7 @@ import com.bpkpad.peminjaman.core.database.entity.*
         PerpanjanganEntity::class,
         AuditLogEntity::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(DateConverters::class)

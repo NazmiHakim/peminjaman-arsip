@@ -191,6 +191,20 @@ fun AuditTimelineItem(log: AuditLog, isLast: Boolean = false, modifier: Modifier
             )
             Text(log.namaUser, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             log.detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline) }
+            log.catatan?.takeIf { it.isNotBlank() }?.let { note ->
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                    color = actionColor.copy(alpha = 0.08f),
+                    shape = RoundedCornerShape(6.dp)
+                ) {
+                    Text(
+                        text = "Catatan:\n$note",
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
             Text(sdf.format(Date(log.timestamp)), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(Modifier.height(6.dp))
         }

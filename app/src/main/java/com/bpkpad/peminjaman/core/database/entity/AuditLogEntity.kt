@@ -27,7 +27,7 @@ import androidx.room.*
 )
 data class AuditLogEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "transaksi_id") val transaksiId: Int,
+    @ColumnInfo(name = "transaksi_id") val transaksiId: Int?,
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "aksi") val aksi: String,
     @ColumnInfo(name = "detail") val detail: String?,

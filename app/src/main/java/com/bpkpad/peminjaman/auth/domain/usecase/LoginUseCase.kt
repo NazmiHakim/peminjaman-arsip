@@ -17,9 +17,10 @@ class LoginUseCase @Inject constructor(
     suspend operator fun invoke(username: String, password: String): ResultState<User> {
         if (username.isBlank()) return ResultState.Error("Username tidak boleh kosong")
         if (password.isBlank()) return ResultState.Error("Password tidak boleh kosong")
+        if (username.length > 254) return ResultState.Error("Username terlalu panjang")
+        if (password.length > 128) return ResultState.Error("Password terlalu panjang")
 
-        val passwordHash = hashPassword(password)
-        val result = userRepository.login(username.trim(), passwordHash)
+        val result = userRepository.login(username.trim(), password)
 
         if (result is ResultState.Success) {
             val user = result.data
@@ -34,9 +35,8 @@ class LoginUseCase @Inject constructor(
                     noHp = user.noHp
                 )
             )
-            // LOGIN audit — transaksiId = 0 is the sentinel for non-transaction auth actions
             auditLogRepository.log(
-                transaksiId = 0,
+                transaksiId = null,
                 userId = user.id,
                 aksi = AuditAction.LOGIN,
                 detail = "Login berhasil: ${user.username} (${user.role.name})"
@@ -44,11 +44,5 @@ class LoginUseCase @Inject constructor(
         }
 
         return result
-    }
-
-    private fun hashPassword(password: String): String {
-        // TODO: Replace with BCrypt when integrating real auth backend
-        // Must match format used by DatabaseSeeder for dummy accounts
-        return "\$2a\$10\$${password.hashCode()}dummyhash"
     }
 }

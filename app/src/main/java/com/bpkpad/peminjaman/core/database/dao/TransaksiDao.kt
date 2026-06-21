@@ -7,10 +7,10 @@ import java.time.LocalDate
 
 @Dao
 interface TransaksiDao {
-    @Query("SELECT * FROM transaksi_peminjaman ORDER BY created_at DESC")
+    @Query("SELECT * FROM transaksi_peminjaman ORDER BY id DESC")
     fun getAll(): Flow<List<TransaksiEntity>>
 
-    @Query("SELECT * FROM transaksi_peminjaman WHERE status = :status ORDER BY created_at DESC")
+    @Query("SELECT * FROM transaksi_peminjaman WHERE status = :status ORDER BY id DESC")
     fun getByStatus(status: String): Flow<List<TransaksiEntity>>
 
     @Query("""
@@ -29,6 +29,36 @@ interface TransaksiDao {
 
     @Query("SELECT * FROM transaksi_peminjaman WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): TransaksiEntity?
+
+    @Query("SELECT * FROM transaksi_peminjaman WHERE sync_state = 'pending' ORDER BY id ASC")
+    suspend fun getPendingSync(): List<TransaksiEntity>
+
+    @Query("""
+        UPDATE transaksi_peminjaman
+        SET remote_id = :remoteId,
+            sync_state = 'synced',
+            last_sync_error = NULL,
+            updated_at = :now
+        WHERE id = :id
+    """)
+    suspend fun markSynced(
+        id: Int,
+        remoteId: String,
+        now: Long = System.currentTimeMillis()
+    )
+
+    @Query("""
+        UPDATE transaksi_peminjaman
+        SET sync_state = 'pending',
+            last_sync_error = :error,
+            updated_at = :now
+        WHERE id = :id
+    """)
+    suspend fun markSyncPending(
+        id: Int,
+        error: String?,
+        now: Long = System.currentTimeMillis()
+    )
 
     @Query("SELECT * FROM transaksi_peminjaman WHERE qr_code_token = :token LIMIT 1")
     suspend fun findByQrToken(token: String): TransaksiEntity?
@@ -73,8 +103,27 @@ interface TransaksiDao {
     @Query("UPDATE transaksi_peminjaman SET status = 'ditolak', alasan_penolakan = :alasan, approved_by = :approverId, updated_at = :now WHERE id = :id")
     suspend fun reject(id: Int, approverId: Int, alasan: String, now: Long = System.currentTimeMillis())
 
-    @Query("UPDATE transaksi_peminjaman SET status = 'disetujui', metode_persetujuan = 'bypass', bukti_bypass_path = :buktiPath, catatan_bypass = :catatan, approved_by = :arsiparisId, is_bypass_acknowledged = 0, updated_at = :now WHERE id = :id")
-    suspend fun bypass(id: Int, arsiparisId: Int, buktiPath: String, catatan: String, now: Long = System.currentTimeMillis())
+    @Query("""
+        UPDATE transaksi_peminjaman
+        SET status = 'disetujui',
+            metode_persetujuan = 'bypass',
+            bukti_bypass_path = :buktiPath,
+            catatan_bypass = :catatan,
+            qr_code_token = :qrToken,
+            approved_by = :arsiparisId,
+            is_bypass_acknowledged = 0,
+            updated_at = :now
+        WHERE id = :id
+          AND status = 'menunggu_persetujuan'
+    """)
+    suspend fun bypass(
+        id: Int,
+        arsiparisId: Int,
+        buktiPath: String,
+        catatan: String,
+        qrToken: String,
+        now: Long = System.currentTimeMillis()
+    ): Int
 
     @Query("UPDATE transaksi_peminjaman SET is_bypass_acknowledged = 1, updated_at = :now WHERE id = :id")
     suspend fun acknowledgeBypass(id: Int, now: Long = System.currentTimeMillis())
@@ -89,8 +138,8 @@ interface TransaksiDao {
     @Query("UPDATE transaksi_peminjaman SET status = 'dibatalkan', updated_at = :now WHERE id = :id")
     suspend fun cancel(id: Int, now: Long = System.currentTimeMillis())
 
-    @Query("UPDATE transaksi_peminjaman SET tanggal_kembali_rencana = :newDate, updated_at = :now WHERE id = :id")
-    suspend fun updateTanggalKembali(id: Int, newDate: LocalDate, now: Long = System.currentTimeMillis())
+    @Query("UPDATE transaksi_peminjaman SET tanggal_kembali_rencana = :newDate, updated_at = :now WHERE id = :id AND status = 'dipinjam'")
+    suspend fun updateTanggalKembali(id: Int, newDate: LocalDate, now: Long = System.currentTimeMillis()): Int
 
     @Delete
     suspend fun delete(transaksi: TransaksiEntity)

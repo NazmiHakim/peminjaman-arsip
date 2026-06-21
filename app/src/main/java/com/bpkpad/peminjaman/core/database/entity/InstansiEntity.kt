@@ -12,5 +12,6 @@ data class InstansiEntity(
     @ColumnInfo(name = "alamat") val alamat: String?,
     @ColumnInfo(name = "kode_instansi") val kodeInstansi: String?,
     @ColumnInfo(name = "created_at") val createdAt: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis()
+    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "remote_id") val remoteId: String? = null
 )

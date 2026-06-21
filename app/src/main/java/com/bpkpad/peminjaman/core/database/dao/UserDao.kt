@@ -12,6 +12,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): UserEntity?
 
+    @Query("SELECT * FROM users WHERE lower(username) = lower(:username) AND is_active = 1 LIMIT 1")
+    suspend fun getByUsername(username: String): UserEntity?
+
     @Query("SELECT * FROM users WHERE is_active = 1 ORDER BY nama_lengkap ASC")
     fun getAll(): Flow<List<UserEntity>>
 
@@ -20,6 +23,9 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: UserEntity): Long
+
+    @Upsert
+    suspend fun upsert(user: UserEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(users: List<UserEntity>)

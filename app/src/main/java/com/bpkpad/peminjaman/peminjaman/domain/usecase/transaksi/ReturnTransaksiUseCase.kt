@@ -44,11 +44,20 @@ class ReturnTransaksiUseCase @Inject constructor(
                 hasRusak -> AuditAction.DIKEMBALIKAN_RUSAK
                 else -> AuditAction.DIKEMBALIKAN_BAIK
             }
+            val conditionNotes = kondisiMap.values
+                .mapNotNull { (condition, note) ->
+                    note?.trim()
+                        ?.takeIf(String::isNotBlank)
+                        ?.let { "${condition.replaceFirstChar(Char::uppercase)}: $it" }
+                }
+                .joinToString(separator = "\n")
+                .ifBlank { null }
             auditRepo.log(
                 transaksiId = transaksiId,
                 userId = arsiparisId,
                 aksi = action,
-                detail = "Dokumen dikembalikan. ${kondisiMap.size} dokumen diproses."
+                detail = "Dokumen dikembalikan. ${kondisiMap.size} dokumen diproses.",
+                catatan = conditionNotes
             )
         }
         return result

@@ -18,7 +18,9 @@ data class DashboardKasubagUiState(
     val session: SessionObject? = null,
     val pendingTransaksi: List<Transaksi> = emptyList(),
     val bypassPendingList: List<Transaksi> = emptyList(),
+    val totalSemua: Int = 0,
     val totalMenunggu: Int = 0,
+    val totalDisetujui: Int = 0,
     val totalDipinjam: Int = 0,
     val totalDikembalikan: Int = 0,
     val totalOverdue: Int = 0,
@@ -40,6 +42,7 @@ class DashboardKasubagViewModel @Inject constructor(
     init { loadData() }
 
     private fun loadData() {
+        viewModelScope.launch { transaksiRepo.syncPending() }
         viewModelScope.launch {
             sessionManager.session.collect { s -> _uiState.update { it.copy(session = s) } }
         }
@@ -56,7 +59,9 @@ class DashboardKasubagViewModel @Inject constructor(
                     it.copy(
                         pendingTransaksi  = pending,
                         bypassPendingList = bypass,
+                        totalSemua         = all.size,
                         totalMenunggu     = pending.size,
+                        totalDisetujui    = all.count { t -> t.status == TransaksiStatus.DISETUJUI },
                         totalDipinjam     = all.count { t -> t.status == TransaksiStatus.DIPINJAM },
                         totalDikembalikan = all.count { t -> t.status == TransaksiStatus.DIKEMBALIKAN },
                         totalOverdue      = overdue.size,

@@ -18,7 +18,7 @@ class AuditLogRepositoryImpl @Inject constructor(
 ) : AuditLogRepository {
 
     override suspend fun log(
-        transaksiId: Int,
+        transaksiId: Int?,
         userId: Int,
         aksi: AuditAction,
         detail: String?,

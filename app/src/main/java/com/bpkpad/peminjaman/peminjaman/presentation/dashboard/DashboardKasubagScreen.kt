@@ -144,9 +144,9 @@ fun DashboardKasubagContent(
                 // ── Status Cards Row (Clickable) ──
                 item {
                     Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        val totalSemua = uiState.totalMenunggu + uiState.totalDipinjam + uiState.totalOverdue + uiState.totalDikembalikan
-                        KFigmaStatCard("Total Pengajuan", "Semua Waktu", totalSemua, Icons.Default.Description, Color(0xFFDFF5E1), Color(0xFF207125)) { onNavigate("list_riwayat?status=ALL") }
+                        KFigmaStatCard("Total Pengajuan", "Semua Waktu", uiState.totalSemua, Icons.Default.Description, Color(0xFFDFF5E1), Color(0xFF207125)) { onNavigate("list_riwayat?status=ALL") }
                         KFigmaStatCard("Menunggu", "Semua Waktu", uiState.totalMenunggu, Icons.Default.HourglassEmpty, Color(0xFFFFF3CD), Color(0xFFD4A017)) { onNavigate("list_riwayat?status=MENUNGGU_PERSETUJUAN") }
+                        KFigmaStatCard("Disetujui", "Siap diserahkan", uiState.totalDisetujui, Icons.Default.Verified, Color(0xFFE3F2FD), Color(0xFF1565C0)) { onNavigate("list_riwayat?status=DISETUJUI") }
                         KFigmaStatCard("Sedang dipinjam", "Semua Waktu", uiState.totalDipinjam, Icons.Default.CheckCircleOutline, Color(0xFFD1ECF1), Color(0xFF0C5460)) { onNavigate("list_riwayat?status=DIPINJAM") }
                         KFigmaStatCard("Selesai dipinjam", "Semua Waktu", uiState.totalDikembalikan, Icons.Default.CheckCircle, Color(0xFFD4EDDA), Color(0xFF155724)) { onNavigate("list_riwayat?status=DIKEMBALIKAN") }
                         KFigmaStatCard("Terlambat", "Semua Waktu", uiState.totalOverdue, Icons.Default.Warning, Color(0xFFF8D7DA), Color(0xFFC62828)) { onNavigate("list_riwayat?status=TERLAMBAT") }

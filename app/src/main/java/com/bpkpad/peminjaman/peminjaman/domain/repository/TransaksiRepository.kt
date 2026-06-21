@@ -15,7 +15,13 @@ interface TransaksiRepository {
     suspend fun update(transaksi: Transaksi): ResultState<Transaksi>
     suspend fun approve(transaksiId: Int, approverId: Int, qrToken: String): ResultState<Unit>
     suspend fun reject(transaksiId: Int, approverId: Int, alasan: String): ResultState<Unit>
-    suspend fun bypass(transaksiId: Int, arsiparisId: Int, buktiPath: String, catatan: String): ResultState<Unit>
+    suspend fun bypass(
+        transaksiId: Int,
+        arsiparisId: Int,
+        buktiPath: String,
+        catatan: String,
+        qrToken: String
+    ): ResultState<Unit>
     suspend fun acknowledgeBypass(transaksiId: Int, kasubagId: Int): ResultState<Unit>
     suspend fun confirmHandover(transaksiId: Int, arsiparisId: Int): ResultState<Unit>
     suspend fun returnTransaksi(
@@ -24,5 +30,6 @@ interface TransaksiRepository {
         kondisiMap: Map<Int, Pair<String, String?>>
     ): ResultState<Unit>
     suspend fun cancel(transaksiId: Int, userId: Int): ResultState<Unit>
+    suspend fun syncPending()
     fun getDashboardStats(): Flow<Map<String, Int>>
 }

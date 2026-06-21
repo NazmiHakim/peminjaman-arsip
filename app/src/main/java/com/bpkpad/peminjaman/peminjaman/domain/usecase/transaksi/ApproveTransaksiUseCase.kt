@@ -17,7 +17,7 @@ class ApproveTransaksiUseCase @Inject constructor(
         if (!transaksi.canBeApproved)
             return ResultState.Error("Status transaksi tidak valid untuk disetujui")
 
-        val qrToken = "QR-" + UUID.randomUUID().toString().take(8).uppercase()
+        val qrToken = UUID.randomUUID().toString()
         val result = transaksiRepo.approve(transaksiId, approverId, qrToken)
         if (result is ResultState.Success) {
             auditRepo.log(

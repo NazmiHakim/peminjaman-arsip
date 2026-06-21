@@ -2,6 +2,7 @@ package com.bpkpad.peminjaman.core.database.entity
 
 import androidx.room.*
 import java.time.LocalDate
+import java.util.UUID
 
 @Entity(
     tableName = "transaksi_peminjaman",
@@ -18,7 +19,8 @@ import java.time.LocalDate
         Index(value = ["tanggal_kembali_rencana"]),
         Index(value = ["created_by"]),
         Index(value = ["qr_code_token"], unique = true),
-        Index(value = ["tanggal_pinjam"])
+        Index(value = ["tanggal_pinjam"]),
+        Index(value = ["sync_key"], unique = true)
     ]
 )
 data class TransaksiEntity(
@@ -41,5 +43,10 @@ data class TransaksiEntity(
     @ColumnInfo(name = "created_by") val createdBy: Int,
     @ColumnInfo(name = "approved_by") val approvedBy: Int?,
     @ColumnInfo(name = "created_at") val createdAt: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis()
+    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "remote_id") val remoteId: String? = null,
+    @ColumnInfo(name = "sync_key", defaultValue = "''")
+    val syncKey: String = UUID.randomUUID().toString(),
+    @ColumnInfo(name = "sync_state", defaultValue = "'pending'") val syncState: String = "pending",
+    @ColumnInfo(name = "last_sync_error") val lastSyncError: String? = null
 )

@@ -5,6 +5,7 @@ import com.bpkpad.peminjaman.core.database.dao.InstansiDao
 import com.bpkpad.peminjaman.core.database.entity.InstansiEntity
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
 import com.bpkpad.peminjaman.peminjaman.domain.repository.InstansiRepository
+import com.bpkpad.peminjaman.peminjaman.data.remote.LoanRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -12,7 +13,8 @@ import javax.inject.Singleton
 
 @Singleton
 class InstansiRepositoryImpl @Inject constructor(
-    private val dao: InstansiDao
+    private val dao: InstansiDao,
+    private val remoteDataSource: LoanRemoteDataSource
 ) : InstansiRepository {
 
     override fun getAll(): Flow<List<Instansi>> =
@@ -24,6 +26,15 @@ class InstansiRepositoryImpl @Inject constructor(
     override suspend fun create(instansi: Instansi): ResultState<Instansi> {
         return try {
             val id = dao.insert(instansi.toEntity())
+            if (id < 0) return ResultState.Error("Nama atau kode instansi sudah digunakan")
+            runCatching {
+                val remoteId = remoteDataSource.upsertAgency(
+                    instansi.namaInstansi,
+                    instansi.alamat,
+                    instansi.kodeInstansi
+                )
+                dao.updateRemoteId(id.toInt(), remoteId)
+            }
             ResultState.Success(instansi.copy(id = id.toInt()))
         } catch (e: Exception) {
             ResultState.Error("Gagal menyimpan instansi: ${e.message}", e)
@@ -32,7 +43,17 @@ class InstansiRepositoryImpl @Inject constructor(
 
     override suspend fun update(instansi: Instansi): ResultState<Instansi> {
         return try {
-            dao.update(instansi.toEntity())
+            val existing = dao.getById(instansi.id)
+                ?: return ResultState.Error("Instansi tidak ditemukan")
+            dao.update(instansi.toEntity().copy(remoteId = existing.remoteId))
+            runCatching {
+                val remoteId = remoteDataSource.upsertAgency(
+                    instansi.namaInstansi,
+                    instansi.alamat,
+                    instansi.kodeInstansi
+                )
+                dao.updateRemoteId(instansi.id, remoteId)
+            }
             ResultState.Success(instansi)
         } catch (e: Exception) {
             ResultState.Error("Gagal mengupdate instansi: ${e.message}", e)

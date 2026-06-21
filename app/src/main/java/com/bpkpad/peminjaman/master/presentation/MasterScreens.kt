@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bpkpad.peminjaman.core.common.InputRules
 import androidx.room.Delete
 import com.bpkpad.peminjaman.core.theme.*
 import com.bpkpad.peminjaman.core.ui.*
@@ -151,9 +152,16 @@ fun ListInstansiScreen(
     var inputNama by remember { mutableStateOf("") }
     var inputKode by remember { mutableStateOf("") }
     var inputAlamat by remember { mutableStateOf("") }
+    var formSubmitted by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage.collect { snackbarHostState.showSnackbar(it) }
+    }
 
     Scaffold(
         containerColor = Color(0xFFF7F8FA),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showDialog = true },
@@ -217,18 +225,65 @@ fun ListInstansiScreen(
                 title = { Text("Tambah Instansi Baru", fontWeight = FontWeight.Bold) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        OutlinedTextField(value = inputNama, onValueChange = { inputNama = it }, label = { Text("Nama Instansi *") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                        OutlinedTextField(value = inputKode, onValueChange = { inputKode = it }, label = { Text("Kode (Opsional)") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                        OutlinedTextField(value = inputAlamat, onValueChange = { inputAlamat = it }, label = { Text("Alamat (Opsional)") }, modifier = Modifier.fillMaxWidth())
+                        OutlinedTextField(
+                            value = inputNama,
+                            onValueChange = { inputNama = InputRules.filterAgencyName(it) },
+                            label = { Text("Nama Instansi *") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            isError = formSubmitted && InputRules.validateAgencyName(inputNama) != null,
+                            supportingText = {
+                                val error = InputRules.validateAgencyName(inputNama)
+                                    .takeIf { formSubmitted }
+                                Text(error ?: "${inputNama.length}/${InputRules.AGENCY_NAME_MAX}")
+                            }
+                        )
+                        OutlinedTextField(
+                            value = inputKode,
+                            onValueChange = { inputKode = InputRules.filterAgencyCode(it) },
+                            label = { Text("Kode (Opsional)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            isError = formSubmitted && InputRules.validateAgencyCode(inputKode) != null,
+                            supportingText = {
+                                Text(
+                                    InputRules.validateAgencyCode(inputKode)
+                                        .takeIf { formSubmitted }
+                                        ?: "${inputKode.length}/${InputRules.AGENCY_CODE_MAX}"
+                                )
+                            }
+                        )
+                        OutlinedTextField(
+                            value = inputAlamat,
+                            onValueChange = { inputAlamat = InputRules.filterAgencyAddress(it) },
+                            label = { Text("Alamat (Opsional)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            minLines = 2,
+                            maxLines = 4,
+                            isError = formSubmitted && InputRules.validateAgencyAddress(inputAlamat) != null,
+                            supportingText = {
+                                Text(
+                                    InputRules.validateAgencyAddress(inputAlamat)
+                                        .takeIf { formSubmitted }
+                                        ?: "${inputAlamat.length}/${InputRules.AGENCY_ADDRESS_MAX}"
+                                )
+                            }
+                        )
                     }
                 },
                 confirmButton = {
                     Button(
                         onClick = {
-                            if (inputNama.isNotBlank()) {
+                            formSubmitted = true
+                            if (
+                                InputRules.validateAgencyName(inputNama) == null &&
+                                InputRules.validateAgencyCode(inputKode) == null &&
+                                InputRules.validateAgencyAddress(inputAlamat) == null
+                            ) {
                                 viewModel.addInstansi(inputNama, inputKode, inputAlamat)
                                 showDialog = false
                                 inputNama = ""; inputKode = ""; inputAlamat = ""
+                                formSubmitted = false
                             }
                         }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF207125))
                     ) { Text("Simpan") }

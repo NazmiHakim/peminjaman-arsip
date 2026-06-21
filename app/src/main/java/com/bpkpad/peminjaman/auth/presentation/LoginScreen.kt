@@ -176,7 +176,7 @@ fun LoginContent(
 
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        "Demo: budi/budi123 (Arsiparis) · siti/siti123 (Kasubag)",
+                        "Gunakan akun yang telah dibuat dan diaktifkan di Supabase Auth",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         textAlign = TextAlign.Center,

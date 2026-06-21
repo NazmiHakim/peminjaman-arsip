@@ -13,6 +13,7 @@ import com.bpkpad.peminjaman.core.theme.BpkpadTheme
 import com.bpkpad.peminjaman.navigation.BpkpadNavGraph
 import com.bpkpad.peminjaman.navigation.Screen
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.UserRole
+import com.bpkpad.peminjaman.peminjaman.domain.repository.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
     @Inject lateinit var sessionManager: SessionManager
     @Inject lateinit var dbSeeder: DatabaseSeeder
+    @Inject lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Install splash BEFORE super.onCreate so the system can manage it.
@@ -54,7 +56,14 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             // Resolve session once; DataStore guarantees a value or null.
-            val session = sessionManager.session.firstOrNull()
+            var session = sessionManager.session.firstOrNull()
+            if (session != null) {
+                val authenticatedUser = userRepository.getAuthenticatedUser()
+                if (authenticatedUser == null || authenticatedUser.id != session.userId) {
+                    sessionManager.clearSession()
+                    session = null
+                }
+            }
 
             val startDestination = when {
                 session == null -> Screen.Login.route

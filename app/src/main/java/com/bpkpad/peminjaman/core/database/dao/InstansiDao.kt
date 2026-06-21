@@ -12,6 +12,12 @@ interface InstansiDao {
     @Query("SELECT * FROM instansi_peminjam WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): InstansiEntity?
 
+    @Query("SELECT * FROM instansi_peminjam WHERE lower(nama_instansi) = lower(:name) LIMIT 1")
+    suspend fun getByName(name: String): InstansiEntity?
+
+    @Query("UPDATE instansi_peminjam SET remote_id = :remoteId, updated_at = :now WHERE id = :id")
+    suspend fun updateRemoteId(id: Int, remoteId: String, now: Long = System.currentTimeMillis())
+
     @Query("SELECT * FROM instansi_peminjam WHERE nama_instansi LIKE '%' || :query || '%' OR kode_instansi LIKE '%' || :query || '%' ORDER BY nama_instansi ASC")
     fun search(query: String): Flow<List<InstansiEntity>>
 

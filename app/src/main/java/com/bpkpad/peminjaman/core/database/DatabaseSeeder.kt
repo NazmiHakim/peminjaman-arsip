@@ -109,7 +109,7 @@ class DatabaseSeeder @Inject constructor(
                 status = "dipinjam", metodePersetujuan = "online",
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 1, approvedBy = 2
+                createdBy = 1, approvedBy = 2, syncState = "local_only"
             ),
             // SKENARIO 2: PENDING - antrean Kasubag
             TransaksiEntity(
@@ -125,7 +125,7 @@ class DatabaseSeeder @Inject constructor(
                 status = "menunggu_persetujuan", metodePersetujuan = null,
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 1, approvedBy = null
+                createdBy = 1, approvedBy = null, syncState = "local_only"
             ),
             // SKENARIO 3: BYPASS - perlu acknowledge Kasubag
             TransaksiEntity(
@@ -142,7 +142,7 @@ class DatabaseSeeder @Inject constructor(
                 buktiBypassPath = "memo_bypass.jpg",
                 catatanBypass = "Kasubag ACC via telepon karena dinas luar",
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 1, approvedBy = 1
+                createdBy = 1, approvedBy = 1, syncState = "local_only"
             ),
             // SKENARIO 4: NORMAL BORROWED - test pengembalian / perpanjangan
             TransaksiEntity(
@@ -158,7 +158,7 @@ class DatabaseSeeder @Inject constructor(
                 status = "dipinjam", metodePersetujuan = "online",
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 3, approvedBy = 2
+                createdBy = 3, approvedBy = 2, syncState = "local_only"
             ),
             // SKENARIO 5: DITOLAK - dead-end
             TransaksiEntity(
@@ -175,7 +175,7 @@ class DatabaseSeeder @Inject constructor(
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false,
                 alasanPenolakan = "Surat pengantar tidak ditandatangani kepala dinas",
-                createdBy = 1, approvedBy = 2
+                createdBy = 1, approvedBy = 2, syncState = "local_only"
             ),
             // SKENARIO 6: DIKEMBALIKAN (BAIK) - riwayat sukses
             TransaksiEntity(
@@ -191,7 +191,7 @@ class DatabaseSeeder @Inject constructor(
                 status = "dikembalikan", metodePersetujuan = "online",
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 1, approvedBy = 2
+                createdBy = 1, approvedBy = 2, syncState = "local_only"
             ),
             // SKENARIO 7: DIPINJAM + Perpanjangan Pending
             TransaksiEntity(
@@ -207,7 +207,7 @@ class DatabaseSeeder @Inject constructor(
                 status = "dipinjam", metodePersetujuan = "online",
                 buktiBypassPath = null, catatanBypass = null,
                 isBypassAcknowledged = false, alasanPenolakan = null,
-                createdBy = 1, approvedBy = 2
+                createdBy = 1, approvedBy = 2, syncState = "local_only"
             )
         ))
 

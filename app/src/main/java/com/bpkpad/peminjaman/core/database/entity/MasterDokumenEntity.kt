@@ -22,5 +22,6 @@ data class MasterDokumenEntity(
     @ColumnInfo(name = "lokasi_rak") val lokasiRak: String?,
     @ColumnInfo(name = "lokasi_box") val lokasiBox: String?,
     @ColumnInfo(name = "created_at") val createdAt: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis()
+    @ColumnInfo(name = "updated_at") val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "remote_id") val remoteId: String? = null
 )

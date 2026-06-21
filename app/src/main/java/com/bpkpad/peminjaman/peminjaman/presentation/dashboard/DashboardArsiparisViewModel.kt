@@ -17,6 +17,8 @@ data class DashboardArsiparisUiState(
     val session: SessionObject? = null,
     val overdueList: List<Transaksi> = emptyList(),
     val recentList: List<Transaksi> = emptyList(),
+    val totalSemua: Int = 0,
+    val totalDisetujui: Int = 0,
     val totalDipinjam: Int = 0,
     val totalMenunggu: Int = 0,
     val totalOverdue: Int = 0,
@@ -37,6 +39,7 @@ class DashboardArsiparisViewModel @Inject constructor(
     init { loadData() }
 
     private fun loadData() {
+        viewModelScope.launch { transaksiRepo.syncPending() }
         viewModelScope.launch {
             sessionManager.session.collect { session ->
                 _uiState.update { it.copy(session = session) }
@@ -51,6 +54,8 @@ class DashboardArsiparisViewModel @Inject constructor(
                     it.copy(
                         overdueList = overdue,
                         recentList  = all.take(10),
+                        totalSemua = all.size,
+                        totalDisetujui = all.count { t -> t.status == TransaksiStatus.DISETUJUI },
                         totalDipinjam = all.count { t -> t.status == TransaksiStatus.DIPINJAM },
                         totalMenunggu = all.count { t -> t.status == TransaksiStatus.MENUNGGU_PERSETUJUAN },
                         totalOverdue  = overdue.size,

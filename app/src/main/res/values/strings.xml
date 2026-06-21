@@ -35,6 +35,13 @@
     <string name="btn_approve">Setujui</string>
     <string name="btn_reject">Tolak</string>
     <string name="btn_bypass">Bypass Persetujuan</string>
+    <string name="bypass_pending_title">Bypass Persetujuan Kasubag</string>
+    <string name="bypass_pending_description">Gunakan hanya jika Kasubag tidak tersedia dan persetujuan telah diperoleh melalui memo, disposisi, atau komunikasi resmi.</string>
+    <string name="bypass_attach_proof">Lampirkan Foto Bukti</string>
+    <string name="bypass_replace_proof">Ganti Foto Bukti</string>
+    <string name="bypass_proof_selected">Foto bukti sudah dipilih</string>
+    <string name="bypass_note_label">Catatan bypass *</string>
+    <string name="bypass_process">Proses Bypass</string>
     <string name="btn_acknowledge">Ketahui</string>
     <string name="btn_return">Selesaikan Peminjaman</string>
     <string name="btn_extend">Perpanjang</string>

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuditLogRepository {
     suspend fun log(
-        transaksiId: Int,
+        transaksiId: Int?,
         userId: Int,
         aksi: AuditAction,
         detail: String? = null,

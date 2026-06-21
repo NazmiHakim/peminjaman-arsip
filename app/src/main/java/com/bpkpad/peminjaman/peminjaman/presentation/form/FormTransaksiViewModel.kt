@@ -3,6 +3,7 @@ package com.bpkpad.peminjaman.peminjaman.presentation.form
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bpkpad.peminjaman.core.common.InputRules
 import com.bpkpad.peminjaman.core.common.ResultState
 import com.bpkpad.peminjaman.core.session.SessionManager
 import com.bpkpad.peminjaman.core.storage.FileRepository
@@ -83,23 +84,33 @@ class FormTransaksiViewModel @Inject constructor(
         }
     }
 
-    fun onPicNamaChange(v: String) = _uiState.update { it.copy(picNama = v) }
-    fun onPicHpChange(v: String) = _uiState.update { it.copy(picNoHp = v) }
-    fun onNomorSuratChange(v: String) = _uiState.update { it.copy(nomorSurat = v) }
+    fun onPicNamaChange(v: String) =
+        _uiState.update { it.copy(picNama = InputRules.filterApplicantName(v)) }
+
+    fun onPicHpChange(v: String) =
+        _uiState.update { it.copy(picNoHp = InputRules.filterPhone(v)) }
+
+    fun onNomorSuratChange(v: String) =
+        _uiState.update { it.copy(nomorSurat = InputRules.filterLetterNumber(v)) }
     fun onTanggalKembaliChange(v: String) = _uiState.update { it.copy(tanggalKembali = v) }
     fun onFotoSelected(uri: Uri) = _uiState.update { it.copy(fotoUri = uri) }
     fun onBypassToggle(v: Boolean) = _uiState.update { it.copy(isBypass = v) }
     fun onFotoBypassSelected(uri: Uri) = _uiState.update { it.copy(fotoBypassUri = uri) }
-    fun onCatatanBypassChange(v: String) = _uiState.update { it.copy(catatanBypass = v) }
+    fun onCatatanBypassChange(v: String) =
+        _uiState.update { it.copy(catatanBypass = InputRules.filterBypassNote(v)) }
+
     fun onInstansiSearch(q: String) {
-        _uiState.update { it.copy(instansiName = q) }
-        _instansiQuery.value = q
+        val filtered = InputRules.filterWorkUnit(q)
+        _uiState.update { it.copy(instansiName = filtered) }
+        _instansiQuery.value = filtered
     }
     fun onInstansiSelect(inst: Instansi) {
         // Saat diklik dari autocomplete, masukkan namanya ke kolom teks
         _uiState.update { it.copy(instansiName = inst.namaInstansi, instansiSuggestions = emptyList()) }
     }
-    fun searchDokumen(q: String) { _dokumenQuery.value = q }
+    fun searchDokumen(q: String) {
+        _dokumenQuery.value = InputRules.filterDocumentSearch(q)
+    }
     fun addDokumen(dok: MasterDokumen) = _uiState.update { it.copy(selectedDokumen = it.selectedDokumen + dok, dokumenSearchResults = emptyList()) }
     fun removeDokumen(id: Int) = _uiState.update { it.copy(selectedDokumen = it.selectedDokumen.filter { d -> d.id != id }) }
     fun clearSuccess() = _uiState.update { it.copy(submitSuccess = false) }
@@ -108,11 +119,20 @@ class FormTransaksiViewModel @Inject constructor(
     fun submit() {
         val s = _uiState.value
         _uiState.update { it.copy(submitted = true) }
-        if (s.instansiName.isBlank() || s.picNama.isBlank() || s.picNoHp.isBlank() ||
-            s.nomorSurat.isBlank() || s.tanggalKembali.isBlank() || s.fotoUri == null || s.selectedDokumen.isEmpty()
+        if (
+            InputRules.validateWorkUnit(s.instansiName) != null ||
+            InputRules.validateApplicantName(s.picNama) != null ||
+            InputRules.validatePhone(s.picNoHp) != null ||
+            InputRules.validateLetterNumber(s.nomorSurat) != null ||
+            s.tanggalKembali.isBlank() ||
+            s.fotoUri == null ||
+            s.selectedDokumen.isEmpty()
         ) return
 
-        if (s.isBypass && (s.fotoBypassUri == null || s.catatanBypass.isBlank())) return
+        if (
+            s.isBypass &&
+            (s.fotoBypassUri == null || InputRules.validateBypassNote(s.catatanBypass) != null)
+        ) return
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val userId = sessionManager.session.firstOrNull()?.userId ?: run {

@@ -2,6 +2,9 @@ package com.bpkpad.peminjaman.master.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bpkpad.peminjaman.core.common.InputRules
+import com.bpkpad.peminjaman.core.common.ResultState
+import com.bpkpad.peminjaman.core.session.SessionManager
 import com.bpkpad.peminjaman.master.domain.usecase.CreateInstansiUseCase
 import com.bpkpad.peminjaman.peminjaman.domain.model.Instansi
 import com.bpkpad.peminjaman.peminjaman.domain.model.MasterDokumen
@@ -52,7 +55,8 @@ data class ListInstansiUiState(
 @HiltViewModel
 class ListInstansiViewModel @Inject constructor(
     private val instansiRepo: InstansiRepository,
-    private val createInstansiUseCase: com.bpkpad.peminjaman.master.domain.usecase.CreateInstansiUseCase
+    private val createInstansiUseCase: com.bpkpad.peminjaman.master.domain.usecase.CreateInstansiUseCase,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     // 1. Simpan apa yang diketik user di kolom pencarian
@@ -86,18 +90,23 @@ class ListInstansiViewModel @Inject constructor(
     )
 
     fun onSearch(q: String) {
-        _searchQuery.value = q
+        _searchQuery.value = InputRules.filterAgencyName(q)
     }
 
     fun addInstansi(nama: String, kode: String, alamat: String) {
         viewModelScope.launch {
+            val userId = sessionManager.session.firstOrNull()?.userId ?: run {
+                _errorMessage.emit("Sesi tidak valid")
+                return@launch
+            }
             val newInstansi = Instansi(
                 id = 0,
-                namaInstansi = nama,
-                alamat = alamat.ifBlank { null },
-                kodeInstansi = kode.ifBlank { null }
+                namaInstansi = InputRules.filterAgencyName(nama),
+                alamat = InputRules.filterAgencyAddress(alamat).ifBlank { null },
+                kodeInstansi = InputRules.filterAgencyCode(kode).ifBlank { null }
             )
-            createInstansiUseCase(newInstansi, 1)
+            val result = createInstansiUseCase(newInstansi, userId)
+            if (result is ResultState.Error) _errorMessage.emit(result.message)
         }
     }
     fun updateInstansi(id: Int, nama: String, kode: String, alamat: String) {
