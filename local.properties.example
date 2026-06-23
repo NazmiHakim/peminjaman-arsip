@@ -1,0 +1,6 @@
+# Copy these entries into local.properties. Never commit local.properties.
+SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_REPLACE_ME
+
+# Android Studio normally writes this automatically.
+# sdk.dir=C\:\\Users\\YOUR_NAME\\AppData\\Local\\Android\\Sdk

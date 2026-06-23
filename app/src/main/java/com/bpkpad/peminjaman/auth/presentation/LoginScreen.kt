@@ -176,7 +176,7 @@ fun LoginContent(
 
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        "Gunakan akun yang telah dibuat dan diaktifkan di Supabase Auth",
+                        "Gunakan akun dan password yang valid",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         textAlign = TextAlign.Center,

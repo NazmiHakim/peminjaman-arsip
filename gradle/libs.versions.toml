@@ -55,8 +55,9 @@ desugar = "2.1.5"
 # SplashScreen
 splashscreen = "1.0.1"
 
-# Google Fonts
 uiTextGoogleFonts = "1.7.8"
+mockk = "1.13.12"
+kotlinxCoroutinesTest = "1.10.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -147,6 +148,9 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 
 # Google Fonts
 androidx-compose-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
