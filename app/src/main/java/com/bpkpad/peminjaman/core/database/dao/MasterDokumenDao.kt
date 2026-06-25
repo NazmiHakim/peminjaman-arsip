@@ -67,6 +67,9 @@ interface MasterDokumenDao {
     @Delete
     suspend fun delete(dokumen: MasterDokumenEntity)
 
+    @Query("SELECT * FROM master_dokumen WHERE remote_id = :remoteId LIMIT 1")
+    suspend fun getByRemoteId(remoteId: String): MasterDokumenEntity?
+
     @Query("SELECT COUNT(*) FROM master_dokumen")
     suspend fun count(): Int
 }

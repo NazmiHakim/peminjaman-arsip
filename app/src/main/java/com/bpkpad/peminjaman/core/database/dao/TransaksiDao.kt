@@ -137,12 +137,17 @@ interface TransaksiDao {
 
     @Query("UPDATE transaksi_peminjaman SET status = 'dibatalkan', updated_at = :now WHERE id = :id")
     suspend fun cancel(id: Int, now: Long = System.currentTimeMillis())
-
-    @Query("UPDATE transaksi_peminjaman SET tanggal_kembali_rencana = :newDate, updated_at = :now WHERE id = :id AND status = 'dipinjam'")
+    @Query("UPDATE transaksi_peminjaman SET tanggal_kembali_rencana = :newDate, updated_at = :now WHERE id = :id AND status = 'dipinjam'")
     suspend fun updateTanggalKembali(id: Int, newDate: LocalDate, now: Long = System.currentTimeMillis()): Int
 
     @Delete
     suspend fun delete(transaksi: TransaksiEntity)
+
+    @Query("SELECT * FROM transaksi_peminjaman WHERE remote_id = :remoteId LIMIT 1")
+    suspend fun getByRemoteId(remoteId: String): TransaksiEntity?
+
+    @Query("SELECT * FROM transaksi_peminjaman WHERE sync_key = :syncKey LIMIT 1")
+    suspend fun getBySyncKey(syncKey: String): TransaksiEntity?
 
     @Query("SELECT COUNT(*) FROM transaksi_peminjaman")
     suspend fun count(): Int

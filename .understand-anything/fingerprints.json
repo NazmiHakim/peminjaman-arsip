@@ -1,0 +1,2057 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "087bd900812109b245b586472cd67846b680f1b6",
+  "generatedAt": "2026-06-25T01:16:20.598Z",
+  "files": {
+    ".omp/mcp.json": {
+      "filePath": ".omp/mcp.json",
+      "contentHash": "67f69d5ea04d752bc0d6f132ccd3e2a4c3d68521dab2ac0e0b81e3750ea0795d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "c6b01a8dde2b8f900631713ce55bce51ffe3849bf96368641418109db3512f66",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/config.json": {
+      "filePath": ".understand-anything/config.json",
+      "contentHash": "c3d4ed53a5453d102e321f7c8943707b29c34bad4a7038d624d2c2fe82919b2b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": true
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "6a571c8f1569c8cc78f26cc1a25e9cef203feb817ac62f351059028da894d6ae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 949,
+      "hasStructuralAnalysis": true
+    },
+    "app/AGENTS.MD": {
+      "filePath": "app/AGENTS.MD",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "app/build.gradle.kts": {
+      "filePath": "app/build.gradle.kts",
+      "contentHash": "008eabff0cb96bb0ed2d912f95c9efba51c80b999dc3bd107303468a42a8be0c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 193,
+      "hasStructuralAnalysis": false
+    },
+    "app/proguard-rules.pro": {
+      "filePath": "app/proguard-rules.pro",
+      "contentHash": "48c84bd2ac064ce2665b62a6e7c0e87f3b4fe259708a76e16625c2b43e1bc078",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/androidTest/java/com/bpkpad/arsipnonkeu/ExampleInstrumentedTest.kt": {
+      "filePath": "app/src/androidTest/java/com/bpkpad/arsipnonkeu/ExampleInstrumentedTest.kt",
+      "contentHash": "8eef279b9e8fc79498ca5a3c272730068c48b63f1206fdaa71267856b3422596",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/AndroidManifest.xml": {
+      "filePath": "app/src/main/AndroidManifest.xml",
+      "contentHash": "bad89a7141703da813f481cdcae230fd81342a150da8805111767fbc680aa338",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 94,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/data/repository/UserRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/data/repository/UserRepositoryImpl.kt",
+      "contentHash": "c41db1a4b65617afbae3ad5bb22b02f79401c55c5689bc59d49072ff503a3238",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 214,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/data/security/OfflineAuthStore.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/data/security/OfflineAuthStore.kt",
+      "contentHash": "6c25c7a06aededcdc4f76cb45769bd9321c7c57be8e6088043e9bab34fa6ae8a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 139,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/domain/model/User.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/domain/model/User.kt",
+      "contentHash": "279ba77392073e0c385679865066eae352645560ee02984ae4c85304f34e863e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/domain/usecase/LoginUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/domain/usecase/LoginUseCase.kt",
+      "contentHash": "0f1c992e743430d690f97b7da630b4cbbf0e766d3813390559e6ad75166167fc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/domain/usecase/LogoutUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/domain/usecase/LogoutUseCase.kt",
+      "contentHash": "dd71cb5754f8ee46f9f498769dd843411b7012e7f0c8ecd85046281acb29c462",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 29,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/presentation/LoginScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/presentation/LoginScreen.kt",
+      "contentHash": "c51d77ffd55159ca3bcbf599aa6ff61d0ef1c6185493122f539e4e8a85a97d21",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 215,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/auth/presentation/LoginViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/auth/presentation/LoginViewModel.kt",
+      "contentHash": "0aed3090864956d0b2f5dae4635cb1f990947a2c31ea00b69ba058464d1c3245",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/BpkpadApplication.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/BpkpadApplication.kt",
+      "contentHash": "40f65d3e700183b903159a904966998a79d34abc5a7b2c09a05dada98ac16750",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/common/Constants.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/common/Constants.kt",
+      "contentHash": "b2f0b2d5a28651a22853683d4736015c001a8740694719362cf993fbc547c5f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/common/Extensions.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/common/Extensions.kt",
+      "contentHash": "fa9324b84085293444e06b91c36c30713118ce16b1ee38ce6df0e48301cae960",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/common/InputRules.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/common/InputRules.kt",
+      "contentHash": "3619bb36b498c7fd1184b5f444a920d6a7de8a79a599a71a97dec6e15998a3d7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 142,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/common/ResultState.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/common/ResultState.kt",
+      "contentHash": "1c1995d1cb56d9846f03b6c1c5df2ab9368b899084b8dd203ba39f0f04f9e6c3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/AppDatabase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/AppDatabase.kt",
+      "contentHash": "2e9e39438eff52f7068962c3c90685c7df92ff1d48fcd1ebd98c1bbafe7ea4b9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/AuditLogDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/AuditLogDao.kt",
+      "contentHash": "2b611bb3b8bc64c07fa7bf4d1218e457a2dc299c1369d56b2a02ef7f62e2d50c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/DetailPeminjamanDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/DetailPeminjamanDao.kt",
+      "contentHash": "917ffaf56084186286ea24482f192485abbdb9259287ea66bc2aac0ed3155051",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/InstansiDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/InstansiDao.kt",
+      "contentHash": "d0cb6cf0ea5b6f993f2a8067011fec3e771d646d2e4a40cda1dd75a03270bfcb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/MasterDokumenDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/MasterDokumenDao.kt",
+      "contentHash": "d0c70749bf8d81a12a19655f7c755e7d3c9aa7c8e1a6ba517c40e0ee9c489d29",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/PerpanjanganDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/PerpanjanganDao.kt",
+      "contentHash": "0c3a8f1ca022045a41d6f3d32596fdfb7b2e92a13a994bc965e50bdca477f930",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/TransaksiDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/TransaksiDao.kt",
+      "contentHash": "e188de3132f27ecc9d087b00a267b34d617149ea0d36b60e161dff4b48f5a535",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 150,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/UserDao.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/dao/UserDao.kt",
+      "contentHash": "6754f17b910fabea1ed915c648158a110479265c6893d34b02cfdfc0fc6c25d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/DatabaseMigrations.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/DatabaseMigrations.kt",
+      "contentHash": "9fbd786f3151e506cc6a99bceba14b2c09384c6a0401a6cf09f2fceabcd33b2c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/DatabaseSeeder.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/DatabaseSeeder.kt",
+      "contentHash": "19f307348665cb63efdc41451ccdbcc67988090939e9132837423a5d25201513",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 257,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/DateConverters.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/DateConverters.kt",
+      "contentHash": "06075a280a8f98a3a1b29e20edfdb3e07d50422c46bea935ee27a2f52a8fa890",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/AuditLogEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/AuditLogEntity.kt",
+      "contentHash": "c313e7591586b2333aba068f96c781516fadf90b3c7fca3aeae8be3e0d07a2d1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/DetailPeminjamanEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/DetailPeminjamanEntity.kt",
+      "contentHash": "7a946fd9f9d6ccbe96e0b5d06470092a6f884af48e3e7c3738c46a82d49ddf33",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/InstansiEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/InstansiEntity.kt",
+      "contentHash": "30da9cde38684282dc7ab208ea848594f0a3d7cf46382e8ad4aa12852c3ea2fe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/MasterDokumenEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/MasterDokumenEntity.kt",
+      "contentHash": "273396c9647ac93e2173f2f16f037225feae0ca29e0e2a8871b560f01ab40e15",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/PerpanjanganEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/PerpanjanganEntity.kt",
+      "contentHash": "15710f0c887ce4363d1450c4da7b3d9adaf804e7b9dc3132b5bd9916da186efc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 41,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/TransaksiEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/TransaksiEntity.kt",
+      "contentHash": "e8c743b9ac989261790116ff1f09df8971c650e6e6e72efb447389086362d8be",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/UserEntity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/database/entity/UserEntity.kt",
+      "contentHash": "416eb199ff18d9d28dd2acb6543291ea71b1c386f5a7b7f45d89b225abd8187b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/di/DatabaseModule.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/di/DatabaseModule.kt",
+      "contentHash": "48ace9db5b616606bd4c6d6babf45b8f9c574519e19e3c2d00ba060a300be662",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/di/NetworkModule.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/di/NetworkModule.kt",
+      "contentHash": "c1d1168a1172eacf64fcd75b5a5f9660cf8ca12278b1085e661d5ea44965338b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/di/RepositoryModule.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/di/RepositoryModule.kt",
+      "contentHash": "b842e86bc5e1d2737b1bc2e9d458e50da4d9f838febcc0f24aed1adaa5cb496d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/network/AuthInterceptor.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/network/AuthInterceptor.kt",
+      "contentHash": "b68c277c1849a0d6fde6936b061f0af3f6595892d5042ae438a0f25ed43843e3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/network/NetworkMonitor.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/network/NetworkMonitor.kt",
+      "contentHash": "533273e567c02e9211c831859cf93661ceea5048981e8176cef15f376c7d97a9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/network/RetrofitClient.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/network/RetrofitClient.kt",
+      "contentHash": "056d2575ca33ebe76d320f3f08a6c4f5e8310909663fde21a3358a5627c1483a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/network/SupabaseConfig.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/network/SupabaseConfig.kt",
+      "contentHash": "54f5d1cbd6471c12ca602ad5fbb2eb12f7906decdb5a38d5e4396ad523a76896",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/notification/NotificationHelper.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/notification/NotificationHelper.kt",
+      "contentHash": "8b5effc1d87ddc2e5cb6d3296a48e4454a3eb1a5159e9f5100d9b50a1a756380",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 108,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/notification/OverdueWorker.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/notification/OverdueWorker.kt",
+      "contentHash": "9df43b24cff72f7bcebea94d1ba3b0620b718910c519fc29383fc66512c17a2d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 41,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/session/SessionManager.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/session/SessionManager.kt",
+      "contentHash": "1ed83d6279d52e01927b210febb49a67676d49435a2456674c9dbc24fc4c81ee",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 70,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/session/SessionObject.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/session/SessionObject.kt",
+      "contentHash": "949a42afb5ce8a69c12eb64c53fe44b8f54dd7967e0d0f6f96b1461acf8156eb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/storage/FileRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/storage/FileRepository.kt",
+      "contentHash": "21c45d782b4c8b029d4fecb0e12bf2272b65dc050ff71cd500626fe537fa3d36",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/storage/LocalFileRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/storage/LocalFileRepository.kt",
+      "contentHash": "ad1e70d9a75e39a16ac5a507e931570db6e493c02d6b5bced826b89b83ee38da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 74,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/theme/BpkpadTheme.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/theme/BpkpadTheme.kt",
+      "contentHash": "02a34ee464e167f93d30b397ef8cf7f4f1540fc07e91e0ecd93f546b5bbcb8e9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 61,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/theme/BpkpadTypography.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/theme/BpkpadTypography.kt",
+      "contentHash": "1b137cb24a8f205202de818fc1535d4d9f4f245658f56cae169e8611e6b55ced",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/ui/OwnedComponents.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/ui/OwnedComponents.kt",
+      "contentHash": "02a8ffacb49f255e8aceec6926a9c461b2a710eadf44e250753290d2593623a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 462,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/core/ui/SharedComponents.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/core/ui/SharedComponents.kt",
+      "contentHash": "2f2d464305054508dbd071f278e63f95925ba928f3ec9d52afe74ba330e9b666",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 201,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/data/repository/LaporanExportRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/data/repository/LaporanExportRepositoryImpl.kt",
+      "contentHash": "6f5c3271e6f6b5177d5b2a00757f35d76c528ade5bfda92998838ed80b7e61fe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 368,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/model/ExportedReport.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/model/ExportedReport.kt",
+      "contentHash": "aad00ec9afdf9f1ddb059a4c2d7984ea9612df233361c21fd9a08eb569ee1467",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/repository/LaporanExportRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/repository/LaporanExportRepository.kt",
+      "contentHash": "389957ce1601c6bdf2f8a36bec31fd1cd3e2a46a84fd0227bc7c0336b3b9d04f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportExcelUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportExcelUseCase.kt",
+      "contentHash": "2a67273a6a32dfa8ce7d6a4d670a856702f497cf025bf1073d64e18eaa876466",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportPdfUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportPdfUseCase.kt",
+      "contentHash": "2e089911bad7dd21a4ccce2a963ee649a4f3d63c5b8c9e12560c6b9652765888",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/presentation/LaporanScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/presentation/LaporanScreen.kt",
+      "contentHash": "d45b0f07b0c6b2a089e79bf5f5fa358a566e416964bb61ffe3beb7d3dff3afc9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 400,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/laporan/presentation/LaporanViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/laporan/presentation/LaporanViewModel.kt",
+      "contentHash": "3a0826143f7784fe692ae4514dacab5a87fb0227c2613dcb8779ce7feb335194",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 172,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/MainActivity.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/MainActivity.kt",
+      "contentHash": "7e5c02dfc7b64a70f9cc05b607d22cb88736e8e92291894b869832b1d0473671",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 90,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/master/domain/usecase/CreateDokumenUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/master/domain/usecase/CreateDokumenUseCase.kt",
+      "contentHash": "9da81a583128a12b7a5dcfcabac91afa0ec1397be8972dc827285b7dbb867cec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/master/domain/usecase/CreateInstansiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/master/domain/usecase/CreateInstansiUseCase.kt",
+      "contentHash": "cdc763b952d0c8735638148b2cf637a1f9504ac6dc6b04b2654522ccd456847f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/master/presentation/MasterScreens.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/master/presentation/MasterScreens.kt",
+      "contentHash": "36548acfa83ce1fa4285ad95e5203a2e0752907cb85a18ea6d7c62d60c467415",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 330,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/master/presentation/MasterViewModels.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/master/presentation/MasterViewModels.kt",
+      "contentHash": "80eca1d7432de0146ba9524932ed1ba593834b507457a330e36d89cd67453974",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 134,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/navigation/NavGraph.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/navigation/NavGraph.kt",
+      "contentHash": "dbbbc0689d6ddfd78bb1a79634ae85e2bfebdbb5dceeadf1b1a2a5dcd7a35229",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 138,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/remote/ArchiveDocumentDto.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/remote/ArchiveDocumentDto.kt",
+      "contentHash": "1d0d33ad6bce8ebcf3be7c31e9e4836f54af54b7ed2ebb21f9a7c7158a3f6a5c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/remote/LoanRemoteDataSource.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/remote/LoanRemoteDataSource.kt",
+      "contentHash": "e01621878622114a548f0651ad18e69e2935151804741f669c564e0f98acf4f9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 350,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/AuditLogRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/AuditLogRepositoryImpl.kt",
+      "contentHash": "a1b08c374de4ad2fc52f9220d887a995fb167864945a0a618712c74bf1873147",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/InstansiRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/InstansiRepositoryImpl.kt",
+      "contentHash": "ae16c19f617240a97785cd02b1f2f489b4f63755b5e27cadad71440f384efdec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 90,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/MasterDokumenRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/MasterDokumenRepositoryImpl.kt",
+      "contentHash": "9de94cb7b1d26e544dd3ce6b183b9390f5f947ff24f927d392fb6692e4eacdcd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 153,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/PerpanjanganRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/PerpanjanganRepositoryImpl.kt",
+      "contentHash": "98a14a40cab7e743d5a7a17a2e97bfe8652fd0a9277cfbe941169e7fd9ecea67",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/TransaksiRepositoryImpl.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/data/repository/TransaksiRepositoryImpl.kt",
+      "contentHash": "d006b2f6ecb43b00e828eb4bfa6057e0b886a5eea1b3a196277bf5be13d9a9dc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 365,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/AuditLog.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/AuditLog.kt",
+      "contentHash": "1bd1b526fa6a148cc6a4d201ec9a543863a5a802041908b6c4d5cbb09d0c693d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/DashboardStats.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/DashboardStats.kt",
+      "contentHash": "0277e77bdc88993ee7a9116a3bf708e63ce5c3f50e6c829b6e891d7656a7e9c3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/DetailPeminjaman.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/DetailPeminjaman.kt",
+      "contentHash": "889adc29b53fa5e974ddceb8bd80b41df249cae829ba832b64459e9a23754b3a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/AuditAction.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/AuditAction.kt",
+      "contentHash": "132aa06ee5bcbdc9f756fc0923f1cd2af58e751b8213128717eb153360c7d6fd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/DokumenStatus.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/DokumenStatus.kt",
+      "contentHash": "3de2dc2fd05e99c8599fe700ad7ac8353743db064c5e217b54623f3f29e5e265",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/KondisiPengembalian.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/KondisiPengembalian.kt",
+      "contentHash": "53efc188acbf07d580e5842bc4bee161eabe1043b25194ea4250728c05b7d9f6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/MetodePersetujuan.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/MetodePersetujuan.kt",
+      "contentHash": "03e845dac6bb7423ac65436e07ac42f900972b1e989af8af538a7146650b06da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/PerpanjanganStatus.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/PerpanjanganStatus.kt",
+      "contentHash": "fb43b52ca99449e201e68d5abb3fd3d7fff08f5f353495bdc7ca19df91efb772",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/TransaksiStatus.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/TransaksiStatus.kt",
+      "contentHash": "fc91af247a97eba5598a6e24b8280cfc27df05f4283d187db4f7f70760b01531",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/UserRole.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/enums/UserRole.kt",
+      "contentHash": "700f1835332b081e47f72aaf63e0d64f35c9e58cd54690eedeca36139c2240d1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Instansi.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Instansi.kt",
+      "contentHash": "1dfb1adb9ef7008dd8d9c58bd44374def76417ba465e6d0ffd7ab726de729b78",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/MasterDokumen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/MasterDokumen.kt",
+      "contentHash": "065c8cc4a1a0b0a60f8e01da5d2add33cc433eb998c59be8c9492decc81e2766",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Perpanjangan.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Perpanjangan.kt",
+      "contentHash": "414218b04a083d470c69bea104891acdac077a21dc4acf2f47ed7f9884be242b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Transaksi.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/model/Transaksi.kt",
+      "contentHash": "f1f0ca8c6fd01e342eb015f10fd0536b69793b43b083fb2311b350baa994aa97",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/AuditLogRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/AuditLogRepository.kt",
+      "contentHash": "d0815ab63cf9ff8c97d53defd131a23c7e6901c50ccdb738acc7226fbab95897",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/InstansiRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/InstansiRepository.kt",
+      "contentHash": "01b42ce32237496fadccb3ee5d005027dac3113f0600148a4954049d785e1ec0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/MasterDokumenRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/MasterDokumenRepository.kt",
+      "contentHash": "f5ff26af32c012a95f1da253c4076498f8c929f75bd52b44756522ec8b66d3f1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/PerpanjanganRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/PerpanjanganRepository.kt",
+      "contentHash": "65260de7bc0d754a13d98659cbe52d2ab57eea3221d8b0cc0893d013ef329a19",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/TransaksiRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/TransaksiRepository.kt",
+      "contentHash": "c3394fe69170964f88e7cbf13831eb791fbdf80a85401c072dbc74133f67f29e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/UserRepository.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/repository/UserRepository.kt",
+      "contentHash": "cf2a1607c7814b2c7ff80471a45258f7343da01a26de177f8117d236f414712f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/ApprovePerpanjanganUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/ApprovePerpanjanganUseCase.kt",
+      "contentHash": "4252c3a822e6bbc6782cd64e0f298a38d902e669c0792e7584a3469c288cfe33",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/CreatePerpanjanganUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/CreatePerpanjanganUseCase.kt",
+      "contentHash": "45e2f61d6cfee3d7d96c793e19f3f61419d2a02f73e06e2283ed6f5abb6c9ecb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/RejectPerpanjanganUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/RejectPerpanjanganUseCase.kt",
+      "contentHash": "deb2d192cf727a2cbc4a0c4c3f9827c1be83af9e49ad47a8c31f443266dceffb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 44,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/AcknowledgeBypassUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/AcknowledgeBypassUseCase.kt",
+      "contentHash": "5f8eb3f9772db85d4ab5d9ed559f02ba28ae30b675ff8971deb52fc674d33996",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ApproveTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ApproveTransaksiUseCase.kt",
+      "contentHash": "1b733bcc9b01f5e5327cf0fd9c86da459ed7afa06d5e917db7e244bf5a4e0170",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/BypassTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/BypassTransaksiUseCase.kt",
+      "contentHash": "6f2733b8336f929d21ba3a8dabafecad2d621e106634b3918ebe0a2611c63588",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 59,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CancelTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CancelTransaksiUseCase.kt",
+      "contentHash": "e75012ce0d6aabba6d8dd928b1007e9465c17eb63041980bc6204a1c42ccdcf8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ConfirmHandoverUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ConfirmHandoverUseCase.kt",
+      "contentHash": "200ab6a6cbb106a89950fa617a31d2daecf2b8ef73846e87a0828a35b3c08ca0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CreateTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CreateTransaksiUseCase.kt",
+      "contentHash": "3433516c45d1e7f3aafb9509b7185001572109b5da25f7598b6a99404fabce58",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/FindTransaksiByQrTokenUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/FindTransaksiByQrTokenUseCase.kt",
+      "contentHash": "2de63f56a12db685dcfa22e3cdad6c35cd7076da3bc8e78030608eddc27d43bd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/RejectTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/RejectTransaksiUseCase.kt",
+      "contentHash": "494c83e9c035447e663f8dd61a2f76be72bb2663ee8d23494cb10bf01e7be410",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 33,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ReturnTransaksiUseCase.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ReturnTransaksiUseCase.kt",
+      "contentHash": "c7f39c0a0fdbaf67ae1d4e9116e91028be2ad0f11fe025d2db0eb032840dd7d4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 66,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/approval/AntreanApprovalScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/approval/AntreanApprovalScreen.kt",
+      "contentHash": "07e29f1ae068e7e31cd9946a48080e219a25aa8bdae4ba0a487dc6caa4dd0d38",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 302,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/approval/AntreanApprovalViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/approval/AntreanApprovalViewModel.kt",
+      "contentHash": "afb26f82870b3284bd35b1ba317c25e05bd4d17b75f7f3fbdb0c337f74a40f9e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardArsiparisScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardArsiparisScreen.kt",
+      "contentHash": "483f00f00104980c8b26e1bf3e35d082074c7e31f8041c5aa051a4e0509f58f5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 312,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardArsiparisViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardArsiparisViewModel.kt",
+      "contentHash": "f6e3b0e2d644289a76c35354731432b2fb96c7024e15a87c22a1291cd122a525",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 71,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardKasubagScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardKasubagScreen.kt",
+      "contentHash": "3934ef47ab9760f823c807e59189bd317c29351288f11a3e7420172f0afccb13",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 282,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardKasubagViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/dashboard/DashboardKasubagViewModel.kt",
+      "contentHash": "f87aa47bc4501b88781e844cd66cfbe0e3c87f2b8362c3a10674e23bb05305e1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 78,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/detail/DetailTransaksiScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/detail/DetailTransaksiScreen.kt",
+      "contentHash": "74478caae02fe6f1f647597b6b9667b3049c18480f3b664ec696be72f600a2ce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 841,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/detail/DetailTransaksiViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/detail/DetailTransaksiViewModel.kt",
+      "contentHash": "81d03584e9e2d341a079b795c98d8f8eb12dd5a7f09ca20541eb0292eafcc4ad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 267,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/components/FotoSuratInputOptions.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/components/FotoSuratInputOptions.kt",
+      "contentHash": "b085c410c97a18244d455288337a00c87b3abdcf8c73d532c6d9d16926a2a8c7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 144,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/FormTransaksiScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/FormTransaksiScreen.kt",
+      "contentHash": "59930cd93e6b0396b0fc36cdca46e07c29525c549d58c2c0a2fccc2b3fd7f09a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 578,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/FormTransaksiViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/form/FormTransaksiViewModel.kt",
+      "contentHash": "5fa37fb8ac25d59d1eb81ae780ab9af73de2c05d869a4c5d3f985ceb994955ad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 191,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/components/CameraPermissionPlaceholder.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/components/CameraPermissionPlaceholder.kt",
+      "contentHash": "dd433e55dbc9e5dcb9a61a34d2bfa2704956134599a41b57df7855fa55e18315",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 91,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/ScanQrScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/ScanQrScreen.kt",
+      "contentHash": "784acecfc99980913e6e1367b69be123c8f53d1c3e4f56855e313a193ecd3ae0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 305,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/ScanQrViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/pengembalian/ScanQrViewModel.kt",
+      "contentHash": "9fec1337d93a666edf9bd3c9e59f061ffd10485125c5242a43cef928a6b98261",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/riwayat/ListRiwayatScreen.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/riwayat/ListRiwayatScreen.kt",
+      "contentHash": "c00d04be25902a6a61a05351b4572bc67d7043f47109fbd4656577670a11c65d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 241,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/riwayat/ListRiwayatViewModel.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/peminjaman/presentation/riwayat/ListRiwayatViewModel.kt",
+      "contentHash": "bd6a4bef94866b353c53fd373719daabfa8175e8a32899052054e2a069b70362",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 82,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/qr/QrGenerator.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/qr/QrGenerator.kt",
+      "contentHash": "127c0b1aed70a0d12471b9f56ff33d14c3a9b4193489892204689fbdb752bebd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/java/com/bpkpad/peminjaman/qr/QrShareHelper.kt": {
+      "filePath": "app/src/main/java/com/bpkpad/peminjaman/qr/QrShareHelper.kt",
+      "contentHash": "f885594df04b1a9741958b070e020c99f0418f232c15b0df203641c52dc6df66",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 99,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/drawable/ic_launcher_background.xml": {
+      "filePath": "app/src/main/res/drawable/ic_launcher_background.xml",
+      "contentHash": "38381d0d0a64770d992c98e5b5e492555690af40e2fc6ee59e5a1c2a7c0fdcde",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 171,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/drawable/ic_launcher_foreground.xml": {
+      "filePath": "app/src/main/res/drawable/ic_launcher_foreground.xml",
+      "contentHash": "6e3c1bb64d9bec079cf0030d867c58b064d2fb19ca6c5a691543c43134f64a2a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml": {
+      "filePath": "app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "contentHash": "e7c073fbec1a51a73f678b266a1cb207aa6468e3ea1504d24f43591f31d2b7c5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": {
+      "filePath": "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "contentHash": "e7c073fbec1a51a73f678b266a1cb207aa6468e3ea1504d24f43591f31d2b7c5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-hdpi/ic_launcher_round.webp": {
+      "filePath": "app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "contentHash": "1d6430f8afad81f4f2289906ebb818376a2af6a33b24cee754c84ea66b9df1d4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-hdpi/ic_launcher.webp": {
+      "filePath": "app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "contentHash": "cd7c79b42736c3a125052194a44ac61e71014412c4ab46b46dde6106380d60a5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-mdpi/ic_launcher_round.webp": {
+      "filePath": "app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "contentHash": "8c79ff7b9a5878c91a1bd8386e98f9bad8dd411808364d05ba81be2a23eecd15",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-mdpi/ic_launcher.webp": {
+      "filePath": "app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "contentHash": "b8e9f262d70e1f44370bd914e16c5fa6472d98e5b37b67e19319b3d56a956352",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp": {
+      "filePath": "app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "contentHash": "8db2bba728276835d67c6d50dc3c48ae8040583f0f687dd78f6787d1ee922f2d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xhdpi/ic_launcher.webp": {
+      "filePath": "app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "contentHash": "b97ffe2af001a60a27bed22c6bc16c369465bbd62bf2f7d5574eb376aca116c5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp": {
+      "filePath": "app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "contentHash": "e70dee4785ea66f8715a42dad8d4a476e491a33e059d6d735ac38224b0798271",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xxhdpi/ic_launcher.webp": {
+      "filePath": "app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "contentHash": "dab7348a3756ff531cdaed105804affbc50a12121408c137da2c5d3f296f359b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp": {
+      "filePath": "app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "contentHash": "319de08d6bcb0ef1faef4f50a1e732af76d999ac0dcc767312ce57a0a9722d8b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp": {
+      "filePath": "app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "contentHash": "eb92aeb0a3039e2e693ee185d5ceebb3e9f4cebaf1d0e1159fad883ae8dc29b8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/values-in/strings.xml": {
+      "filePath": "app/src/main/res/values-in/strings.xml",
+      "contentHash": "e85037e9480e61209c34438598f52f18901cc4902489f0433094236e568e178d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/values/colors.xml": {
+      "filePath": "app/src/main/res/values/colors.xml",
+      "contentHash": "26bcf7f77f1a82a5c1651e7451ed40ea5e071b08521514b9d69a7e9dc2c2cd45",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/values/strings.xml": {
+      "filePath": "app/src/main/res/values/strings.xml",
+      "contentHash": "69e1d52052710568dc45b100dbcd90db305683afb5bf6ccbfeb5c945e02a3d05",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 91,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/values/themes.xml": {
+      "filePath": "app/src/main/res/values/themes.xml",
+      "contentHash": "7726f2e35419dcb23f2aa7d6c6e74b2ac49fcbae833c8f741a0e75b2ea99e7df",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/xml/backup_rules.xml": {
+      "filePath": "app/src/main/res/xml/backup_rules.xml",
+      "contentHash": "facaaef2162be6dd86544a819278042729ed481c38933a410651b81424da7ea7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/xml/data_extraction_rules.xml": {
+      "filePath": "app/src/main/res/xml/data_extraction_rules.xml",
+      "contentHash": "940f48fb2ba4d9ec5a55671126796fefa71661c0a5d7b434dc1e9be23da41690",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/main/res/xml/file_paths.xml": {
+      "filePath": "app/src/main/res/xml/file_paths.xml",
+      "contentHash": "7eda2a6d638b50094a11eb7e49d290613e21ca4bdbe1f56da7736ee67e3fe826",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/arsipnonkeu/ExampleUnitTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/arsipnonkeu/ExampleUnitTest.kt",
+      "contentHash": "6bac65147c3ecd9e72154d3572000659ecaad3c1b6ed343a8362dfb8e1b16aad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/auth/data/repository/UserRepositoryImplTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/auth/data/repository/UserRepositoryImplTest.kt",
+      "contentHash": "63f5368946ca682775660528035bdb14083d9bd29e947131a49d4acc6b95078b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 214,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/auth/domain/usecase/LoginUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/auth/domain/usecase/LoginUseCaseTest.kt",
+      "contentHash": "afeffd6d5c06b2a960d30ae48b5f88eb917b2d9a0a217e659b4bb47d78369644",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 124,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/core/common/InputRulesTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/core/common/InputRulesTest.kt",
+      "contentHash": "37a634b9b4253fda6e18d5d22cdfb19e7a5e3d2e6eed4a1ac7b8269e92f98818",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 70,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportExcelUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportExcelUseCaseTest.kt",
+      "contentHash": "a1f3c331e43243c7b0f55b8874788aa30866df0bf4df2555b5180134b87baee5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportPdfUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/laporan/domain/usecase/ExportPdfUseCaseTest.kt",
+      "contentHash": "c737b1aa2e2d290a79452235fa0f52b4ac64ae6bd557034f90789da894f204b2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/master/domain/usecase/CreateDokumenUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/master/domain/usecase/CreateDokumenUseCaseTest.kt",
+      "contentHash": "dc800bb614c5747cc0901eb20740ccf2b393bd8d63398fae7a27d896208a8407",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 98,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/master/domain/usecase/CreateInstansiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/master/domain/usecase/CreateInstansiUseCaseTest.kt",
+      "contentHash": "c7b87f599b4f6ba157ebfab4bbc2568a4b28e158f3b3a7ca8485985cd1636ac4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 85,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/data/repository/MasterDokumenRepositoryImplTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/data/repository/MasterDokumenRepositoryImplTest.kt",
+      "contentHash": "19ccc1c84139795161734f7203d52d207ee673bfc5398fdf7df15753a71cdf58",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 150,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/ApprovePerpanjanganUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/ApprovePerpanjanganUseCaseTest.kt",
+      "contentHash": "d8563dc959bcc4f04f63ef7c55e15f6bb1b035f5e0fb82bb701a8a75ef868221",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 59,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/CreatePerpanjanganUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/CreatePerpanjanganUseCaseTest.kt",
+      "contentHash": "776b84258508fd3d75ae166432a825f1638e33f451e09cd51acaf3018cb20893",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 147,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/RejectPerpanjanganUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/perpanjangan/RejectPerpanjanganUseCaseTest.kt",
+      "contentHash": "c36df4bc0c9cbf05a11f1840c430672ad1be1d7c84647b310d915a150188e084",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/AcknowledgeBypassUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/AcknowledgeBypassUseCaseTest.kt",
+      "contentHash": "08dd3b68740e884b117fd84e3c8a9ce315e8ed8ebfe40762b106f7b353d731b7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 85,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ApproveTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ApproveTransaksiUseCaseTest.kt",
+      "contentHash": "11cf8cb42ee7d674b17cba595ef3f1e0e6d4b62a99652eec31d5aaa4090a050c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 94,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/BypassTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/BypassTransaksiUseCaseTest.kt",
+      "contentHash": "0a3ceda42da38f1b4c44d30a72bd9a08bbf476c1c023988bb0cf73a379e4fd4a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 113,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CancelTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CancelTransaksiUseCaseTest.kt",
+      "contentHash": "a17435817a70ec5920a1715f4baabb00d5ddc16fcb8c05ac04095e728f420bcf",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ConfirmHandoverUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ConfirmHandoverUseCaseTest.kt",
+      "contentHash": "b2b5535f87931ae2a7a3095cc26ba30651ac9c28e91d8a1fb5478b2dbf258d38",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 84,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CreateTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/CreateTransaksiUseCaseTest.kt",
+      "contentHash": "00b632827b1f61b5c81a933580dcc179cbccec7b749d83e677af0cc1a755deda",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 208,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/FindTransaksiByQrTokenUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/FindTransaksiByQrTokenUseCaseTest.kt",
+      "contentHash": "e12dcb87137ef17c0802e16aae6446cdee1ecae33ad483da5acae0b51ed07a43",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 96,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/RejectTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/RejectTransaksiUseCaseTest.kt",
+      "contentHash": "0324c3513ea97cd88696386eea6e11551ef0e5246901d5f44e0afe41f285bad8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 92,
+      "hasStructuralAnalysis": false
+    },
+    "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ReturnTransaksiUseCaseTest.kt": {
+      "filePath": "app/src/test/java/com/bpkpad/peminjaman/peminjaman/domain/usecase/transaksi/ReturnTransaksiUseCaseTest.kt",
+      "contentHash": "807a3359bc6906e6271504a08737f52228b296fe7a79de18c0218978db6f4619",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 161,
+      "hasStructuralAnalysis": false
+    },
+    "build_errors.txt": {
+      "filePath": "build_errors.txt",
+      "contentHash": "82294eba871ecfa247a98eca9e35bd2b92aa57533ecf54ed53ec298fc01ac405",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 828,
+      "hasStructuralAnalysis": false
+    },
+    "build_full.txt": {
+      "filePath": "build_full.txt",
+      "contentHash": "ed4adf23d8b673e4414bb046610a217d6345ae4582a25a37547784c5c8646fc5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": false
+    },
+    "build_full2.txt": {
+      "filePath": "build_full2.txt",
+      "contentHash": "6277bf32da73ae54b926abd7041481b8543a3cb2d794ffb6af6f6ff13426d550",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 97,
+      "hasStructuralAnalysis": false
+    },
+    "build_full3.txt": {
+      "filePath": "build_full3.txt",
+      "contentHash": "8fedf08108ccfe40b8033b77eec0bb12cd339bf6c0bcb3ce46e9b7b4b9e8e8a3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 112,
+      "hasStructuralAnalysis": false
+    },
+    "build.gradle.kts": {
+      "filePath": "build.gradle.kts",
+      "contentHash": "f983eee332cb70162df0e84d1a8eb7051e995f17e163e007a4de810a3f03aacd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "build4.txt": {
+      "filePath": "build4.txt",
+      "contentHash": "375383b7e1331b2d9d23a392307d0234884b6b7fbb3993df7e2efd0f54519d1f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 79,
+      "hasStructuralAnalysis": false
+    },
+    "build5.txt": {
+      "filePath": "build5.txt",
+      "contentHash": "34d08118a42ceebeefd86efa79aeae6af4fed23662476fff0eb51fe0bf9e0dab",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 79,
+      "hasStructuralAnalysis": false
+    },
+    "gradle.properties": {
+      "filePath": "gradle.properties",
+      "contentHash": "a229a36f95f44f032c1b68ca4c2503b2d54f1777cdffc97d6efb4117819b6409",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "gradle/gradle-daemon-jvm.properties": {
+      "filePath": "gradle/gradle-daemon-jvm.properties",
+      "contentHash": "a95e08f57e1bc6594d223f4116e0d1f53162096356f5f1381d0ebce078ecd02a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "gradle/libs.versions.toml": {
+      "filePath": "gradle/libs.versions.toml",
+      "contentHash": "ba592c0d50c354540640eb8a9e82e25d8e599bae764dab345217a279d5e4c0b6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 163,
+      "hasStructuralAnalysis": true
+    },
+    "gradle/wrapper/gradle-wrapper.jar": {
+      "filePath": "gradle/wrapper/gradle-wrapper.jar",
+      "contentHash": "d2630fec8f65fdcd2a08975c64008a029299d6d100ff71272f95a8c88178dc2d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 160,
+      "hasStructuralAnalysis": false
+    },
+    "gradle/wrapper/gradle-wrapper.properties": {
+      "filePath": "gradle/wrapper/gradle-wrapper.properties",
+      "contentHash": "86a6c1c90ddf70f1ccff9a2ad7015588c880ec81e16a347fd4efe613e9c6f62f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "gradlew": {
+      "filePath": "gradlew",
+      "contentHash": "8cd81d7a40a14119b8e9e64647e02822b3511e9e4a536ab92c88daa3b0e170bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 252,
+      "hasStructuralAnalysis": false
+    },
+    "gradlew.bat": {
+      "filePath": "gradlew.bat",
+      "contentHash": "1d297e00bd21de3ace22b4d7f2de1f9dfa858883d66bbf7c1ccbecccec8f4f3b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 95,
+      "hasStructuralAnalysis": false
+    },
+    "local.properties.example": {
+      "filePath": "local.properties.example",
+      "contentHash": "50cffa7d8dc7c32fab3ad8ef43d3b7bdafcfc6e2d219fce36e6a0ace6ad0f29b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "settings.gradle.kts": {
+      "filePath": "settings.gradle.kts",
+      "contentHash": "28656ef3ac9f4337009a61eea41aea251e4714f41d4fd6eceeac78ed0be6bcb5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/cli-latest": {
+      "filePath": "supabase/.temp/cli-latest",
+      "contentHash": "6ee78bae40fae4d9b9c8e1b85dbad4f90d8512a30832f1e91963b52f8e62a6ed",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/gotrue-version": {
+      "filePath": "supabase/.temp/gotrue-version",
+      "contentHash": "73344e7ddfe296d1707b22aaf0cd25a43c2cc7244250512c0807048b490e69ab",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/linked-project.json": {
+      "filePath": "supabase/.temp/linked-project.json",
+      "contentHash": "b98c0c39644c8f5e52deec1ab0125432c5f6147a46fd3955b17239b92d9aa6a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/.temp/pooler-url": {
+      "filePath": "supabase/.temp/pooler-url",
+      "contentHash": "ec5b39134cd64ecf4f86cf00e117b1ed4e397c949b05d7c00342e19597bb710f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/postgres-version": {
+      "filePath": "supabase/.temp/postgres-version",
+      "contentHash": "d955b10ac9c402ea85804848c4d73b31bab4f5c60c6a6766c3797d04cfc6b3ac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/project-ref": {
+      "filePath": "supabase/.temp/project-ref",
+      "contentHash": "76b587f8ca948d25e6df2da39aec22f393e9ae39e419a1ec029fe5cefb900f1d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/rest-version": {
+      "filePath": "supabase/.temp/rest-version",
+      "contentHash": "b25de4a023eef82d4780a9f7816c5685ca35437308a9d457585eece9945485dc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/storage-migration": {
+      "filePath": "supabase/.temp/storage-migration",
+      "contentHash": "5eefa09f2bf47edfbd65e0307f2ebf6eec935a663b45e36cbd9395c3f10695d0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/.temp/storage-version": {
+      "filePath": "supabase/.temp/storage-version",
+      "contentHash": "93f8d44096ac613d9d3677b9ea37cfd08e62170cd2d26eec46dc3acdff469ceb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "supabase/migrations/20260620091143_stub_financial_document_schema.sql": {
+      "filePath": "supabase/migrations/20260620091143_stub_financial_document_schema.sql",
+      "contentHash": "e82e88baf667c25d5d7a0a4f5218b22affc108b2b876732d48fdf0b24a654989",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 192,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260620091200_bpkpad_document_loan_schema.sql": {
+      "filePath": "supabase/migrations/20260620091200_bpkpad_document_loan_schema.sql",
+      "contentHash": "c027ced63a6948aba4a3e7c01b9c7b725627aa5d98019541dee89c2ece3128e5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 839,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260620113300_harden_loan_input_constraints.sql": {
+      "filePath": "supabase/migrations/20260620113300_harden_loan_input_constraints.sql",
+      "contentHash": "cd02f5bdb41facf1a165006b191572479637628ebd8c134ca35df2fd531f2a7f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260620150416_harden_loan_extension_notes.sql": {
+      "filePath": "supabase/migrations/20260620150416_harden_loan_extension_notes.sql",
+      "contentHash": "eddaec4677f12118ccbfa846f9c0be01d6bdeaaef7a23ab9dbfd56b98b39194a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260620235503_add_mobile_sync_contract.sql": {
+      "filePath": "supabase/migrations/20260620235503_add_mobile_sync_contract.sql",
+      "contentHash": "406d7851480ed7c8760df1e60f361a1fb7ed5145471b8381c2d3fc8b5c08d601",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/migrations/20260621012757_fix_generic_loan_audit_trigger.sql": {
+      "filePath": "supabase/migrations/20260621012757_fix_generic_loan_audit_trigger.sql",
+      "contentHash": "9375d7a4b08d88dd20accf91ad4fb633e8e06cfcb9fe0a7812a2ffb19851c0db",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/README.md": {
+      "filePath": "supabase/README.md",
+      "contentHash": "1784d6187ba7e852756f63c27266206a27b64844d9c6371f618872dfefedd254",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 138,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/reset_development.sql": {
+      "filePath": "supabase/reset_development.sql",
+      "contentHash": "69824e1247c6b1d050a980fc684438ecda518f5a9c653c9fee71c1526911ac38",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 121,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/seed_additional.sql": {
+      "filePath": "supabase/seed_additional.sql",
+      "contentHash": "848a311fb501f396d126195ba1e81be4c00f5262478846fed65bcd5c72893b08",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 290,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/seed.sql": {
+      "filePath": "supabase/seed.sql",
+      "contentHash": "c1b36908030a5ffe002b6dae497020999bf7cf296bf7c25af88b5f43e15b375b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 322,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/verify_deployment.sql": {
+      "filePath": "supabase/verify_deployment.sql",
+      "contentHash": "7ceab2ed259e1e7fb14efbef0246045bab90bb004cc4aca49670766c13359cb2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 78,
+      "hasStructuralAnalysis": true
+    },
+    "supabase/verify_financial_document_contract.sql": {
+      "filePath": "supabase/verify_financial_document_contract.sql",
+      "contentHash": "6d8061b29d12099043ca1beeba676e577aa8d783f7a3654c72181015f4946595",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 127,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

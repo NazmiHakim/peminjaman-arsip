@@ -4,12 +4,16 @@ import android.util.Log
 import com.bpkpad.peminjaman.core.common.ResultState
 import com.bpkpad.peminjaman.core.database.dao.*
 import com.bpkpad.peminjaman.core.database.entity.*
+import com.bpkpad.peminjaman.core.database.dao.*
+import com.bpkpad.peminjaman.core.database.entity.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.*
 import com.bpkpad.peminjaman.peminjaman.domain.model.enums.*
 import com.bpkpad.peminjaman.peminjaman.domain.repository.TransaksiRepository
 import com.bpkpad.peminjaman.peminjaman.data.remote.LoanRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.withTimeout
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -27,15 +31,20 @@ class TransaksiRepositoryImpl @Inject constructor(
     private val loanRemoteDataSource: LoanRemoteDataSource
 ) : TransaksiRepository {
 
-    override fun getAll(): Flow<List<Transaksi>> =
-        transaksiDao.getAll().map { list -> list.map { buildDomainWithDetails(it) } }
+    override fun getAll(): Flow<List<Transaksi>> = flow {
+        refreshFromRemote()
+        emitAll(transaksiDao.getAll().map { list -> list.map { buildDomainWithDetails(it) } })
+    }
 
-    override fun getByStatus(status: TransaksiStatus): Flow<List<Transaksi>> =
-        transaksiDao.getByStatus(status.name.lowercase()).map { list -> list.map { buildDomainWithDetails(it) } }
+    override fun getByStatus(status: TransaksiStatus): Flow<List<Transaksi>> = flow {
+        refreshFromRemote()
+        emitAll(transaksiDao.getByStatus(status.name.lowercase()).map { list -> list.map { buildDomainWithDetails(it) } })
+    }
 
-    override fun getOverdue(): Flow<List<Transaksi>> {
+    override fun getOverdue(): Flow<List<Transaksi>> = flow {
+        refreshFromRemote()
         val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-        return transaksiDao.getOverdue(today).map { list -> list.map { buildDomainWithDetails(it) } }
+        emitAll(transaksiDao.getOverdue(today).map { list -> list.map { buildDomainWithDetails(it) } })
     }
 
     override suspend fun getById(id: Int): Transaksi? {
@@ -236,8 +245,9 @@ class TransaksiRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getDashboardStats(): Flow<Map<String, Int>> {
-        return transaksiDao.getAll().map { list ->
+    override fun getDashboardStats(): Flow<Map<String, Int>> = flow {
+        refreshFromRemote()
+        emitAll(transaksiDao.getAll().map { list ->
             val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
             mapOf(
                 "total" to list.size,
@@ -250,7 +260,7 @@ class TransaksiRepositoryImpl @Inject constructor(
                 "bypass_pending_acknowledge" to list.count { it.metodePersetujuan == "bypass" && !it.isBypassAcknowledged },
                 "disetujui" to list.count { it.status == "disetujui" }
             )
-        }
+        })
     }
 
     private suspend fun buildDomainWithDetails(entity: TransaksiEntity): Transaksi {
@@ -291,6 +301,90 @@ class TransaksiRepositoryImpl @Inject constructor(
                 error.message?.take(MAX_SYNC_ERROR_LENGTH)
             )
             Log.w(TAG, "Transaksi #$transaksiId tersimpan lokal dan menunggu sinkronisasi", error)
+        }
+    }
+
+    private suspend fun refreshFromRemote() {
+        runCatching {
+            // 1. Sync remote user profiles to local SQLite DB
+            val remoteProfiles = try {
+                loanRemoteDataSource.getAllProfiles()
+            } catch (e: Exception) {
+                Log.e(TAG, "Gagal memuat profil pengguna dari remote: ${e.message}", e)
+                emptyList()
+            }
+            remoteProfiles.forEach { profile ->
+                userDao.upsert(
+                    UserEntity(
+                        id = profile.legacyId.toInt(),
+                        username = profile.username,
+                        passwordHash = "",
+                        namaLengkap = profile.namaLengkap,
+                        nip = profile.nip,
+                        role = profile.role,
+                        noHp = profile.noHp,
+                        isActive = profile.isActive
+                    )
+                )
+            }
+            val uuidToLegacyIdMap = remoteProfiles.associate { it.id to it.legacyId.toInt() }
+
+            // 2. Fetch all transactions (with agency name and items embedded)
+            val remoteTransactions = loanRemoteDataSource.getAllTransactions()
+
+            // 3. Process each transaction
+            remoteTransactions.forEach { remoteTx ->
+                val localTx = remoteTx.id.let { transaksiDao.getByRemoteId(it) }
+                    ?: remoteTx.clientReference?.let { transaksiDao.getBySyncKey(it) }
+
+                val createdByLegacyId = uuidToLegacyIdMap[remoteTx.createdBy] ?: 1
+                val approvedByLegacyId = remoteTx.approvedBy?.let { uuidToLegacyIdMap[it] }
+
+                val entity = TransaksiEntity(
+                    id = localTx?.id ?: 0,
+                    namaInstansi = remoteTx.agency?.namaInstansi ?: remoteTx.picNama,
+                    picNama = remoteTx.picNama,
+                    picNoHp = remoteTx.picNoHp,
+                    nomorSuratPengantar = remoteTx.nomorSuratPengantar,
+                    fotoSuratPengantarPath = remoteTx.fotoSuratPengantarPath,
+                    qrCodeToken = remoteTx.qrCodeToken,
+                    tanggalPinjam = LocalDate.parse(remoteTx.tanggalPinjam),
+                    tanggalKembaliRencana = LocalDate.parse(remoteTx.tanggalKembaliRencana),
+                    tanggalKembaliAktual = remoteTx.tanggalKembaliAktual?.let { LocalDate.parse(it) },
+                    status = remoteTx.status,
+                    metodePersetujuan = remoteTx.metodePersetujuan,
+                    buktiBypassPath = remoteTx.buktiBypassPath,
+                    catatanBypass = remoteTx.catatanBypass,
+                    isBypassAcknowledged = remoteTx.isBypassAcknowledged,
+                    alasanPenolakan = remoteTx.alasanPenolakan,
+                    createdBy = createdByLegacyId,
+                    approvedBy = approvedByLegacyId,
+                    remoteId = remoteTx.id,
+                    syncKey = remoteTx.clientReference ?: UUID.randomUUID().toString(),
+                    syncState = "synced"
+                )
+                val txId = transaksiDao.insert(entity).toInt()
+
+                // Sync details (items)
+                detailDao.deleteByTransaksiId(txId)
+                val detailEntities = remoteTx.items.map { item ->
+                    val localDoc = masterDokumenDao.getByRemoteId(item.archiveDocumentId)
+                    val docId = localDoc?.id ?: 0
+                    DetailPeminjamanEntity(
+                        transaksiId = txId,
+                        dokumenId = docId,
+                        nomorDokumen = item.documentNumberSnapshot,
+                        perihalDokumen = item.titleSnapshot,
+                        tahunDokumen = item.yearSnapshot?.toString(),
+                        lokasiRak = item.locationSnapshot,
+                        kondisiPengembalian = item.returnCondition,
+                        catatanKondisi = item.conditionNote
+                    )
+                }
+                detailDao.insertAll(detailEntities)
+            }
+        }.onFailure { error ->
+            Log.e(TAG, "Gagal sinkronisasi transaksi dari remote", error)
         }
     }
 

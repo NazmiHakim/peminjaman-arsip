@@ -336,6 +336,96 @@ class LoanRemoteDataSource @Inject constructor(
     )
 
     @Serializable
+    data class RemoteProfileDto(
+        val id: String,
+        @SerialName("legacy_id") val legacyId: Long,
+        val username: String,
+        @SerialName("nama_lengkap") val namaLengkap: String,
+        val nip: String? = null,
+        val role: String,
+        @SerialName("no_hp") val noHp: String? = null,
+        @SerialName("is_active") val isActive: Boolean
+    )
+
+    @Serializable
+    data class RemoteLoanItem(
+        @SerialName("loan_transaction_id") val loanTransactionId: String,
+        @SerialName("archive_document_id") val archiveDocumentId: String,
+        @SerialName("document_number_snapshot") val documentNumberSnapshot: String,
+        @SerialName("title_snapshot") val titleSnapshot: String,
+        @SerialName("year_snapshot") val yearSnapshot: Int?,
+        @SerialName("location_snapshot") val locationSnapshot: String?,
+        @SerialName("return_condition") val returnCondition: String? = null,
+        @SerialName("condition_note") val conditionNote: String? = null
+    )
+
+    @Serializable
+    data class RemoteAgencyDto(
+        @SerialName("nama_instansi") val namaInstansi: String
+    )
+
+    @Serializable
+    data class RemoteTransactionResponse(
+        val id: String,
+        @SerialName("client_reference") val clientReference: String?,
+        @SerialName("borrower_agency_id") val borrowerAgencyId: String,
+        @SerialName("pic_nama") val picNama: String,
+        @SerialName("pic_no_hp") val picNoHp: String,
+        @SerialName("nomor_surat_pengantar") val nomorSuratPengantar: String,
+        @SerialName("foto_surat_pengantar_path") val fotoSuratPengantarPath: String,
+        @SerialName("qr_code_token") val qrCodeToken: String?,
+        @SerialName("tanggal_pinjam") val tanggalPinjam: String,
+        @SerialName("tanggal_kembali_rencana") val tanggalKembaliRencana: String,
+        @SerialName("tanggal_kembali_aktual") val tanggalKembaliAktual: String?,
+        val status: String,
+        @SerialName("metode_persetujuan") val metodePersetujuan: String?,
+        @SerialName("bukti_bypass_path") val buktiBypassPath: String?,
+        @SerialName("catatan_bypass") val catatanBypass: String?,
+        @SerialName("is_bypass_acknowledged") val isBypassAcknowledged: Boolean,
+        @SerialName("alasan_penolakan") val alasanPenolakan: String?,
+        @SerialName("created_by") val createdBy: String,
+        @SerialName("approved_by") val approvedBy: String?,
+        @SerialName("loan_borrower_agencies") val agency: RemoteAgencyDto? = null,
+        @SerialName("loan_items") val items: List<RemoteLoanItem> = emptyList()
+    )
+
+    suspend fun getAllProfiles(): List<RemoteProfileDto> =
+        supabase.from("loan_profiles")
+            .select()
+            .decodeList<RemoteProfileDto>()
+
+    suspend fun getAllTransactions(): List<RemoteTransactionResponse> =
+        supabase.from(TRANSACTIONS)
+            .select(
+                columns = io.github.jan.supabase.postgrest.query.Columns.raw(
+                    """
+                    id,
+                    client_reference,
+                    borrower_agency_id,
+                    pic_nama,
+                    pic_no_hp,
+                    nomor_surat_pengantar,
+                    foto_surat_pengantar_path,
+                    qr_code_token,
+                    tanggal_pinjam,
+                    tanggal_kembali_rencana,
+                    tanggal_kembali_aktual,
+                    status,
+                    metode_persetujuan,
+                    bukti_bypass_path,
+                    catatan_bypass,
+                    is_bypass_acknowledged,
+                    alasan_penolakan,
+                    created_by,
+                    approved_by,
+                    loan_borrower_agencies(nama_instansi),
+                    loan_items(*)
+                    """.trimIndent()
+                )
+            )
+            .decodeList<RemoteTransactionResponse>()
+
+    @Serializable
     private data class RemoteLockReference(
         @SerialName("archive_document_id") val archiveDocumentId: String
     )

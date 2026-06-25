@@ -19,6 +19,7 @@ class ExportExcelUseCaseTest {
     private val repository: LaporanExportRepository = mockk()
     private lateinit var useCase: ExportExcelUseCase
 
+
     @Before
     fun setUp() {
         useCase = ExportExcelUseCase(repository)

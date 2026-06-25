@@ -69,10 +69,11 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getAllUsers(): List<User> {
         return runCatching {
-            supabase.from("loan_profiles")
+            val profiles = supabase.from("loan_profiles")
                 .select()
                 .decodeList<ProfileDto>()
-                .map(ProfileDto::toDomain)
+            profiles.forEach { it.cacheLocally() }
+            profiles.map(ProfileDto::toDomain)
         }.getOrDefault(emptyList())
     }
 
@@ -163,6 +164,7 @@ class UserRepositoryImpl @Inject constructor(
 
     @Serializable
     private data class ProfileDto(
+        val id: String,
         @SerialName("legacy_id") val legacyId: Long,
         val username: String,
         @SerialName("nama_lengkap") val namaLengkap: String,
